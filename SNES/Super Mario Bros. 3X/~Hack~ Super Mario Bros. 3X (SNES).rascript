@@ -364,6 +364,7 @@ level_dictionary = {
 // YI4 also not included due to sharing value with YI Mushroom House. YI array is split around it so I can generate all the leaderboards in the right order
 // Bonus World array is now also split to fit in a quick and silly Toad Castle speedrun
 // And Bowser's Castle is also excluded because it needs separate logic
+// Also the 3 cave levels in Bowser's Land split after an issue arose
 grassland_array = [level_grassland_1, level_grassland_2, level_grassland_3, level_grassland_4, level_larry_castle]
 desert_world_array = [level_desert_world_1, level_desert_world_2, level_pyramid, level_desert_world_3, level_desert_world_4, level_quicksand, level_morton_castle]
 seaside_array = [level_seaside_1, level_seaside_2, level_seaside_3, level_seaside_fortress, level_seaside_4, level_seaside_5, level_seaside_6, level_wendy_battleship]
@@ -372,7 +373,9 @@ sky_array = [level_piranha_hills_1, level_sky_1, level_sky_2, level_sky_3, level
 ice_land_array = [level_ice_land_1, level_ice_land_2, level_ice_land_3, level_ice_fortress, level_ice_land_4, level_ice_land_5, level_ice_land_6, level_lemmy_castle]
 yoshi_island_array_1 = [level_yoshi_island_1, level_yoshi_island_2, level_yoshi_island_3, level_yi_ghost_house]
 yoshi_island_array_2 = [level_yoshi_island_5, level_ludwig_castle]
-bowser_land_array = [level_bowser_tank_1, level_to_bowser_land, level_bowser_land_1, level_bowser_land_2, level_bowser_land_3, level_magma_castle, level_bowser_land_4, level_bandit_cave, level_swooper_cave, level_dark_cave, level_crappy_ship, level_bowser_tower, level_mystery_castle]
+bowser_land_array_1 = [level_bowser_tank_1, level_to_bowser_land, level_bowser_land_1, level_bowser_land_2, level_bowser_land_3, level_magma_castle, level_bowser_land_4]
+bowser_land_array_2 = [level_bandit_cave, level_swooper_cave, level_dark_cave]
+bowser_land_array_3 = [level_crappy_ship, level_bowser_tower, level_mystery_castle]
 bonus_world_array_1 = [level_piranha_hills_2, level_bonus_world_1, level_bonus_world_2, level_bonus_world_3, level_bonus_world_4]
 bonus_world_array_2 = [level_bonus_world_5]
 
@@ -508,8 +511,8 @@ room_dictionary = {
     room_fun_house_bowser: "Fun House: Bowser Fight"
 }
 
-// For speedrun leaderboards
-fun_house_array = [room_fun_house_coin_ship_boss, room_fun_house_hammer_bro_zone, room_fun_house_desert_maze, room_fun_house_frost_cave]
+// For speedrun leaderboards. Coin Ship removed due to issue, needs separate logic
+fun_house_array = [room_fun_house_hammer_bro_zone, room_fun_house_desert_maze, room_fun_house_frost_cave]
 
 // $0094: Mario x-coordinate (in level) [16-bit]
 // $0096: Mario y-coordinate (in level) [16-bit]
@@ -658,7 +661,7 @@ function fun_house_frost_cave_1_up_1() => byte(0x1ab18)
 // Progress
 // --------
 
-function achievement_progress(title, points, level_parameter) {
+function achievement_progress(id, title, points, level_parameter) {
     achievement(
         title = title,
         description = "Clear " + level_dictionary[level_parameter] + ".",
@@ -670,77 +673,7 @@ function achievement_progress(title, points, level_parameter) {
     )
 }
 
-achievement_progress("Unlucky Larry", 5, level_larry_castle)
-achievement_progress("Big Mouth Shuts Up", 5, level_morton_castle)
-achievement_progress("Invasion by Sea", 5, level_seaside_fortress)
-achievement_progress("Battleship Sunk", 5, level_wendy_battleship)
-achievement_progress("A Harrowing Ordeal", 5, level_gi_ghost_house)
-achievement_progress("Crazed Koopa", 10, level_iggy_castle)
-achievement_progress("Invasion by Air", 5, level_sky_fortress)
-achievement_progress("Bullied", 10, level_roy_ship)
-achievement_progress("Winter Invasion", 5, level_ice_fortress)
-achievement_progress("Down with the Clown", 10, level_lemmy_castle)
-achievement_progress("Ghost Hunter", 5, level_yi_ghost_house)
-achievement_progress("Ludwig's Last Symphony", 10, level_ludwig_castle)
-achievement_progress("Lethal Lava Lord", 5, level_magma_castle)
-achievement_progress("Final Invasion", 5, level_mystery_castle)
-achievement_progress("King of the Koopas", 25, level_bowser_castle)
-achievement_progress("Mysterious Land", 5, level_bonus_world_5)
-
-
-achievement(
-    title = "Chill With Your Bro",
-    description = "Get the 1-Up in Mario's Pad.",
-    points = 1,
-    trigger = game_state() == state_in_level &&
-              level() == level_mario_pad &&
-              room() == room_mario_pad_inside &&
-              lives() > prev(lives())
-)
-
-function achievement_fun_house(title, description, points, room_parameter) {
-    achievement(
-        title = title,
-        description = description,
-        points = points,
-        trigger = game_state() == state_in_level &&
-                  level() == level_fun_house &&
-                  room() == room_parameter &&
-                  prev(exit_level()) == 0 &&
-                  exit_level() == exit_level_complete
-    )
-}
-
-achievement_fun_house("Many Coins, One Point", "Clear Coin Ship in Fun House.", 1, room_fun_house_coin_ship_boss)
-achievement_fun_house("The Hammering Fields", "Clear Hammer Bro. Zone in Fun House.", 2, room_fun_house_hammer_bro_zone)
-achievement_fun_house("Lost in the Desert", "Clear Desert Maze in Fun House.", 2, room_fun_house_desert_maze)
-achievement_fun_house("A Cold and Cruel Challenge", "Clear Frost Cave in Fun House.", 5, room_fun_house_frost_cave)
-
-achievement(
-    title = "Mario Astral Projects to SMW",
-    description = "Defeat Bowser in Fun House.",
-    points = 3,
-    trigger = game_state() == state_fun_house_bowser &&
-              level() == level_fun_house &&
-              room() == room_fun_house_bowser &&
-              prev(exit_level()) == 0 &&
-              exit_level() == exit_level_complete
-)
-
-achievement(
-    title = "Finally!",
-    description = "Get a Super Leaf and become Raccoon Mario.",
-    points = 2,
-    trigger = game_state() == state_in_level &&
-              prev(mario_power_state()) != raccoon_mario &&
-              mario_power_state() == raccoon_mario
-)
-
-// --------------------
-// Secrets & Challenges
-// --------------------
-
-function achievement_secret_area(title, points, level_parameter, first_room, second_room) {
+function achievement_secret_area(id, title, points, level_parameter, first_room, second_room) {
     achievement(
         title = title,
         description = "Find the secret area in " + level_dictionary[level_parameter] + ".",
@@ -752,7 +685,7 @@ function achievement_secret_area(title, points, level_parameter, first_room, sec
     )
 }
 
-function achievement_speedrun(title, points, level_parameter, time_parameter) {
+function achievement_speedrun(id, title, points, level_parameter, time_parameter) {
     achievement(
         title = title,
         description = "Clear " + level_dictionary[level_parameter] + " with at least " + time_parameter + " remaining on the timer.",
@@ -765,7 +698,7 @@ function achievement_speedrun(title, points, level_parameter, time_parameter) {
     )
 }
 
-function achievement_small_mario(title, points, level_parameter) {
+function achievement_small_mario(id, title, points, level_parameter) {
     achievement(
         title = title,
         description = "Clear " + level_dictionary[level_parameter] + " as Small Mario from start to finish, without getting a power-up.",
@@ -785,7 +718,7 @@ function achievement_small_mario(title, points, level_parameter) {
     )
 }
 
-function achievement_red_coins(title, points, level_parameter) {
+function achievement_red_coins(id, title, points, level_parameter) {
     achievement(
         title = title,
         description = "Get all Red Coins in " + level_dictionary[level_parameter] + ".",
@@ -797,32 +730,64 @@ function achievement_red_coins(title, points, level_parameter) {
     )
 }
 
-achievement_secret_area("Super Mario Bros. 5", 2, level_grassland_1, room_grassland_1, room_grassland_1_secret)
-achievement_speedrun("Classic SMB3 Feel", 5, level_grassland_1, 255)
-achievement_secret_area("A Pipeful of Dollars", 2, level_grassland_2, room_grassland_2, room_grassland_2_secret)
-achievement_secret_area("3x3", 2, level_grassland_3, room_grassland_3, room_grassland_3_secret)
-achievement_small_mario("Close Quarters", 5, level_grassland_4)
+function achievement_fun_house(id, title, description, points, room_parameter) {
+    achievement(
+        title = title,
+        description = description,
+        points = points,
+        trigger = game_state() == state_in_level &&
+                  level() == level_fun_house &&
+                  room() == room_parameter &&
+                  prev(exit_level()) == 0 &&
+                  exit_level() == exit_level_complete
+    )
+}
 
-achievement_secret_area("Beautiful Blue Coins", 2, level_desert_world_1, room_desert_world_1, room_desert_world_1_secret)
-achievement_small_mario("Pyramid of No Power", 5, level_pyramid)
-achievement_secret_area("Moai Menace", 2, level_desert_world_4, room_desert_world_4, room_desert_world_4_secret)
-achievement_speedrun("Rage Race", 5, level_quicksand, 240)
+achievement_secret_area(325743, "Super Mario Bros. 5", 2, level_grassland_1, room_grassland_1, room_grassland_1_secret)
+achievement_speedrun(325744, "Classic SMB3 Feel", 5, level_grassland_1, 255)
+achievement_secret_area(325745, "A Pipeful of Dollars", 2, level_grassland_2, room_grassland_2, room_grassland_2_secret)
+achievement_secret_area(325746, "3x3", 2, level_grassland_3, room_grassland_3, room_grassland_3_secret)
+achievement_small_mario(325747, "Close Quarters", 5, level_grassland_4)
+achievement_progress(325720, "Unlucky Larry", 5, level_larry_castle)
 
-achievement_small_mario("Deep Trouble", 5, level_seaside_3)
-achievement_speedrun("Fire Flower Recommended", 5, level_seaside_4, 250)
-achievement_red_coins("Piracy", 5, level_wendy_battleship)
+achievement_secret_area(325748, "Beautiful Blue Coins", 2, level_desert_world_1, room_desert_world_1, room_desert_world_1_secret)
+achievement_small_mario(325749, "Pyramid of No Power", 5, level_pyramid)
+achievement_secret_area(325750, "Moai Menace", 2, level_desert_world_4, room_desert_world_4, room_desert_world_4_secret)
+achievement_speedrun(325751, "Rage Race", 5, level_quicksand, 240)
+achievement_progress(325721, "Big Mouth Shuts Up", 5, level_morton_castle)
 
-achievement_speedrun("Lakitu's Rain of Terror", 5, level_giant_isle_2, 220)
-achievement_small_mario("Extra Small", 5, level_giant_isle_3)
+achievement_small_mario(325752, "Deep Trouble", 5, level_seaside_3)
+achievement_progress(325722, "Invasion by Sea", 5, level_seaside_fortress)
+achievement_speedrun(325753, "Fire Flower Recommended", 5, level_seaside_4, 250)
+achievement_progress(325723, "Battleship Sunk", 5, level_wendy_battleship)
+achievement_red_coins(325754, "Piracy", 5, level_wendy_battleship)
 
-achievement_secret_area("Conspicuous Pipe", 2, level_piranha_hills_1, room_piranha_hills_1, room_piranha_hills_1_secret)
+achievement_speedrun(325755, "Lakitu's Rain of Terror", 5, level_giant_isle_2, 220)
+achievement_progress(325724, "A Harrowing Ordeal", 5, level_gi_ghost_house)
+achievement_small_mario(325756, "Extra Small", 5, level_giant_isle_3)
+achievement_progress(325725, "Crazed Koopa", 10, level_iggy_castle)
 
-achievement_small_mario("Birds of Prey", 5, level_sky_1)
-achievement_speedrun("Familiar Territory", 5, level_sky_3, 200)
-
-achievement_small_mario("Ptooie Panic", 5, level_ice_land_1)
-achievement_speedrun("Big Bertha's Revenge", 5, level_ice_land_3, 340)
+achievement_secret_area(325757, "Conspicuous Pipe", 2, level_piranha_hills_1, room_piranha_hills_1, room_piranha_hills_1_secret)
+achievement_small_mario(325758, "Birds of Prey", 5, level_sky_1)
+achievement_speedrun(325759, "Familiar Territory", 5, level_sky_3, 200)
+achievement_progress(325726, "Invasion by Air", 5, level_sky_fortress)
 achievement(
+    id = 325742,
+    title = "Finally!",
+    description = "Get a Super Leaf and become Raccoon Mario.",
+    points = 2,
+    trigger = game_state() == state_in_level &&
+              prev(mario_power_state()) != raccoon_mario &&
+              mario_power_state() == raccoon_mario
+)
+achievement_progress(325727, "Bullied", 10, level_roy_ship)
+
+achievement_small_mario(325760, "Ptooie Panic", 5, level_ice_land_1)
+achievement_speedrun(325761, "Big Bertha's Revenge", 5, level_ice_land_3, 340)
+achievement_progress(325728, "Winter Invasion", 5, level_ice_fortress)
+achievement_progress(325729, "Down with the Clown", 10, level_lemmy_castle)
+achievement(
+    id = 325762,
     title = "Lemmy's Precious Treasure",
     description = "Get the 3-Up Moon in Lemmy's Castle",
     points = 5,
@@ -833,11 +798,13 @@ achievement(
               lemmy_castle_moon() == empty_tile
 )
 
-achievement_secret_area("Where's Yoshi Though", 2, level_yoshi_island_1, room_yoshi_island_1, room_yoshi_island_1_secret)
-achievement_speedrun("Bah Bah!", 5, level_yoshi_island_1, 230)
-achievement_red_coins("Yoshi's Red Coins", 5, level_yoshi_island_2)
-achievement_red_coins("More Stealing from Yoshi", 5, level_yoshi_island_3)
+achievement_secret_area(325763, "Where's Yoshi Though", 2, level_yoshi_island_1, room_yoshi_island_1, room_yoshi_island_1_secret)
+achievement_speedrun(325764, "Bah Bah!", 5, level_yoshi_island_1, 230)
+achievement_red_coins(325765, "Yoshi's Red Coins", 5, level_yoshi_island_2)
+achievement_red_coins(325766, "More Stealing from Yoshi", 5, level_yoshi_island_3)
+achievement_progress(325730, "Ghost Hunter", 5, level_yi_ghost_house)
 achievement(
+    id = 325767,
     title = "Haunted Treasure",
     description = "Get all Red Coins and the 3-Up Moon in Yoshi's Island Ghost House.",
     points = 5,
@@ -855,6 +822,7 @@ achievement(
               never(game_state() == state_world_map)
 )
 achievement(
+    id = 325768,
     title = "Dense Jungle",
     description = "Clear Yoshi's Island 4 as Small Mario from start to finish, without getting a power-up. (Watch out for a buggy death tile in the tunnel!)",
     points = 5,
@@ -871,20 +839,38 @@ achievement(
               never(mario_power_state() != small_mario) &&
               never(game_state() == state_world_map)
 )
+achievement_progress(325731, "Ludwig's Last Symphony", 10, level_ludwig_castle)
 
-achievement_secret_area("Dark Secrets", 3, level_bowser_land_1, room_bowser_land_1, room_bowser_land_1_secret)
-achievement_speedrun("Rage Race 2: Slow and Steady Wins the Race", 5, level_bowser_land_2, 330)
-achievement_small_mario("Sky Craptain and the World of Mario", 5, level_crappy_ship)
+achievement_secret_area(325769, "Dark Secrets", 3, level_bowser_land_1, room_bowser_land_1, room_bowser_land_1_secret)
+achievement_speedrun(325770, "Rage Race 2: Slow and Steady Wins the Race", 5, level_bowser_land_2, 330)
+achievement_progress(325732, "Lethal Lava Lord", 5, level_magma_castle)
+achievement_small_mario(325771, "Sky Craptain and the World of Mario", 5, level_crappy_ship)
+achievement_progress(325733, "Final Invasion", 5, level_mystery_castle)
+achievement_progress(325734, "King of the Koopas", 25, level_bowser_castle)
 
-achievement_secret_area("Bonus World Bonus", 2, level_bonus_world_1, room_bonus_world_1, room_bonus_world_1_secret)
-achievement_speedrun("Classic SMW Feel", 5, level_bonus_world_1, 255)
-achievement_secret_area("The Blue Cave", 2, level_bonus_world_2, room_bonus_world_2, room_bonus_world_2_secret)
-achievement_secret_area("Cozy Night", 2, level_bonus_world_3, room_bonus_world_3, room_bonus_world_3_secret)
-achievement_small_mario("Mario's Last Stand", 5, level_bonus_world_4)
+achievement_secret_area(325772, "Bonus World Bonus", 2, level_bonus_world_1, room_bonus_world_1, room_bonus_world_1_secret)
+achievement_speedrun(325773, "Classic SMW Feel", 5, level_bonus_world_1, 255)
+achievement_secret_area(325774, "The Blue Cave", 2, level_bonus_world_2, room_bonus_world_2, room_bonus_world_2_secret)
+achievement_secret_area(325775, "Cozy Night", 2, level_bonus_world_3, room_bonus_world_3, room_bonus_world_3_secret)
+achievement_small_mario(325776, "Mario's Last Stand", 5, level_bonus_world_4)
+achievement_progress(325735, "Mysterious Land", 5, level_bonus_world_5)
 
-// Couldn't find tile addresses for these 1-Ups, like with the 3-Up Moon cheevos.
-// But they're found between x-coordinates 0x0f00 and 0x1000
 achievement(
+    id = 325736,
+    title = "Chill With Your Bro",
+    description = "Get the 1-Up in Mario's Pad.",
+    points = 1,
+    trigger = game_state() == state_in_level &&
+              level() == level_mario_pad &&
+              room() == room_mario_pad_inside &&
+              lives() > prev(lives())
+)
+achievement_fun_house(325737, "Many Coins, One Point", "Clear Coin Ship in Fun House.", 1, room_fun_house_coin_ship_boss)
+achievement_fun_house(325738, "The Hammering Fields", "Clear Hammer Bro. Zone in Fun House.", 2, room_fun_house_hammer_bro_zone)
+achievement_fun_house(325739, "Lost in the Desert", "Clear Desert Maze in Fun House.", 2, room_fun_house_desert_maze)
+achievement_fun_house(325740, "A Cold and Cruel Challenge", "Clear Frost Cave in Fun House.", 5, room_fun_house_frost_cave)
+achievement(
+    id = 325777,
     title = "The Secret Exit",
     description = "Get the 3 hidden 1-Ups in Frost Cave in Fun House.",
     points = 5,
@@ -920,12 +906,24 @@ achievement(
               ) &&
               never(game_state() == state_world_map)
 )
+achievement(
+    id = 325741,
+    title = "Mario Astral Projects to SMW",
+    description = "Defeat Bowser in Fun House.",
+    points = 3,
+    trigger = game_state() == state_fun_house_bowser &&
+              level() == level_fun_house &&
+              room() == room_fun_house_bowser &&
+              prev(exit_level()) == 0 &&
+              exit_level() == exit_level_complete
+)
 
 // ------------
 // Leaderboards
 // ------------
 
 leaderboard(
+    id = 66978,
     title = "Lowest Score: Full Game",
     description = "One session, starts after New Game, ends after clearing Bonus World 5. If you want to remove the tracker and cancel this challenge, press L+X+Select while on the world map.",
     start = game_state() == state_transition &&
@@ -944,6 +942,7 @@ leaderboard(
 )
 
 leaderboard(
+    id = 66979,
     title = "Speedrun: Full Game",
     description = "One session, starts after New Game, ends after clearing Bonus World 5. If you want to remove the tracker and cancel this challenge, press R+X+Select while on the world map.",
     start = game_state() == state_transition &&
@@ -961,14 +960,113 @@ leaderboard(
     lower_is_better = true
 )
 
+leaderboard_id = {
+    level_grassland_1: 66980,
+    level_grassland_2: 66981,
+    level_grassland_3: 66982,
+    level_grassland_4: 66983,
+    level_larry_castle: 66984,
+    level_desert_world_1: 66985,
+    level_desert_world_2: 66986,
+    level_pyramid: 66987,
+    level_desert_world_3: 66988,
+    level_desert_world_4: 66989,
+    level_quicksand: 66990,
+    level_morton_castle: 66991,
+    level_seaside_1: 66992,
+    level_seaside_2: 66993,
+    level_seaside_3: 66994,
+    level_seaside_fortress: 66995,
+    level_seaside_4: 66996,
+    level_seaside_5: 66997,
+    level_seaside_6: 66998,
+    level_wendy_battleship: 66999,
+    level_giant_isle_1: 67000,
+    level_giant_isle_2: 67001,
+    level_gi_ghost_house: 67002,
+    level_giant_isle_3: 67003,
+    level_giant_isle_4: 67004,
+    level_iggy_castle: 67005,
+    level_piranha_hills_1: 67006,
+    level_sky_1: 67007,
+    level_sky_2: 67008,
+    level_sky_3: 67009,
+    level_sky_fortress: 67010,
+    level_sky_4: 67011,
+    level_sky_5: 67012,
+    level_roy_ship: 67013,
+    level_ice_land_1: 67014,
+    level_ice_land_2: 67015,
+    level_ice_land_3: 67016,
+    level_ice_fortress: 67017,
+    level_ice_land_4: 67018,
+    level_ice_land_5: 67019,
+    level_ice_land_6: 67020,
+    level_lemmy_castle: 67021,
+    level_yoshi_island_1: 67022,
+    level_yoshi_island_2: 67023,
+    level_yoshi_island_3: 67024,
+    level_yi_ghost_house: 67025,
+    level_yoshi_island_4: 67026,
+    level_yoshi_island_5: 67027,
+    level_ludwig_castle: 67028,
+    level_bowser_tank_1: 67029,
+    level_to_bowser_land: 67030,
+    level_bowser_land_1: 67031,
+    level_bowser_land_2: 67032,
+    level_bowser_land_3: 67033,
+    level_magma_castle: 67034,
+    level_bowser_land_4: 67035,
+    level_bandit_cave: 67036,
+    level_swooper_cave: 67037,
+    level_dark_cave: 67038,
+    level_crappy_ship: 67039,
+    level_bowser_tower: 67040,
+    level_mystery_castle: 67041,
+    level_bowser_castle: 67042,
+    level_piranha_hills_2: 67043,
+    level_bonus_world_1: 67044,
+    level_bonus_world_2: 67045,
+    level_bonus_world_3: 67046,
+    level_bonus_world_4: 67047,
+    level_toad_castle: 67048,
+    level_bonus_world_5: 67049,
+    room_fun_house_coin_ship_boss: 67050,
+    room_fun_house_hammer_bro_zone: 67051,
+    room_fun_house_desert_maze: 67052,
+    room_fun_house_frost_cave: 67053,
+    room_fun_house_bowser: 67054
+}
+
 function leaderboard_level_speedrun(array) {
     for level_iteration in array {
         leaderboard(
+            id = leaderboard_id[level_iteration],
             title = level_dictionary[level_iteration] + " Speedrun",
             description = "Submits time remaining.",
             start = game_state() == state_in_level &&
                     level() == level_iteration &&
                     prev(exit_level()) == 0 &&
+                    exit_level() == exit_level_complete,
+            cancel = always_false(),
+            submit = always_true(),
+            value = measured(time()),
+            format = "VALUE"
+        )
+    }
+}
+
+// Used for the 3 cave levels due to an issue that arose with them. Small tweak to exit_level() logic
+// Could probably apply this to all leaderboards but don't want to mess with everything after it's live
+function leaderboard_level_speedrun_alt(array) {
+    for level_iteration in array {
+        leaderboard(
+            id = leaderboard_id[level_iteration],
+            title = level_dictionary[level_iteration] + " Speedrun",
+            description = "Submits time remaining.",
+            start = game_state() == state_in_level &&
+                    level() == level_iteration &&
+                    prev(exit_level()) != exit_level_complete &&
                     exit_level() == exit_level_complete,
             cancel = always_false(),
             submit = always_true(),
@@ -987,6 +1085,7 @@ leaderboard_level_speedrun(ice_land_array)
 leaderboard_level_speedrun(yoshi_island_array_1)
 
 leaderboard(
+    id = 67026,
     title = "Yoshi's Island 4 Speedrun",
     description = "Submits time remaining.",
     start = game_state() == state_in_level &&
@@ -1001,9 +1100,12 @@ leaderboard(
 )
 
 leaderboard_level_speedrun(yoshi_island_array_2)
-leaderboard_level_speedrun(bowser_land_array)
+leaderboard_level_speedrun(bowser_land_array_1)
+leaderboard_level_speedrun_alt(bowser_land_array_2)
+leaderboard_level_speedrun(bowser_land_array_3)
 
 leaderboard(
+    id = 67042,
     title = "Bowser's Castle Speedrun",
     description = "Submits time remaining.",
     start = game_state() == state_in_level &&
@@ -1020,6 +1122,7 @@ leaderboard(
 leaderboard_level_speedrun(bonus_world_array_1)
 
 leaderboard(
+    id = 67048,
     title = "Toad Castle Speedrun",
     description = "Why not?",
     start = game_state() == state_transition &&
@@ -1039,6 +1142,7 @@ leaderboard_level_speedrun(bonus_world_array_2)
 function leaderboard_fun_house_speedrun() {
     for room_iteration in fun_house_array {
         leaderboard(
+            id = leaderboard_id[room_iteration],
             title = room_dictionary[room_iteration] + " Speedrun",
             description = "Submits time remaining.",
             start = game_state() == state_in_level &&
@@ -1053,9 +1157,27 @@ function leaderboard_fun_house_speedrun() {
     }
 }
 
+// room() value for this one was shared with the last room in Bowser's Land 3. So had to add the level() logic
+// Could probably apply to all the fun house leaderboards, but still avoiding unnecessary changes
+leaderboard(
+    id = 67050,
+    title = "Fun House: Coin Ship Speedrun",
+    description = "Submits time remaining.",
+    start = game_state() == state_in_level &&
+            level() == 0xff &&
+            room() == room_fun_house_coin_ship_boss &&
+            prev(exit_level()) == 0 &&
+            exit_level() == exit_level_complete,
+    cancel = always_false(),
+    submit = always_true(),
+    value = measured(time()),
+    format = "VALUE"
+)
+
 leaderboard_fun_house_speedrun()
 
 leaderboard(
+    id = 67054,
     title = "Fun House: Bowser Speedrun",
     description = "Submits as ending cutscene begins.",
     start = prev(game_state()) == state_transition &&
@@ -1196,6 +1318,16 @@ rich_presence_conditional_display(
 rich_presence_conditional_display(
     mario_action() == mario_death,
     "Mario died in {0} | 🚶{1} | 🚪{2}/70",
+    rich_presence_lookup("Level", level(), level_dictionary),
+    rich_presence_value("Lives", lives() + 1),
+    rich_presence_value("Exits", total_exits())
+)
+
+// The hand that drags you into these levels will set the "exit_level_die_or_quit" value for the whole level. So they need separate logic for an appropriate message
+rich_presence_conditional_display(
+    exit_level() == exit_level_die_or_quit && (level() == level_bandit_cave || level() == level_swooper_cave || level() == level_dark_cave),
+    "{0} is in {1} | 🚶{2} | 🚪{3}/70",
+    rich_presence_lookup("MarioPower", mario_power_state(), mario_power_dictionary),
     rich_presence_lookup("Level", level(), level_dictionary),
     rich_presence_value("Lives", lives() + 1),
     rich_presence_value("Exits", total_exits())
