@@ -5,8 +5,8 @@ This script wasn't actually used to generate the achievements, and I haven't tes
 
 ## Resources
 
-Arduboy forum thread
-- https://community.arduboy.com/t/1944-return-to-midway-horizontal/4101
+Arduboy forum thread<br>
+https://community.arduboy.com/t/1944-return-to-midway-horizontal/4101
 
-Game download (Nineteen44.hex)
-- https://github.com/Press-Play-On-Tape/Nineteen44/tree/master/distributable
+Game download (Nineteen44.hex)<br>
+https://github.com/Press-Play-On-Tape/Nineteen44/tree/master/distributable
