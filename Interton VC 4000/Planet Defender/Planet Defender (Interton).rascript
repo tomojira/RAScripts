@@ -96,29 +96,44 @@ function ammo() => byte(0x590)
 // Achievements
 // ------------
 
-function achievement_progress(title, description, points, game_min, game_max, wave_parameter) {
+function achievement_progress(id, title, description, points, game_array, wave_parameter) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
         trigger = game_state() == in_game &&
-                  game_variation() >= game_min &&
-                  game_variation() <= game_max &&
-                  prev(enemy_wave()) == (wave_parameter - 1) &&
-                  enemy_wave() == wave_parameter
+                  __ornext(any_of(game_array, f => game_variation() == f)) &&
+                  prev(enemy_wave()) == (wave_parameter) &&
+                  enemy_wave() == (wave_parameter + 1)
     )
 }
 
-function achievement_score_perfect(title, points, game_min, game_max, score_parameter) {
+function achievement_wave_13(id, title, description, points, game_array) {
     achievement(
+        id = id,
         title = title,
-        description = "[Games " + game_min + " to " + game_max + "] Reach a score of at least " + score_parameter + " without ever letting a city get hit.",
+        description = description,
+        points = points,
+        trigger = game_state() == in_game &&
+                  __ornext(any_of(game_array, f => game_variation() == f)) &&
+                  prev(enemy_wave()) == 0xd &&
+                  enemy_wave() == 0xd &&
+                  prev(enemy_round()) == 0 &&
+                  enemy_round() == 7
+    )
+}
+
+function achievement_score_perfect(id, title, description, points, game_array, score_parameter) {
+    achievement(
+        id = id,
+        title = title,
+        description = description,
         points = points,
         trigger = once(prev(start_select_input()) == input_start &&
                        start_select_input() != input_start &&
                        game_state() == in_game &&
-                       game_variation() >= game_min &&
-                       game_variation() <= game_max
+                       __ornext(any_of(game_array, f => game_variation() == f))
                   ) &&
                   prev(score()) < score_parameter &&
                   trigger_when(score() >= score_parameter) &&
@@ -132,50 +147,45 @@ function achievement_score_perfect(title, points, game_min, game_max, score_para
     )
 }
 
-function achievement_score(title, points, game_min, game_max, score_parameter) {
+function achievement_score(id, title, description, points, game_array, score_parameter) {
     achievement(
+        id = id,
         title = title,
-        description = "[Games " + game_min + " to " + game_max + "] Reach a score of at least " + score_parameter + ".",
+        description = description,
         points = points,
         trigger = game_state() == in_game &&
-                  game_variation() >= game_min &&
-                  game_variation() <= game_max &&
+                  __ornext(any_of(game_array, f => game_variation() == f)) &&
                   prev(score()) < score_parameter &&
                   score() >= score_parameter
     )
 }
 
-achievement_progress("First Defence", "[Games 1 to 4] Reach the 2nd wave of ballistic missiles. (Each wave lasts 7 rounds of enemy attacks)", points=1, game_min=1, game_max=4, wave_parameter=2)
-achievement_progress("Red Revolution", "[Games 1 to 4] Reach the 5th wave, when red ballistic missiles appear.", points=2, game_min=1, game_max=4, wave_parameter=5)
-achievement_progress("The Deadly Purple Pixel", "[Games 1 to 4] Reach the 8th wave, when cruise missiles start appearing.", points=3, game_min=1, game_max=4, wave_parameter=8)
-achievement_progress("The Age of Green Missiles is Over...", "[Games 1 to 4] Reach the 9th wave, when green ballistic missiles appear.", points=3, game_min=1, game_max=4, wave_parameter=9)
-achievement_progress("...The Time of the White Missile Has Come!", "[Games 1 to 4] Reach the 11th wave, when white ballistic missiles appear.", points=5, game_min=1, game_max=4, wave_parameter=11)
-achievement_score_perfect("City Defender", points=5, game_min=1, game_max=4, score_parameter=2000)
+achievement_progress(325881, "First Defence", "[Game 1/2/3/4] Clear wave 1. (Each wave lasts 7 rounds of enemy attacks)", points=1, game_array=range(1, 4), wave_parameter=1)
+achievement_progress(325882, "Yellow Shield: Target Control A", "[Game 1/3] Clear wave 4 - the final wave of yellow ballistic missiles.", points=1, game_array=range(1, 3, 2), wave_parameter=4)
+achievement_progress(325883, "Yellow Shield: Target Control B", "[Game 2/4] Clear wave 4 - the final wave of yellow ballistic missiles.", points=1, game_array=range(2, 4, 2), wave_parameter=4)
+achievement_progress(325884, "Red Revolution", "[Game 1/2/3/4] Clear wave 8 - the final wave of red ballistic missiles and the first wave of cruise missiles.", points=3, game_array=range(1, 4), wave_parameter=8)
+achievement_progress(325885, "The Age of Green Missiles is Over...", "[Game 1/2/3/4] Clear wave 10 - the final wave of green ballistic missiles.", points=5, game_array=range(1, 4), wave_parameter=10)
+achievement_wave_13(331687, "...The Time of the White Missile Has Come!", "[Game 1/2/3/4] Clear wave 13 - the wave that loops forever.", points=10, game_array=range(1, 4))
+achievement_score_perfect(325886, "City Defender", "[Game 1/2/3/4] Reach a score of at least 2000 without ever letting a city get hit.", points=5, game_array=range(1, 4), score_parameter=2000)
 
-achievement_progress("Kick It Up a Notch", "[Games 5 to 8] Reach the 9th wave, when green ballistic missiles appear. (These games start on wave 5)", points=3, game_min=5, game_max=8, wave_parameter=9)
-achievement_progress("Return of the White Menace", "[Games 5 to 8] Reach the 11th wave, when white ballistic missiles appear.", points=5, game_min=5, game_max=8, wave_parameter=11)
-achievement_score_perfect("Man of the People", points=5, game_min=5, game_max=8, score_parameter=1500)
+achievement_progress(325887, "Red Revenge: Target Control A", "[Game 5/7] Clear wave 8 - the final wave of red ballistic missiles and the first wave of cruise missiles.", points=2, game_array=range(5, 7, 2), wave_parameter=8)
+achievement_progress(331688, "The Deadly Purple Pixel: Target Control B", "[Game 6/8] Clear wave 8 - the final wave of red ballistic missiles and the first wave of cruise missiles.", points=2, game_array=range(6, 8, 2), wave_parameter=8)
+achievement_progress(325888, "Green Vengeance", "[Game 5/6/7/8] Clear wave 10 - the final wave of green ballistic missiles.", points=5, game_array=range(5, 8), wave_parameter=10)
+achievement_wave_13(331689, "Return of the White Menace", "[Game 5/6/7/8] Clear wave 13 - the wave that loops forever.", points=10, game_array=range(5, 8))
+achievement_score_perfect(325889, "Man of the People", "[Game 5/6/7/8] Reach a score of at least 1500 without ever letting a city get hit.", points=5, game_array=range(5, 8), score_parameter=1500)
 
-achievement_progress("Brief Green Onslaught", "[Games 9 to 12] Reach the 11th wave, when white ballistic missiles appear. (These games start on wave 9)", points=5, game_min=9, game_max=12, wave_parameter=11)
-achievement_score("Survival", points=5, game_min=9, game_max=12, score_parameter=1500)
+achievement_progress(325890, "Green Defeat: Target Control A", "[Game 9/11] Clear wave 10 - the final wave of green ballistic missiles.", points=3, game_array=range(9, 11, 2), wave_parameter=10)
+achievement_progress(331690, "Green Defeat: Target Control B", "[Game 10/12] Clear wave 10 - the final wave of green ballistic missiles.", points=3, game_array=range(10, 12, 2), wave_parameter=10)
+achievement_progress(331691, "Green Defeat: Against the Dumb Missiles", "[Game 9/10] Clear wave 10 - the final wave of green ballistic missiles.", points=3, game_array=range(9, 10), wave_parameter=10)
+achievement_progress(331692, "Green Defeat: Against the Smart Missiles", "[Game 11/12] Clear wave 10 - the final wave of green ballistic missiles.", points=3, game_array=range(11, 12), wave_parameter=10)
+achievement_wave_13(331693, "White Duel", "[Game 9/10/11/12] Clear wave 13 - the wave that loops forever.", points=10, game_array=range(9, 12))
+achievement_score(325891, "Survival", "[Game 9/10/11/12] Reach a score of at least 1500.", points=5, game_array=range(9, 12), score_parameter=1500)
 
-achievement_progress("Duel with the Dumb Missiles", "[Games 13 to 14] Reach the 12th wave of missiles. (These games start on wave 11)", points=5, game_min=13, game_max=14, wave_parameter=12)
-achievement_progress("Battle of Wits with the Smart Missiles", "[Games 15 to 16] Reach the 12th wave of missiles. (These games start on wave 11)", points=5, game_min=15, game_max=16, wave_parameter=12)
-
-achievement(
-    title = "Nothing Special... Just a Guy Who Defends Planets",
-    description = "[Games 13 to 16] Clear the 13th wave, the wave of the endless loop, thus asserting your dominance over the missiles.",
-    points = 10,
-    trigger = game_state() == in_game &&
-              game_variation() >= 13 &&
-              game_variation() <= 16 &&
-              prev(enemy_wave()) == 0xd &&
-              enemy_wave() == 0xd &&
-              prev(enemy_round()) == 0 &&
-              enemy_round() == 7
-)
-
-achievement_score("Pushed to the Brink", points=5, game_min=13, game_max=16, score_parameter=1500)
+achievement_wave_13(325894, "Defender of Planets: Target Control A", "[Game 13/15] Clear wave 13 - the wave that loops forever.", points=5, game_array=range(13, 15, 2))
+achievement_wave_13(331694, "Defender of Planets: Target Control B", "[Game 14/16] Clear wave 13 - the wave that loops forever.", points=5, game_array=range(14, 16, 2))
+achievement_wave_13(325892, "Defender of Planets: Against the Dumb Missiles", "[Game 13/14] Clear wave 13 - the wave that loops forever.", points=5, game_array=range(13, 14))
+achievement_wave_13(325893, "Defender of Planets: Against the Smart Missiles", "[Game 15/16] Clear wave 13 - the wave that loops forever.", points=5, game_array=range(15, 16))
+achievement_score(325895, "Pushed to the Brink", "[Game 13/14/15/16] Reach a score of at least 1500.", points=5, game_array=range(13, 16), score_parameter=1500)
 
 // ------------
 // Leaderboards
@@ -191,13 +201,24 @@ function leaderboard_high_score() {
                     cities_all() == 0,
             cancel = always_false(),
             submit = always_true(),
-            value = score(),
+            value = measured(score()),
             format = "VALUE"
         )
     }
 }
 
 leaderboard_high_score()
+
+// Doesn't seem to work
+// leaderboard(
+//     title = "Display Wave Number",
+//     description = "This is not an actual leaderboard. It is used to display the current wave number to the player.",
+//     start = always_true(),
+//     cancel = always_false(),
+//     submit = always_false(),
+//     value = measured(enemy_wave()),
+//     format = "VALUE"
+// )
 
 // -------------
 // Rich Presence
