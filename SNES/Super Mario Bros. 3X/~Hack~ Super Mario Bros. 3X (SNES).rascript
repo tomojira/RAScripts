@@ -61,6 +61,7 @@ exit_level_die_or_quit = 0x80
 function mario_action() => byte(0x71)
 
 mario_death = 9
+end_level_star = 0xb
 enter_door = 0xd
 
 // $0019: Mario power-up state [8-bit]
@@ -869,43 +870,58 @@ achievement_fun_house(325737, "Many Coins, One Point", "Clear Coin Ship in Fun H
 achievement_fun_house(325738, "The Hammering Fields", "Clear Hammer Bro. Zone in Fun House.", 2, room_fun_house_hammer_bro_zone)
 achievement_fun_house(325739, "Lost in the Desert", "Clear Desert Maze in Fun House.", 2, room_fun_house_desert_maze)
 achievement_fun_house(325740, "A Cold and Cruel Challenge", "Clear Frost Cave in Fun House.", 5, room_fun_house_frost_cave)
+
 achievement(
     id = 325777,
     title = "The Secret Exit",
-    description = "Get the 3 hidden 1-Ups in Frost Cave in Fun House.",
+    description = "Clear the secret exit in Frost Cave in Fun House.",
     points = 5,
-    trigger = once(game_state() == state_in_level &&
-                   level() == level_fun_house &&
-                   room() == room_fun_house_frost_cave &&
-                   mario_x() > 0xf70 &&
-                   mario_x() < 0xfd0 &&
-                   mario_y() > 0xf0 &&
-                   mario_y() < 0x130 &&
-                   prev(fun_house_frost_cave_1_up_3()) == 1 &&
-                   fun_house_frost_cave_1_up_3() == 0
-              ) &&
-              once(game_state() == state_in_level &&
-                   level() == level_fun_house &&
-                   room() == room_fun_house_frost_cave &&
-                   mario_x() > 0xf70 &&
-                   mario_x() < 0xfd0 &&
-                   mario_y() > 0xf0 &&
-                   mario_y() < 0x130 &&
-                   prev(fun_house_frost_cave_1_up_2()) == 1 &&
-                   fun_house_frost_cave_1_up_2() == 0
-              ) &&
-              once(game_state() == state_in_level &&
-                   level() == level_fun_house &&
-                   room() == room_fun_house_frost_cave &&
-                   mario_x() > 0xf70 &&
-                   mario_x() < 0xfd0 &&
-                   mario_y() > 0xf0 &&
-                   mario_y() < 0x130 &&
-                   prev(fun_house_frost_cave_1_up_1()) == 1 &&
-                   fun_house_frost_cave_1_up_1() == 0
-              ) &&
-              never(game_state() == state_world_map)
+    trigger = game_state() == state_in_level &&
+              level() == level_fun_house &&
+              room() == room_fun_house_frost_cave &&
+              mario_action() != end_level_star &&
+              prev(exit_level()) == 0 &&
+              exit_level() == exit_level_complete
 )
+// This old design was unreliable, see Drew's comment here https://retroachievements.org/achievement/325777
+//achievement(
+//    id = 325777,
+//    title = "The Secret Exit",
+//    description = "Get the 3 hidden 1-Ups in Frost Cave in Fun House.",
+//    points = 5,
+//    trigger = once(game_state() == state_in_level &&
+//                   level() == level_fun_house &&
+//                   room() == room_fun_house_frost_cave &&
+//                   mario_x() > 0xf70 &&
+//                   mario_x() < 0xfd0 &&
+//                   mario_y() > 0xf0 &&
+//                   mario_y() < 0x130 &&
+//                   prev(fun_house_frost_cave_1_up_3()) == 1 &&
+//                   fun_house_frost_cave_1_up_3() == 0
+//              ) &&
+//              once(game_state() == state_in_level &&
+//                   level() == level_fun_house &&
+//                   room() == room_fun_house_frost_cave &&
+//                   mario_x() > 0xf70 &&
+//                   mario_x() < 0xfd0 &&
+//                   mario_y() > 0xf0 &&
+//                   mario_y() < 0x130 &&
+//                   prev(fun_house_frost_cave_1_up_2()) == 1 &&
+//                   fun_house_frost_cave_1_up_2() == 0
+//              ) &&
+//              once(game_state() == state_in_level &&
+//                   level() == level_fun_house &&
+//                   room() == room_fun_house_frost_cave &&
+//                   mario_x() > 0xf70 &&
+//                   mario_x() < 0xfd0 &&
+//                   mario_y() > 0xf0 &&
+//                   mario_y() < 0x130 &&
+//                   prev(fun_house_frost_cave_1_up_1()) == 1 &&
+//                   fun_house_frost_cave_1_up_1() == 0
+//              ) &&
+//              never(game_state() == state_world_map)
+//)
+
 achievement(
     id = 325741,
     title = "Mario Astral Projects to SMW",
