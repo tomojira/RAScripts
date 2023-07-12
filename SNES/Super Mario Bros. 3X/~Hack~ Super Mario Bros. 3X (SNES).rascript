@@ -1,6 +1,6 @@
 // ~Hack~ Super Mario Bros. 3X
 // #ID = 6614
-// md5: 012d5ec25d9bbfc9e035483911ba0631 - Super Mario Bros. 3 X (Final 2.6) by Mirumo (Koyuki) [2014-06-24] (SMW Hack).sfc
+// MD5: 012d5ec25d9bbfc9e035483911ba0631 - Super Mario Bros. 3 X (Final 2.6) by Mirumo (Koyuki) [2014-06-24] (SMW Hack).sfc
 
 // --------------------------------------
 // Useful notes, variables, and functions
@@ -662,15 +662,22 @@ function fun_house_frost_cave_1_up_1() => byte(0x1ab18)
 // Progress
 // --------
 
+// Added an alt group so it functions the same as other achievements, after a player had a problem https://retroachievements.org/achievement/325727
+// Bitflag clear alone didn't really make sense, now it's repeatable
 function achievement_progress(id, title, points, level_parameter) {
     achievement(
         title = title,
         description = "Clear " + level_dictionary[level_parameter] + ".",
         points = points,
-        trigger = game_state() == state_world_map &&
-                  level() == level_parameter &&
-                  prev(level_complete_dictionary[level_parameter]) == 0 &&
-                  level_complete_dictionary[level_parameter] == 1
+        trigger = always_true() &&
+                  (game_state() == state_world_map &&
+                   level() == level_parameter &&
+                   prev(level_complete_dictionary[level_parameter]) == 0 &&
+                   level_complete_dictionary[level_parameter] == 1) ||
+                  (__ornext(game_state() == state_in_level || game_state() == state_transition) &&
+                   level() == level_parameter &&
+                   prev(exit_level()) == 0 &&
+                   exit_level() == exit_level_complete)
     )
 }
 
