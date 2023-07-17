@@ -1,6 +1,8 @@
 // Boulder Dash EX
 // #ID = 9641
-// md5: 70ed2328306fa863bf144b7fdcdbfdfd - Boulder Dash EX (Europe) (En,Fr,De).gba
+// MD5: 70ED2328306FA863BF144B7FDCDBFDFD - Boulder Dash EX (Europe) (En,Fr,De).gba
+// MD5: 8653D5731F4EFFD21E435B9A274023A4 - Boulder Dash EX (USA).gba
+// MD5: 3CC5E954F8ADC6D313C44DA31E3F8A5C - Boulder Dash EX (Japan).gba
 
 // --------------------------------------
 // Useful notes, variables, and functions
@@ -37,6 +39,7 @@
 
 function screen() => byte(0xbea0)
 
+title_main_menu_demo = 1
 story_mode_world_select = 3
 story_mode_in_game = 4
 classic_mode_title = 5
@@ -89,16 +92,50 @@ story_mode_stage_select = 0x5a
 //          0xf2 or 0xf3 = Tutorial menus
 //          0xf8 = Classic Mode All Clear
 //          0xfa or 0xfb = Options, Language Select, Preview Scenes
+//
+//          USA: (only listing relevant values for RP)
+//          0x06 or 0x07 = Card Collection
+//          0x3c or 0x3d = Battle Mode menus
+//          0x42 = Battle Mode: Player 1 wins
+//          0x44 or 0x45 = Battle Mode in-game
+//          0x4a = Opening cutscene
+//          0x4d = Opening cutscene: Dark King appears
+//          0x54 = Opening cutscene: Sonya kidnapped
+//          0x59 or 0x5a = Most cutscenes
+//          0x5f or 0x60 = Cutscenes: Dark King theme
+//          0x64 or 0x65 = Cutscene VI: Alex faces Dark King
+//          0x6b or 0x6c = Cutscene VI: Sonya saved
+//          0x6f or 0x70 = Credits (only 1 frame 0x6f, then all 0x70)
+//          0x91 = EX Game: Stage intro, also outro in Story Mode, and 1 frame before Game Over
+//          0x92 = Story Mode: Game Over / Battle Mode: Player 1 loses, draw, or exit
+//          0xe9 = EX Game menu, Classic Game menu
+//
+//          Japan:
+//          0x08 or 0x09 = Card Collection
+//          0x3e or 0x3f = Battle Mode menus
+//          0x44 = Battle Mode: Player 1 wins
+//          0x45 or 0x46 = Battle Mode in-game
+//          0x4c = Opening cutscene
+//          0x4e or 0x4f = Opening cutscene: Dark King appears
+//          0x55 or 0x56 = Opening cutscene: Sonya kidnapped
+//          0x5a or 0x5b = Most cutscenes
+//          0x61 or 0x62 = Cutscenes: Dark King theme
+//          0x66 or 0x67 = Cutscene VI: Alex faces Dark King
+//          0x6d = Cutscene VI: Sonya saved
+//          0x71 or 0x72 = Credits
+//          0x93 = EX Game: Stage intro, also outro in Story Mode, and 1 frame before Game Over
+//          0x94 = Story Mode: Game Over / Battle Mode: Player 1 loses, draw, or exit
+//          0xea or 0xeb = EX Game menu, Classic Game menu
 
 function music() => byte(0xcc9)
 
-music_card_collection = 6
+//music_card_collection = 6
 //music_battle_mode_menu = [0x3c, 0x3d]
-music_battle_mode_p1_wins = 0x42
+//music_battle_mode_p1_wins = 0x42
 //music_credits_1 = 0x6f
 //music_credits_2 = 0x70
 music_ex_stage_intro_outro = 0x91
-music_ex_game_over = 0x92
+//music_ex_game_over = 0x92
 
 // this didn't seem to work in the rich presence
 //function music_check(music_array) {
@@ -109,11 +146,19 @@ music_ex_game_over = 0x92
 //    return condition
 //}
 
-function music_battle_mode_menus() => (music() >= 0x3c && music() <= 0x3d)
+function music_battle_mode_menus() => (music() >= 0x3c && music() <= 0x3f)
 function music_battle_mode_in_game() => (music() >= 0x43 && music() <= 0x44)
-function music_story_mode_scenes() => (music() >= 0x49 && music() <= 0x6b)
-function music_story_mode_credits() => (music() >= 0x6f && music() <= 0x70)
-function music_game_menus() => (music() >= 0xe8 && music() <= 0xe9)
+function music_story_mode_scenes() => (music() >= 0x49 && music() <= 0x6d)
+function music_story_mode_credits() => (music() >= 0x6f && music() <= 0x72)
+function music_game_menus() => (music() >= 0xe8 && music() <= 0xeb)
+function music_card_collection() => (music() >= 6 && music() <= 9)
+
+// This will conflict with Battle Mode in-game, but should be mostly ok with battle_mode_time_proper() used in RP
+// Unfortunately still flawed sometimes when exiting in USA and Europe roms. Replace with something else
+function music_battle_mode_p1_wins() => (music() == 0x42 || music() == 0x44)
+
+// Can't do >= and <= and include 0x93, it's used by entrance theme
+function music_ex_game_over() => (music() == 0x92 || music() == 0x94)
 
 // -------
 // EX Game
@@ -730,6 +775,7 @@ function card_41_dark_king() => byte(0x203fc)
 
 function battle_mode_time_setting() => byte(0x13cd0)
 
+one_minute = 0
 two_minutes = 1
 
 // $013CCE: Battle Mode: Computer setting [8-bit]
@@ -768,6 +814,8 @@ character_dictionary = {
     3: "Emily"
 }
 
+function battle_mode_p1_character_not_alex() => (battle_mode_p1_character() >= 1 && battle_mode_p1_character() <= 3)
+
 // $0217C8: Battle Mode: Current/Last played stage [8-bit]
 //          0x00 to 0x09 = Stage 1 to 10
 
@@ -805,9 +853,26 @@ function battle_mode_time_proper() => byte(0x24ac1)
 
 proper_time = 0x20
 
+// $02570E: Battle Mode: Graphics [8-bit]
+//          0x00 = Settings menu
+//          0x02 = Draw
+//          0x0e = In-game
+//          0xb2 = Player 1 wins
+//          0xca = Player 1 loses
+//          0xe3 = Exit
+//          Stays the same after exiting to EX Game menu or One Player/Multiplayer menu.
+//          Values are the same regardless of language/rom - English, German, French, Japanese
+
+function battle_mode_graphics() => byte(0x2570e)
+
+graphics_p1_wins = 0xb2
+
 // ------------
 // Classic Game
 // ------------
+
+// Classic Mode achievements and leaderboard have been moved into a subset
+// But most of these are still used here for RP
 
 // $01BA18: Classic Game: Time remaining [8-bit]
 
@@ -956,9 +1021,10 @@ function achievement_ex_tutorial_trigger() {
 }
 
 achievement(
+    id = 316999,
     title = "Learn to Play",
     description = "In one session, clear every lesson in the EX Game Tutorial.",
-    points = 2,
+    points = 1,
     trigger = achievement_ex_tutorial_trigger()
 )
 
@@ -995,8 +1061,9 @@ achievement(
 //    }
 //}
 
-function achievement_story_progress(title, description, points, world, stage) {
+function achievement_story_progress(id, title, description, points, world, stage) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
@@ -1024,34 +1091,35 @@ function description_story_progress_all(world) {
 
 // old title: "The Forest Path"
 //achievement_story_progress("Through the Looking Glass", description_story_progress_5(forest), 3, forest, 5)
-achievement_story_progress("Through the Looking Glass", description_story_progress_all(forest), 5, forest, 10)
+achievement_story_progress(317000, "Through the Looking Glass", description_story_progress_all(forest), 5, forest, 10)
 
 //achievement_story_progress("Desert Wanderer", description_story_progress_5(sand), 3, sand, 5)
-achievement_story_progress("Out of the Frying Pan", description_story_progress_all(sand), 5, sand, 10)
+achievement_story_progress(317001, "Out of the Frying Pan", description_story_progress_all(sand), 5, sand, 10)
 
 // old title: "Hot Pursuit""
 //achievement_story_progress("Into the Fire", description_story_progress_5(fire), 3, fire, 5)
-achievement_story_progress("Into the Fire", description_story_progress_all(fire), 5, fire, 10)
+achievement_story_progress(317002, "Into the Fire", description_story_progress_all(fire), 5, fire, 10)
 
 //achievement_story_progress("The Life Aquatic", description_story_progress_5(water), 4, water, 5)
 //achievement_story_progress("In Deep Water", description_story_progress_10(water), 4, water, 10)
-achievement_story_progress("Ocean Man", description_story_progress_all(water), 5, water, 15)
+achievement_story_progress(317003, "Ocean Man", description_story_progress_all(water), 10, water, 15)
 
 // old title: "Cool Party"
 //achievement_story_progress("The Iceman Cometh!", description_story_progress_5(ice), 5, ice, 5)
 //achievement_story_progress("What Killed the Dinosaurs? The Ice Age!", description_story_progress_10(ice), 5, ice, 10)
-achievement_story_progress("Cool", description_story_progress_all(ice), 5, ice, 15)
+achievement_story_progress(317004, "Cool", description_story_progress_all(ice), 10, ice, 15)
 
 //achievement_story_progress("Storming the Castle", description_story_progress_5(evil), 5, evil, 5)
 //achievement_story_progress("The Final Stretch", description_story_progress_10(evil), 5, evil, 10)
-achievement_story_progress("Against the Dark King", description_story_progress_all(evil), 5, evil, 15)
+achievement_story_progress(317005, "Against the Dark King", description_story_progress_all(evil), 25, evil, 15)
 
 // --------------------------
 // Story Mode: Perfect Stages
 // --------------------------
 
-function achievement_perfect_stages(title, description, points, world, number_of_stages) {
+function achievement_perfect_stages(id, title, description, points, world, number_of_stages) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
@@ -1074,26 +1142,26 @@ function description_perfect_stages_all(world) {
     return "Collect all Mirror Jewels in every stage in " + world_dictionary[world] + "."
 }
 
-achievement_perfect_stages("Forest Treasures", description_perfect_stages_5(forest), 3, forest, 5)
-achievement_perfect_stages("The Secret World of Alex Cat", description_perfect_stages_all(forest), 3, forest, 10)
+achievement_perfect_stages(317006, "Forest Treasures", description_perfect_stages_5(forest), 1, forest, 5)
+achievement_perfect_stages(317007, "The Secret World of Alex Cat", description_perfect_stages_all(forest), 1, forest, 10)
 
-achievement_perfect_stages("Combing the Desert", description_perfect_stages_5(sand), 3, sand, 5)
-achievement_perfect_stages("No Stone Left Unturned", description_perfect_stages_all(sand), 3, sand, 10)
+achievement_perfect_stages(317008, "Combing the Desert", description_perfect_stages_5(sand), 2, sand, 5)
+achievement_perfect_stages(317009, "No Stone Left Unturned", description_perfect_stages_all(sand), 2, sand, 10)
 
-achievement_perfect_stages("Hot Ticket Items", description_perfect_stages_5(fire), 3, fire, 5)
-achievement_perfect_stages("No Coal Here", description_perfect_stages_all(fire), 3, fire, 10)
+achievement_perfect_stages(317010, "Hot Ticket Items", description_perfect_stages_5(fire), 3, fire, 5)
+achievement_perfect_stages(317011, "No Coal Here", description_perfect_stages_all(fire), 3, fire, 10)
 
-achievement_perfect_stages("The Treasure Hunt Continues", description_perfect_stages_5(water), 4, water, 5)
-achievement_perfect_stages("Deep Sea Gems", description_perfect_stages_10(water), 4, water, 10)
-achievement_perfect_stages("Wealth of the Waves", description_perfect_stages_all(water), 4, water, 15)
+achievement_perfect_stages(317012, "The Treasure Hunt Continues", description_perfect_stages_5(water), 4, water, 5)
+achievement_perfect_stages(317013, "Deep Sea Gems", description_perfect_stages_10(water), 4, water, 10)
+achievement_perfect_stages(317014, "Wealth of the Waves", description_perfect_stages_all(water), 5, water, 15)
 
-achievement_perfect_stages("Glittering Treasures", description_perfect_stages_5(ice), 5, ice, 5)
-achievement_perfect_stages("Cold Determination", description_perfect_stages_10(ice), 5, ice, 10)
-achievement_perfect_stages("Iced Out", description_perfect_stages_all(ice), 5, ice, 15)
+achievement_perfect_stages(317015, "Glittering Treasures", description_perfect_stages_5(ice), 5, ice, 5)
+achievement_perfect_stages(317016, "Cold Determination", description_perfect_stages_10(ice), 5, ice, 10)
+achievement_perfect_stages(317017, "Iced Out", description_perfect_stages_all(ice), 10, ice, 15)
 
-achievement_perfect_stages("Dungeon Loot", description_perfect_stages_5(evil), 5, evil, 5)
-achievement_perfect_stages("The Hoard", description_perfect_stages_10(evil), 5, evil, 10)
-achievement_perfect_stages("Filthy Rich", description_perfect_stages_all(evil), 5, evil, 15)
+achievement_perfect_stages(317018, "Dungeon Loot", description_perfect_stages_5(evil), 5, evil, 5)
+achievement_perfect_stages(317019, "The Hoard", description_perfect_stages_10(evil), 10, evil, 10)
+achievement_perfect_stages(317020, "Filthy Rich", description_perfect_stages_all(evil), 25, evil, 15)
 
 // ---------------
 // Card Collection
@@ -1104,8 +1172,9 @@ achievement_perfect_stages("Filthy Rich", description_perfect_stages_all(evil), 
 //    return "Collect every card from progressing and killing enemies in " + world_dictionary[world] + "."
 //}
 
-function achievement_collect_cards_world(title, points, world) {
+function achievement_collect_cards_world(id, title, points, world) {
     achievement(
+        id = id,
         title = title,
         description = "Collect every card from progressing and killing enemies in " + world_dictionary[world] + ".",
         points = points,
@@ -1116,17 +1185,18 @@ function achievement_collect_cards_world(title, points, world) {
     )
 }
 
-achievement_collect_cards_world("Green Cards", 5, forest)
-achievement_collect_cards_world("Cards of the Sands", 5, sand)
-achievement_collect_cards_world("Cards of Fire", 5, fire)
-achievement_collect_cards_world("Cards of the Sea", 5, water)
-achievement_collect_cards_world("Cards of Ice", 5, ice)
-achievement_collect_cards_world("Cards of Darkness", 5, evil)
+achievement_collect_cards_world(317021, "Green Cards", 5, forest)
+achievement_collect_cards_world(317022, "Cards of the Sands", 5, sand)
+achievement_collect_cards_world(317023, "Cards of Fire", 5, fire)
+achievement_collect_cards_world(317024, "Cards of the Sea", 10, water)
+achievement_collect_cards_world(317025, "Cards of Ice", 10, ice)
+achievement_collect_cards_world(317026, "Cards of Darkness", 10, evil)
 
 achievement(
+    id = 317027,
     title = "Master of the Cards",
     description = "Complete your Card Collection.",
-    points = 5,
+    points = 25,
     trigger = screen() == story_mode_in_game &&
               prev(card_41_dark_king()) == 0 &&
               card_41_dark_king() == 1
@@ -1136,8 +1206,9 @@ achievement(
 // Challenges
 // ----------
 
-function achievement_world_speedrun(title, points, world, final_stage, frames, time_description) {
+function achievement_world_speedrun(id, title, points, world, final_stage, frames, time_description) {
     achievement(
+        id = id,
         title = title,
         description = "In one session, clear every stage in " + world_dictionary[world] + " in under " + time_description + ". Starts after selecting " + world_dictionary[world] + " 1 from the Stage Select screen.",
         points = points,
@@ -1155,8 +1226,9 @@ function achievement_world_speedrun(title, points, world, final_stage, frames, t
     )
 }
 
-function achievement_stage_hi_score(title, points, world, stage, target_score) {
+function achievement_stage_hi_score(id, title, points, world, stage, target_score) {
     achievement(
+        id = id,
         title = title,
         description = "Reach a Hi-Score of at least " + target_score + " in " + world_dictionary[world] + " " + stage + ".",
         points = points,
@@ -1169,8 +1241,9 @@ function achievement_stage_hi_score(title, points, world, stage, target_score) {
 }
 
 // Natural max health is 10,000 (0x2710)
-function achievement_stage_low_damage(title, points, world, stage, damage_target) {
+function achievement_stage_low_damage(id, title, points, world, stage, damage_target) {
     achievement(
+        id = id,
         title = title,
         description = "Complete " + world_dictionary[world] + " " + stage + " without taking damage from enemies (or an equivalent amount of damage from other sources).",
         points = points,
@@ -1188,8 +1261,9 @@ function achievement_stage_low_damage(title, points, world, stage, damage_target
     )
 }
 
-function achievement_stage_speedrun(title, points, world, stage, frames, time_description) {
+function achievement_stage_speedrun(id, title, points, world, stage, frames, time_description) {
     achievement(
+        id = id,
         title = title,
         description = "Clear " + world_dictionary[world] + " " + stage + " in under " + time_description + ".",
         points = points,
@@ -1207,32 +1281,32 @@ function achievement_stage_speedrun(title, points, world, stage, frames, time_de
     )
 }
 
-achievement_stage_hi_score("Bee Exterminator", 5, forest, 5, 9850)
-achievement_world_speedrun("Forest Dash", 5, forest, 10, 14400, "4 minutes")
+achievement_stage_hi_score(317028, "Bee Exterminator", 5, forest, 5, 9850)
+achievement_world_speedrun(317029, "Forest Dash", 10, forest, 10, 14400, "4 minutes")
 
 // Red Scorpions do 3000 damage
-achievement_stage_low_damage("Scorpion Maneuvers", 5, sand, 5, 3000)
-achievement_world_speedrun("Darude", 5, sand, 10, 18000, "5 minutes")
+achievement_stage_low_damage(317030, "Scorpion Maneuvers", 5, sand, 5, 3000)
+achievement_world_speedrun(317031, "Darude", 10, sand, 10, 18000, "5 minutes")
 
 // Salamanders do 2500 damage
-achievement_stage_low_damage("The Salamander Situation", 5, fire, 10, 2500)
+achievement_stage_low_damage(317032, "The Salamander Situation", 5, fire, 10, 2500)
 // old name: Blazing Speed
-achievement_world_speedrun("Hot Pursuit", 5, fire, 10, 21600, "6 minutes")
+achievement_world_speedrun(317033, "Hot Pursuit", 10, fire, 10, 21600, "6 minutes")
 
-achievement_stage_hi_score("Seafloor Sweep", 5, water, 3, 17580)
-achievement_stage_speedrun("Running on Water", 5, water, 6, 1200, "20 seconds")
+achievement_stage_hi_score(317034, "Seafloor Sweep", 5, water, 3, 17580)
+achievement_stage_speedrun(317035, "Running on Water", 5, water, 6, 1200, "20 seconds")
 // Blue Sharks do 6000 damage
-achievement_stage_low_damage("Shark Control", 5, water, 12, 6000)
+achievement_stage_low_damage(317036, "Shark Control", 5, water, 12, 6000)
 
-achievement_stage_hi_score("Avalanche", 5, ice, 4, 14770)
-achievement_stage_speedrun("Slick", 5, ice, 7, 840, "14 seconds")
+achievement_stage_hi_score(317037, "Avalanche", 5, ice, 4, 14770)
+achievement_stage_speedrun(317038, "Slick", 5, ice, 7, 840, "14 seconds")
 // Killer Penguins do 5500 damage
-achievement_stage_low_damage("Penguins at Bay", 5, ice, 15, 5500)
+achievement_stage_low_damage(317039, "Penguins at Bay", 5, ice, 15, 5500)
 
-achievement_stage_hi_score("Clean Up This Mess", 5, evil, 7, 10000)
+achievement_stage_hi_score(317040, "Clean Up This Mess", 5, evil, 7, 10000)
 // Devil Kids do 6000 damage, Phantoms do 8000 damage
-achievement_stage_low_damage("Patience is Key", 5, evil, 14, 6000)
-achievement_stage_speedrun("Speed Demon", 5, evil, 15, 1800, "30 seconds")
+achievement_stage_low_damage(317041, "Patience is Key", 5, evil, 14, 6000)
+achievement_stage_speedrun(317042, "Speed Demon", 5, evil, 15, 1800, "30 seconds")
 
 // scrapped the later world speedruns because they were too long and required too much memorization
 //achievement_world_speedrun("Running on Water", 10, water, 15, 36000, "10 minutes")
@@ -1243,8 +1317,9 @@ achievement_stage_speedrun("Speed Demon", 5, evil, 15, 1800, "30 seconds")
 // World Hi-Scores
 // ---------------
 
-function achievement_world_hi_score(title, points, world, target_score) {
+function achievement_world_hi_score(id, title, points, world, target_score) {
     achievement(
+        id = id,
         title = title,
         description = "Reach a total Hi-Score of at least " + target_score + " in " + world_dictionary[world] + ".",
         points = points,
@@ -1255,42 +1330,45 @@ function achievement_world_hi_score(title, points, world, target_score) {
     )
 }
 
-achievement_world_hi_score("Woodland Warrior", 5, forest, 81400)
-achievement_world_hi_score("Duke of the Dunes", 5, sand, 85640)
-achievement_world_hi_score("Firelord", 5, fire, 81910)
-achievement_world_hi_score("Prince of the Sea", 10, water, 159670)
-achievement_world_hi_score("Penguin Massacre", 10, ice, 151750)
-achievement_world_hi_score("Demon Slayer", 10, evil, 170230)
+achievement_world_hi_score(317043, "Woodland Warrior", 5, forest, 81400)
+achievement_world_hi_score(317044, "Duke of the Dunes", 5, sand, 85640)
+achievement_world_hi_score(317045, "Firelord", 5, fire, 81910)
+achievement_world_hi_score(317046, "Prince of the Sea", 10, water, 159670)
+achievement_world_hi_score(317047, "Penguin Massacre", 10, ice, 151750)
+achievement_world_hi_score(317048, "Demon Slayer", 25, evil, 170230)
 
 // -----------
 // Battle Mode
 // -----------
 
-function achievement_battle_wins(title, points, stages) {
+// Removed battle_mode_time_setting() == two_minutes. Can take too long for such easy achievements, let players use 1 minute if they want
+function achievement_battle_wins(id, title, points, stages) {
     trigger = always_true()
     for i in stages {
         trigger = trigger &&
-                  once(screen() == battle_mode && battle_mode_time_setting() == two_minutes && battle_mode_com_setting() == three_computers &&
+                  once(screen() == battle_mode && battle_mode_com_setting() == three_computers &&
                        battle_mode_stage() == i - 1 && battle_mode_p1_wins() > prev(battle_mode_p1_wins()))
     }
     
     achievement(
+        id = id,
         title = title,
-        description = "Battle Mode: In one session, win games in stages " + stages[0] + " through " + stages[4] + ". Use default settings (2 minutes, 3 computers).",
+        description = "Battle Mode: In one session, win games in stages " + stages[0] + " through " + stages[4] + ". Use 3 computers setting and any time setting.",
         points = points,
         trigger = trigger
     )
 }
 
-achievement_battle_wins("The Battlefield", 5, stages_1_5)
-achievement_battle_wins("Cat Fights", 5, stages_6_10)
+achievement_battle_wins(317049, "The Battlefield", 1, stages_1_5)
+achievement_battle_wins(317050, "Cat Fights", 1, stages_6_10)
 
 achievement(
+    id = 317051,
     title = "Wealthy Winner",
-    description = "Battle Mode: Win a game with at least 30 Mirror Jewels. Use default settings (2 minutes, 3 computers).",
-    points = 5,
+    description = "Battle Mode: Win a game with at least 30 Mirror Jewels. Use 3 computers setting and 1 or 2 minutes time setting.",
+    points = 1,
     trigger = screen() == battle_mode &&
-              battle_mode_time_setting() == two_minutes &&
+              __ornext(battle_mode_time_setting() == one_minute || battle_mode_time_setting() == two_minutes) &&
               battle_mode_com_setting() == three_computers &&
               ex_jewels() >= 30 &&
               battle_mode_p1_wins() > prev(battle_mode_p1_wins())
@@ -1310,122 +1388,24 @@ achievement(
 //              battle_mode_p2_health() == 0
 //)
 
-// ---------------------
-// Classic Mode Tutorial
-// ---------------------
-
-function achievement_classic_tutorial_trigger() {
-    trigger = always_true()
-    for i in range(1, 4) {
-        trigger = trigger &&
-                  once(screen() == classic_tutorial_in_game &&
-                       classic_tutorial_lesson() == i - 1 && prev(classic_cave_cleared()) != cave_cleared && classic_cave_cleared() == cave_cleared)
-    }
-    
-    return trigger
-}
-
 achievement(
-    title = "Back to the Past",
-    description = "Classic Mode: In one session, complete every lesson in the tutorial.",
-    points = 2,
-    trigger = achievement_classic_tutorial_trigger()
-)
-
-// ---------------------
-// Classic Mode Progress
-// ---------------------
-
-function achievement_classic_progress(title, points, level, caves) {
-    trigger = always_true()
-    for i in caves {
-        trigger = trigger &&
-                  once(screen() == classic_mode_in_game && classic_mode_level() == level - 1 && 
-                       prev(screen()) == classic_mode_in_game && prev(classic_mode_cave()) == i && classic_mode_cave() == i + 1)
-    }
-    
-    achievement(
-        title = title,
-        description = "Classic Mode: In one session, clear Caves " + cave_dictionary[caves[0]] + ", " + cave_dictionary[caves[1]] + ", " + cave_dictionary[caves[2]] + ", and " + cave_dictionary[caves[3]] + " on Level " + level + ".",
-        points = points,
-        trigger = trigger
-    )
-}
-
-achievement_classic_progress("Enter the Mines I", 5, 1, caves_a_d)
-achievement_classic_progress("Grave of the Fireflies I", 5, 1, caves_e_h)
-achievement_classic_progress("The Depths I", 5, 1, caves_i_l)
-achievement_classic_progress("Amoeba Pit I", 5, 1, caves_m_p)
-
-achievement_classic_progress("Enter the Mines II", 5, 2, caves_a_d)
-achievement_classic_progress("Grave of the Fireflies II", 5, 2, caves_e_h)
-achievement_classic_progress("The Depths II", 5, 2, caves_i_l)
-achievement_classic_progress("Amoeba Pit II", 5, 2, caves_m_p)
-
-achievement_classic_progress("Enter the Mines III", 5, 3, caves_a_d)
-achievement_classic_progress("Grave of the Fireflies III", 5, 3, caves_e_h)
-achievement_classic_progress("The Depths III", 5, 3, caves_i_l)
-achievement_classic_progress("Amoeba Pit III", 5, 3, caves_m_p)
-
-achievement_classic_progress("Enter the Mines IV", 5, 4, caves_a_d)
-achievement_classic_progress("Grave of the Fireflies IV", 5, 4, caves_e_h)
-achievement_classic_progress("The Depths IV", 5, 4, caves_i_l)
-achievement_classic_progress("Amoeba Pit IV", 5, 4, caves_m_p)
-
-achievement_classic_progress("Enter the Mines V", 10, 5, caves_a_d)
-achievement_classic_progress("Grave of the Fireflies V", 10, 5, caves_e_h)
-achievement_classic_progress("The Depths V", 10, 5, caves_i_l)
-achievement_classic_progress("Amoeba Pit V", 10, 5, caves_m_p)
-
-function achievement_bonus_cave_clear(title, points, cave) {
-    achievement(
-        title = title,
-        description = "Classic Mode: Clear Bonus Cave " + cave_dictionary[cave] + ".",
-        points = points,
-        trigger = screen() == classic_mode_in_game &&
-                  __ornext(classic_mode_cave() == cave || classic_mode_cave() == cave + 1) &&
-                  prev(check_bonus_cave_completion(cave)) == 0 &&
-                  check_bonus_cave_completion(cave) == 1
-    )
-}
-
-//function description_bonus_cave_clear(cave) {
-//    return "Classic Mode: Clear Bonus Cave " + cave_strings[cave] + "."
-//}
-
-achievement_bonus_cave_clear("The Butterfly Effect", 10, cave_q)
-achievement_bonus_cave_clear("Infestation", 10, cave_r)
-achievement_bonus_cave_clear("Magic Window", 10, cave_s)
-
-achievement(
-    title = "Rockford Smiles Upon You",
-    description = "Classic Mode: Clear Bonus Cave T.",
-    points = 10,
-    trigger = __ornext(screen() == classic_mode_in_game || screen() == classic_mode_title) &&
-              __ornext(classic_mode_cave() == cave_t || classic_mode_cave() == classic_mode_all_clear || classic_mode_cave() == 1 - 1) &&
-              prev(check_bonus_cave_completion(cave_t)) == 0 &&
-              check_bonus_cave_completion(cave_t) == 1
+    id = 338618,
+    title = "What Could've Been",
+    description = "Play as Sonya, Nick, or Emily in Battle Mode, then return to the Title Screen or Main Menu and wait for the demo to play.",
+    points = 1,
+    trigger = screen() == title_main_menu_demo &&
+              battle_mode_p1_character_not_alex() &&
+              prev(ex_player_animation()) == enter_stage &&
+              ex_player_animation() != enter_stage
 )
 
 // ------------
 // Leaderboards
 // ------------
 
-// 1000 is the Hi-Score the game starts with
-leaderboard(
-    title = "Classic Mode Hi-Score",
-    description = "Submitted after cave is cleared, after Game Over, or after exiting to menu with a new Hi-Score.",
-    start = __ornext(screen() == classic_mode_in_game || screen() == classic_mode_title || screen() == classic_game_menu) &&
-            classic_mode_hi_score() > 1000 &&
-            classic_mode_hi_score() > prev(classic_mode_hi_score()),
-    cancel = always_false(),
-    submit = always_true(),
-    value = measured(classic_mode_hi_score()),
-    format = "VALUE"
-)
-
-function leaderboard_world_speedrun(world, final_stage) {
+function leaderboard_world_speedrun(id, world, final_stage) {
     leaderboard(
+        id = id,
         title = world_dictionary[world] + " Speedrun",
         description = "Starts after selecting " + world_dictionary[world] + " 1 from the Stage Select screen.",
         start = prev(screen()) == story_mode_stage_select &&
@@ -1442,18 +1422,21 @@ function leaderboard_world_speedrun(world, final_stage) {
     )
 }
 
-leaderboard_world_speedrun(forest, 10)
-leaderboard_world_speedrun(sand, 10)
-leaderboard_world_speedrun(fire, 10)
-leaderboard_world_speedrun(water, 15)
-leaderboard_world_speedrun(ice, 15)
-leaderboard_world_speedrun(evil, 15)
+leaderboard_world_speedrun(65201, forest, 10)
+leaderboard_world_speedrun(65202, sand, 10)
+leaderboard_world_speedrun(65203, fire, 10)
+leaderboard_world_speedrun(65204, water, 15)
+leaderboard_world_speedrun(65205, ice, 15)
+leaderboard_world_speedrun(65206, evil, 15)
 
 // The new Hi-Score should register before the stage number increases. However, I still accounted for that to be safe
 function leaderboard_stage_hi_score() {
+    leaderboard_ids = range(65207, 65281)
+    id_iteration = 0
     for world in range(forest, evil) {
         for stage in range(1, stages_per_world[world]) {
             leaderboard(
+                id = leaderboard_ids[id_iteration],
                 title = world_dictionary[world] + " " + stage + " Hi-Score",
                 description = "Submitted after stage is cleared with a new Hi-Score.",
                 start = screen() == story_mode_in_game &&
@@ -1465,6 +1448,7 @@ function leaderboard_stage_hi_score() {
                 value = measured(check_stage_hi_score(world, stage)),
                 format = "VALUE"
             )
+            id_iteration = id_iteration + 1
         }
     }
 }
@@ -1481,7 +1465,7 @@ rich_presence_conditional_display(
 )
 
 rich_presence_conditional_display(
-    screen() == story_mode_in_game && music() == music_card_collection,
+    screen() == story_mode_in_game && music_card_collection(),
     "Collected a Card in Story Mode"
 )
 
@@ -1596,8 +1580,10 @@ rich_presence_conditional_display(
 )
 
 // ex_game_state() for the winning results screen always seemed to be "interstitial", not "in_game_no_input". Not included but just noting
+// music_battle_mode_p1_wins() doesn't quite work here with USA and Japan roms supported. 0x44 value overlaps with in-game music
+// Replaced with battle_mode_graphics() == graphics_p1_wins
 rich_presence_conditional_display(
-    screen() == battle_mode && music() == music_battle_mode_p1_wins,
+    screen() == battle_mode && battle_mode_graphics() == graphics_p1_wins,
     "{0} won a game in Stage {1} in Battle Mode | 💎{2} | ❤️{3}% | Wins: {4}",
     rich_presence_lookup("BattleCharacter", battle_mode_p1_character(), character_dictionary),
     rich_presence_value("BattleStage", battle_mode_stage() + 1),
@@ -1609,7 +1595,7 @@ rich_presence_conditional_display(
 // Unlike the winning screen, ex_game_state() for the loss/draw/quit screen always seemed to be "in_game_no_input", not "interstitial"
 // Also displays before the winning screen, as soon as "Time's up!". Tried to avoid janky time values
 rich_presence_conditional_display(
-    screen() == battle_mode && (ex_game_state() == time_up || battle_mode_time_proper() != proper_time || music() == music_ex_game_over),
+    screen() == battle_mode && (ex_game_state() == time_up || battle_mode_time_proper() != proper_time || music_ex_game_over()),
     "{0} finished a game in Stage {1} in Battle Mode | 💎{2} | ❤️{3}% | Wins: {4}",
     rich_presence_lookup("BattleCharacter", battle_mode_p1_character(), character_dictionary),
     rich_presence_value("BattleStage", battle_mode_stage() + 1),
@@ -1797,6 +1783,118 @@ rich_presence_display(
     "Playing Boulder Dash EX"
 )
 
+// ---------------------
+// Classic Mode Tutorial
+// ---------------------
+
+// These have been moved into a subset
+
+// function achievement_classic_tutorial_trigger() {
+//     trigger = always_true()
+//     for i in range(1, 4) {
+//         trigger = trigger &&
+//                   once(screen() == classic_tutorial_in_game &&
+//                        classic_tutorial_lesson() == i - 1 && prev(classic_cave_cleared()) != cave_cleared && classic_cave_cleared() == cave_cleared)
+//     }
+    
+//     return trigger
+// }
+
+// achievement(
+//     title = "Back to the Past",
+//     description = "Classic Mode: In one session, complete every lesson in the tutorial.",
+//     points = 2,
+//     trigger = achievement_classic_tutorial_trigger()
+// )
+
+// ---------------------
+// Classic Mode Progress
+// ---------------------
+
+// function achievement_classic_progress(title, points, level, caves) {
+//     trigger = always_true()
+//     for i in caves {
+//         trigger = trigger &&
+//                   once(screen() == classic_mode_in_game && classic_mode_level() == level - 1 && 
+//                        prev(screen()) == classic_mode_in_game && prev(classic_mode_cave()) == i && classic_mode_cave() == i + 1)
+//     }
+    
+//     achievement(
+//         title = title,
+//         description = "Classic Mode: In one session, clear Caves " + cave_dictionary[caves[0]] + ", " + cave_dictionary[caves[1]] + ", " + cave_dictionary[caves[2]] + ", and " + cave_dictionary[caves[3]] + " on Level " + level + ".",
+//         points = points,
+//         trigger = trigger
+//     )
+// }
+
+// achievement_classic_progress("Enter the Mines I", 5, 1, caves_a_d)
+// achievement_classic_progress("Grave of the Fireflies I", 5, 1, caves_e_h)
+// achievement_classic_progress("The Depths I", 5, 1, caves_i_l)
+// achievement_classic_progress("Amoeba Pit I", 5, 1, caves_m_p)
+
+// achievement_classic_progress("Enter the Mines II", 5, 2, caves_a_d)
+// achievement_classic_progress("Grave of the Fireflies II", 5, 2, caves_e_h)
+// achievement_classic_progress("The Depths II", 5, 2, caves_i_l)
+// achievement_classic_progress("Amoeba Pit II", 5, 2, caves_m_p)
+
+// achievement_classic_progress("Enter the Mines III", 5, 3, caves_a_d)
+// achievement_classic_progress("Grave of the Fireflies III", 5, 3, caves_e_h)
+// achievement_classic_progress("The Depths III", 5, 3, caves_i_l)
+// achievement_classic_progress("Amoeba Pit III", 5, 3, caves_m_p)
+
+// achievement_classic_progress("Enter the Mines IV", 5, 4, caves_a_d)
+// achievement_classic_progress("Grave of the Fireflies IV", 5, 4, caves_e_h)
+// achievement_classic_progress("The Depths IV", 5, 4, caves_i_l)
+// achievement_classic_progress("Amoeba Pit IV", 5, 4, caves_m_p)
+
+// achievement_classic_progress("Enter the Mines V", 10, 5, caves_a_d)
+// achievement_classic_progress("Grave of the Fireflies V", 10, 5, caves_e_h)
+// achievement_classic_progress("The Depths V", 10, 5, caves_i_l)
+// achievement_classic_progress("Amoeba Pit V", 10, 5, caves_m_p)
+
+// function achievement_bonus_cave_clear(title, points, cave) {
+//     achievement(
+//         title = title,
+//         description = "Classic Mode: Clear Bonus Cave " + cave_dictionary[cave] + ".",
+//         points = points,
+//         trigger = screen() == classic_mode_in_game &&
+//                   __ornext(classic_mode_cave() == cave || classic_mode_cave() == cave + 1) &&
+//                   prev(check_bonus_cave_completion(cave)) == 0 &&
+//                   check_bonus_cave_completion(cave) == 1
+//     )
+// }
+
+//function description_bonus_cave_clear(cave) {
+//    return "Classic Mode: Clear Bonus Cave " + cave_strings[cave] + "."
+//}
+
+// achievement_bonus_cave_clear("The Butterfly Effect", 10, cave_q)
+// achievement_bonus_cave_clear("Infestation", 10, cave_r)
+// achievement_bonus_cave_clear("Magic Window", 10, cave_s)
+
+// achievement(
+//     title = "Rockford Smiles Upon You",
+//     description = "Classic Mode: Clear Bonus Cave T.",
+//     points = 10,
+//     trigger = __ornext(screen() == classic_mode_in_game || screen() == classic_mode_title) &&
+//               __ornext(classic_mode_cave() == cave_t || classic_mode_cave() == classic_mode_all_clear || classic_mode_cave() == 1 - 1) &&
+//               prev(check_bonus_cave_completion(cave_t)) == 0 &&
+//               check_bonus_cave_completion(cave_t) == 1
+// )
+
+// 1000 is the Hi-Score the game starts with
+// leaderboard(
+//     title = "Classic Mode Hi-Score",
+//     description = "Submitted after cave is cleared, after Game Over, or after exiting to menu with a new Hi-Score.",
+//     start = __ornext(screen() == classic_mode_in_game || screen() == classic_mode_title || screen() == classic_game_menu) &&
+//             classic_mode_hi_score() > 1000 &&
+//             classic_mode_hi_score() > prev(classic_mode_hi_score()),
+//     cancel = always_false(),
+//     submit = always_true(),
+//     value = measured(classic_mode_hi_score()),
+//     format = "VALUE"
+// )
+
 // -------------------
 // Formerly used notes
 // -------------------
@@ -1845,23 +1943,23 @@ rich_presence_display(
 
 //map_view_active = 4
 
-// $022295: Battle Mode: Player 2's health [8-bit]
+// $022294: Battle Mode: Player 2's health [16-bit]
 //          See 0x0221ad note
 // $0222A4: Battle Mode: Player 2's jewels [8-bit]
 // $0222C4: Battle Mode: Player 2's item [8-bit]
 //          See 0x0221dc note
-// $02237D: Battle Mode: Player 3's health [8-bit]
+// $02237C: Battle Mode: Player 3's health [16-bit]
 //          See 0x0221ad note
 // $02238C: Battle Mode: Player 3's jewels [8-bit]
 // $0223AC: Battle Mode: Player 3's item [8-bit]
 //          See 0x0221dc note
-// $022465: Battle Mode: Player 4's health [8-bit]
+// $022464: Battle Mode: Player 4's health [16-bit]
 //          See 0x0221ad note
 // $022474: Battle Mode: Player 4's jewels [8-bit]
 // $022494: Battle Mode: Player 4's item [8-bit]
 //          See 0x0221dc note
 
-//function battle_mode_p2_health() => byte(0x22295)
+//function battle_mode_p2_health() => word(0x22294)
 
 // $0155A8: Classic Game: Cave cleared (unreliable) [8-bit]
 //          0x00 = Playing the game. Also when paused, using map preview (select button), cave intros, player death, and in menus
@@ -1937,6 +2035,21 @@ rich_presence_display(
 //          0x32 to 0x35 = Amoeba animation
 //          0x41 to 0x44 = Exit door animation
 //          0x5e to 0x65 = Jewel animation
+
+// $020193: Story Mode: World of Forest accessible [8-bit]
+//          0x00 = Inaccessible
+//          0x01 = Unlocked
+//          These need to be flagged along with 0x02019b and following addresses to make levels accessible
+// $020194: Story Mode: World of Sand accessible [8-bit]
+//          See 0x020193 note
+// $020195: Story Mode: World of Fire accessible [8-bit]
+//          See 0x020193 note
+// $020196: Story Mode: World of Water accessible [8-bit]
+//          See 0x020193 note
+// $020197: Story Mode: World of Ice accessible [8-bit]
+//          See 0x020193 note
+// $020198: Story Mode: World of Evil accessible [8-bit]
+//          See 0x020193 note
 
 // $02019B: Story Mode: World of Forest 1 accessible [8-bit]
 //          0x00 = Inaccessible
