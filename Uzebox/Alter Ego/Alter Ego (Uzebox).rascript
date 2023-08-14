@@ -142,19 +142,19 @@ function achievement_speedrun(title, points, level_param, frames, time_desc) {
 
 achievement_progress("Another Phantom", points=2, level_param=5)
 achievement_deathless("No Mistakes Allowed", points=5, level_param=1)
-achievement_speedrun("Speedy Swapping", points=5, level_param=1, frames=4500, time_desc="1min15sec")
+achievement_speedrun("Speedy Swapping", points=5, level_param=1, frames=4800, time_desc="1min20sec")
 
 achievement_progress("Sixteen Pixels", points=3, level_param=10)
 achievement_deathless("Conquer the Lair", points=5, level_param=6)
-achievement_speedrun("Skulls Run", points=5, level_param=6, frames=5400, time_desc="1min30sec")
+achievement_speedrun("Skulls Run", points=5, level_param=6, frames=5700, time_desc="1min35sec")
 
 achievement_progress("Made in Heaven", points=4, level_param=15)
 achievement_deathless("Master of Ice", points=5, level_param=11)
-achievement_speedrun("Icy Run", points=5, level_param=11, frames=5100, time_desc="1min25sec")
+achievement_speedrun("Icy Run", points=5, level_param=11, frames=5400, time_desc="1min30sec")
 
 achievement_progress("Virus Kvartirus", points=5, level_param=20)
 achievement_deathless("Master of Water", points=5, level_param=16)
-achievement_speedrun("Underwater Run", points=5, level_param=16, frames=6300, time_desc="1min45sec")
+achievement_speedrun("Underwater Run", points=5, level_param=16, frames=6600, time_desc="1min50sec")
 
 // Beating Level 25 functions differently than other level transitions
 //achievement_progress("Final Chamber", points=5, level_param=25)
@@ -184,13 +184,13 @@ achievement(
 
 achievement(
     title = "Lava Run",
-    description = "In one session, clear Levels 21 through 25 in under 1min30sec without exiting. Start by selecting Level 21 from the Level Select screen.",
+    description = "In one session, clear Levels 21 through 25 in under 1min35sec without exiting. Start by selecting Level 21 from the Level Select screen.",
     points = 10,
     trigger = once(no_demo() &&
                    level() == 0x14 &&
                    level_select_start()) &&
               trigger_when(clear_level_25()) &&
-              never(repeated(5400, always_true())) &&
+              never(repeated(5700, always_true())) &&
               never(!in_game() && !all_levels_clear())
 )
 
