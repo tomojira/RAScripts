@@ -1,0 +1,175 @@
+Flame
+https://retroachievements.org/achievement/25343
+0xN00f2fe=1_R:0xH00f3a2=3_R:0xH002f1c=0_0xH00fffe=112
+
+Wind
+https://retroachievements.org/achievement/25344
+0xO00f2fe=1_R:0xH00f3a2=3_R:0xH002f1c=0_0xH00fffe=112
+
+Earth
+https://retroachievements.org/achievement/25345
+0xP00f2fe=1_R:0xH00f3a2=3_R:0xH002f1c=0_0xH00fffe=112
+
+Water
+https://retroachievements.org/achievement/25346
+0xQ00f2fe=1_R:0xH00f3a2=3_R:0xH002f1c=0_0xH00fffe=112
+
+A Fairy Companion
+https://retroachievements.org/achievement/25347
+0xH00f2e4>d0xH00f2e4.1._R:0xH00f3a2=3_R:0xH002f1c=0
+
+Elemental Master
+https://retroachievements.org/achievement/25351
+0xR00f2fe=1_R:0xH00f3a2=3_R:0xH002f1c=0
+
+Magic Mirror
+https://retroachievements.org/achievement/25348
+0xH00a002=2.1._R:0xH00f3a2=3_R:0xH002f1c=0
+
+Crystal Ball
+https://retroachievements.org/achievement/25349
+0xH00a004=3_R:0xH00f3a2=3_R:0xH002f1c=0
+
+Seven Chakras
+https://retroachievements.org/achievement/25350
+0xH00f2fa=7_R:0xH00f3a2=3_R:0xH002f1c=0
+
+Dance of Flame
+https://retroachievements.org/achievement/25336
+R:0xH00f2e2!=0_R:0xH00f3a2=3_R:0xH002f1c=0_M:d0x 00f2e8!=0x 00f2e8.90.
+
+Like the Wind
+https://retroachievements.org/achievement/25337
+R:0xH00f2e2!=1_R:0xH00f3a2=3_R:0xH002f1c=0_M:d0x 00f2e8!=0x 00f2e8.130.
+
+Until the End of the Earth
+https://retroachievements.org/achievement/25338
+R:0xH00f2e2!=2_R:0xH00f3a2=3_R:0xH002f1c=0_M:d0x 00f2e8!=0x 00f2e8.130.
+
+Blood-Stained Lake
+https://retroachievements.org/achievement/25339
+R:0xH00f2e2!=3_R:0xH00f3a2=3_R:0xH002f1c=0_M:d0x 00f2e8!=0x 00f2e8.130.
+
+Terror of the Glacier
+https://retroachievements.org/achievement/25340
+R:0xH00f2e2!=4_R:0xH00f3a2=3_R:0xH002f1c=0_M:d0x 00f2e8!=0x 00f2e8.130.
+
+Den of Evil
+https://retroachievements.org/achievement/25341
+R:0xH00f2e2!=5_R:0xH00f3a2=3_R:0xH002f1c=0_M:d0x 00f2e8!=0x 00f2e8.100.
+
+Shudder of Darkness
+https://retroachievements.org/achievement/25342
+R:0xH00f2e2!=6_R:0xH00f3a2=3_R:0xH002f1c=0_M:d0x 00f2e8!=0x 00f2e8.110.
+
+Crest of the Salamander
+https://retroachievements.org/achievement/25352
+T:0xH00f13b=60.1._0xH00f13b=1.1._R:0xH00f2fc!=1_R:0xH00f2e2!=3_R:0xH00f3a2=3
+
+Crest of the Eagle
+https://retroachievements.org/achievement/25353
+T:0xH00f13b=60.1._0xH00f13b=1.1._R:0xH00f2fc!=2_R:0xH00f2e2!=2_R:0xH00f3a2=3
+
+Crest of the Golem
+https://retroachievements.org/achievement/25354
+T:0xH00f13b=60.1._0xH00f13b=1.1._R:0xH00f2fc!=3_R:0xH00f2e2!=1_R:0xH00f3a2=3
+
+Crest of the Dolphins
+https://retroachievements.org/achievement/25355
+T:0xH00f13b=60.1._0xH00f13b=1.1._R:0xH00f2fc!=4_R:0xH00f2e2!=0_R:0xH00f3a2=3
+
+Crest of the Unicorn
+https://retroachievements.org/achievement/25356
+N:d0xH00f13b!=0_T:0xH00f13b=60.1._0xH00f13b=1.1._R:0xH00f2fc!=0_R:d0xH00f2e2!=4_R:0xH00f3a2=3
+
+Lux Dominum
+https://retroachievements.org/achievement/27414
+M:d0x 00f2e8!=0x 00f2e8.250._P:0xH00f2fc!=0_R:0xH00f3a2=3_R:0xH002f1c=0
+
+Ignis Dominum
+https://retroachievements.org/achievement/27415
+M:d0x 00f2e8!=0x 00f2e8.250._P:0xH00f2fc!=1_R:0xH00f3a2=3_R:0xH002f1c=0
+
+Aer Dominum
+https://retroachievements.org/achievement/27416
+M:d0x 00f2e8!=0x 00f2e8.250._P:0xH00f2fc!=2_R:0xH00f3a2=3_R:0xH002f1c=0
+
+Terrae Dominum
+https://retroachievements.org/achievement/27417
+M:d0x 00f2e8!=0x 00f2e8.250._P:0xH00f2fc!=3_R:0xH00f3a2=3_R:0xH002f1c=0
+
+Aqua Dominum
+https://retroachievements.org/achievement/27418
+M:d0x 00f2e8!=0x 00f2e8.250._P:0xH00f2fc!=4_R:0xH00f3a2=3_R:0xH002f1c=0
+
+Liberator of Lorelei
+https://retroachievements.org/achievement/25357
+R:0xR00f2e4!=1_0xH00fffe=248_R:0xH00f3a2!=1
+
+Elemental Genius
+https://retroachievements.org/achievement/25358
+R:0xR00f2e4!=1_0xH00fffe=248.1._R:0xH00f3a2!=2
+
+Solid Score
+https://retroachievements.org/achievement/25359
+0xH00f3a2!=3_A:0x 00f2e6*65536_A:0x 00f2e8*1_M:0>=68000_A:d0x 00f2e6*65536_A:d0x 00f2e8*1_0<68000_A:d0x 00f2e6*65536_A:d0x 00f2e8*1_0>=10000
+
+True Score
+https://retroachievements.org/achievement/25360
+0xH00f3a2!=3_A:0x 00f2e6*65536_A:0x 00f2e8*1_M:0>=100000_A:d0x 00f2e6*65536_A:d0x 00f2e8*1_0<100000_A:d0x 00f2e6*65536_A:d0x 00f2e8*1_0>=80000
+
+Miracle Score
+https://retroachievements.org/achievement/25361
+0xH00f3a2!=3_A:0x 00f2e6*65536_A:0x 00f2e8*1_M:0>=250000_A:d0x 00f2e6*65536_A:d0x 00f2e8*1_0<250000_A:d0x 00f2e6*65536_A:d0x 00f2e8*1_0>=200000
+
+Unreal Score
+https://retroachievements.org/achievement/25362
+0xH00f3a2!=3_A:0x 00f2e6*65536_A:0x 00f2e8*1_M:0>=400000_A:d0x 00f2e6*65536_A:d0x 00f2e8*1_0<400000_A:d0x 00f2e6*65536_A:d0x 00f2e8*1_0>=350000
+
+Seal of the Sun
+https://retroachievements.org/achievement/25363
+0xH00f3a2<=2_R:0xH00f3a2=3_R:0xH00f300>143_T:0xH00f2e4=3.1._T:0xH00f2e4=7.1._T:0xH00f2e4=15.1._T:0xH00f2e4=31.1._0xH00fffe=68.1._T:0xH00f2e4=1.1.
+
+Seal of the Moon
+https://retroachievements.org/achievement/25364
+0xH00f3a2<=2_0xH00fffe=68.1._N:0xH00f13b!=60_N:0xH00f1b7=0_R:0xQ00f314=1_N:d0xH00f2e4=15.1._T:0xH00f2e4=31.1.
+
+Magus Indoles (Normal)
+https://retroachievements.org/achievement/25365
+0xH00f2e4=0.1._T:0xH00fffe=248.1._R:0xH00f3a2!=0.1._R:0xH00f2f6<d0xH00f2f6_0xH00fffe=68.1._T:0xH00f2e4=3.1._T:0xH00f2e4=7.1._T:0xH00f2e4=15.1._T:0xH00f2e4=31.1._T:0xH00f2e4=63.1.
+
+Magus Indoles (Difficult)
+https://retroachievements.org/achievement/25366
+0xH00f2e4=0.1._T:0xH00fffe=248.1._R:0xH00f3a2!=1.1._R:0xH00f2f6<d0xH00f2f6_0xH00fffe=68.1._T:0xH00f2e4=3.1._T:0xH00f2e4=7.1._T:0xH00f2e4=15.1._T:0xH00f2e4=31.1._T:0xH00f2e4=63.1.
+
+Magus Indoles (Expert)
+https://retroachievements.org/achievement/25367
+0xH00f2e4=0.1._T:0xH00fffe=248.1._R:0xH00f3a2!=2.1._R:0xH00f2f6<d0xH00f2f6_0xH00fffe=68.1._T:0xH00f2e4=3.1._T:0xH00f2e4=7.1._T:0xH00f2e4=15.1._T:0xH00f2e4=31.1._T:0xH00f2e4=63.1.
+
+Avatar of Flame
+https://retroachievements.org/achievement/25368
+R:0xH00f3a2=3_R:0xH00f2e2!=0_R:0xH00f2f8<d0xH00f2f8_R:0xH00a004<d0xH00a004_0xH00f13b=59.1._T:0xH00f388=2.1.
+
+Roar of the Monster
+https://retroachievements.org/achievement/25369
+R:0xH00f3a2=3_R:0xH00f2e2!=1_R:0xH00f2f8<d0xH00f2f8_R:0xH00a004<d0xH00a004_0xH00f13b=59.1._T:0xH00f388=2.1.
+
+Evil Beat
+https://retroachievements.org/achievement/25370
+R:0xH00f3a2=3_R:0xH00f2e2!=2_R:0xH00f2f8<d0xH00f2f8_R:0xH00a004<d0xH00a004_0xH00f13b=59.1._T:0xH00f388=2.1.
+
+Specter Living in the Water
+https://retroachievements.org/achievement/25371
+R:0xH00f3a2=3_R:0xH00f2e2!=3_R:0xH00f2f8<d0xH00f2f8_R:0xH00a004<d0xH00a004_0xH00f13b=59.1._T:0xH00f388=2.1.
+
+Calling on the Dark Dragon King
+https://retroachievements.org/achievement/25372
+R:0xH00f3a2=3_R:0xH00f2e2!=4_R:0xH00f2f8<d0xH00f2f8_R:0xH00a004<d0xH00a004_0xH00f13b=59.1._T:0xH00f388=2.1.
+
+Suspicious Beauty
+https://retroachievements.org/achievement/25373
+R:0xH00f3a2=3_R:0xH00f2e2!=5_R:0xH00f2f8<d0xH00f2f8_R:0xH00a004<d0xH00a004_0xH00f13b=59.1._T:0xH00f388=2.1.
+
+Fate
+https://retroachievements.org/achievement/25374
+R:0xH00f3a2=3_R:0xH00f2e2!=6_R:0xH00f2f8<d0xH00f2f8_R:0xH00a004<d0xH00a004_0xH00f13b=59.1._N:0xH00f13b=60_N:d0xH00f388=2_T:0xH00f388=3
