@@ -1,39 +1,50 @@
 // Elemental Master
 // #ID = 4247
+// MD5: 9b04970a603ace521c7cca2acaf69804 - Elemental Master (USA).md
+// MD5: 32e1a15161ef1f070b023738353bde51 - Elemental Master (Japan).md
+
+// ------------------------------------
+// Code notes, variables, and functions
+// ------------------------------------
 
 // $2F1C: 00=demo
-// $A002: Mirror upgrade
-// $A004: Shield - not always clean
-// $A010: Time position on stage - don't stop at the boss
-// $F104: 00=game activated
-// $F13B: Position on stage 3c= Boss
-// $F1B7: 0x00 = In Game (or briefly after reset)
-//        0xff = Stage Select/Cutscenes/Otherwise not in a level.
-// $F2E2: Stage
-// $F2E4: Stage completion bitmask
-// $F2E6: Score * 65536 + 0xf2e6 * 1
-// $F2E8: Score * 1 + 0xf2e6 * 65536
-// $F2F6: Remained credits
-// $F2F8: Health
-// $F2FA: Max health
-// $F2FC: Weapon chosen
-// $F2FE: Owned weapons bitmask
-// $F300: Power gauge
-// $F30E: When in-stage:
-//        0x00 = Forward shot
-//        0x01 = Back shot
-//        
-//        Is 0x01 while on Stage Select However
-// $F314: Command input 10=front 20=change 40=back
-//        Bits0-3=D-Pad
-//        Bit 4 = Forward Attack
-//        Bit 5 = Change
-//        Bit 6 = Back Attack
-// $F388: 02=boss killed
-// $F3A2: Difficulty
+
+function demo() => byte(0x2f1c) == 0
+
 // $FFFE: 0x44=Opening Introduction at start of game.
 //        0x70=Stage
 //        0xf8=Ending
+//        0x6c = Stage Select
+//        0xa0 = Game Over
+//        0x24 = Sega logo/Title Screen
+//        0x52 = Options
+//        0x00 or 0xff or 0x01 sometimes when transitioning
+
+function beat_game() => prev(byte(0xfffe)) == 0 && byte(0xfffe) == 0xf8
+function game_over_trans() => prev(byte(0xfffe)) == 0xff && byte(0xfffe) == 0xa0
+
+// $F3A2: Difficulty
+//        0x00 = Normal
+//        0x01 = Difficult
+//        0x02 = Expert
+//        0x03 = Practice
+
+function difficulty() => byte(0xf3a2)
+function difficulty_normal_or_higher() => difficulty() <= 2
+function difficult_mode() => difficulty() == 1
+function expert_mode() => difficulty() == 2
+function practice_mode() => difficulty() == 3
+
+LevelLookup = {
+    0x0: "Normal",
+    0x1: "Difficult",
+    0x2: "Expert",
+    0x3: "Practice",
+}
+
+// $F2E2: Stage
+
+function stage() => byte(0xf2e2)
 
 StageLookup = {
     0x0: "1 (Flame)",
@@ -45,6 +56,45 @@ StageLookup = {
     0x6: "7 (Darkness)",
 }
 
+// $F13B: Position on stage 3c= Boss
+
+function stage_end() => byte(0xf13b) == 0x3c
+function reach_stage_end() => prev(byte(0xf13b)) == 0x3b && byte(0xf13b) == 0x3c
+
+// $F2E4: Stage completion bitmask
+//        Bit0 = Stage 1 (Fire)
+//        Bit1 = Stage 2 (Wind)
+//        Bit2 = Stage 3 (Earth)
+//        Bit3 = Stage 4 (Water)
+//        Bit4 = Stage 5
+//        Bit5 = Stage 6
+
+function clear_first_stage() => prev(byte(0xf2e4)) == 0 && byte(0xf2e4) > 0
+function clear_stage_6() => prev(bit5(0xf2e4)) == 0 && bit5(0xf2e4) == 1
+function stage_6_cleared() => bit5(0xf2e4) == 1
+
+// $F2FE: Owned weapons / Stages cleared bitmask
+//        Bit1 = Fire
+//        Bit2 = Wind
+//        Bit3 = Earth
+//        Bit4 = Water
+//        Bit5 = Powered-up Light
+//        Bit6 = Clear Stage 6 (no weapon given)
+
+function owned_fire() => bit1(0xf2fe)
+function owned_wind() => bit2(0xf2fe)
+function owned_earth() => bit3(0xf2fe)
+function owned_water() => bit4(0xf2fe)
+function owned_light_power_up() => bit5(0xf2fe)
+
+function get_fire() => prev(owned_fire()) == 0 && owned_fire() == 1
+function get_wind() => prev(owned_wind()) == 0 && owned_wind() == 1
+function get_earth() => prev(owned_earth()) == 0 && owned_earth() == 1
+function get_water() => prev(owned_water()) == 0 && owned_water() == 1
+function get_light_power_up() => prev(owned_light_power_up()) == 0 && owned_light_power_up() == 1
+
+// $F2FC: Weapon chosen
+
 PowerLookup = {
     0x0: "Light",
     0x1: "Flame",
@@ -53,74 +103,186 @@ PowerLookup = {
     0x4: "Water",
 }
 
-LevelLookup = {
-    0x0: "Normal",
-    0x1: "Difficult",
-    0x2: "Expert",
-    0x3: "Practice",
+// $F2E6: Score * 65536 + 0xf2e6 * 1
+// $F2E8: Score * 1 + 0xf2e6 * 65536
+
+function calc_score() {
+    score = (word(0xf2e6) * 65536) + word(0xf2e8)
+    return score
 }
 
-achievement(
-    title = "Flame", points = 1,
-    description = "Obtain Flame power (Normal or Higher)",
-    id = 25343, badge = "25778", published = "2015-07-16 10:59:00 PM", modified = "2020-11-22 9:12:52 PM",
-    trigger = bit1(0x00F2FE) == 1 && never(byte(0x00F3A2) == 3) && never(byte(0x002F1C) == 0) && byte(0x00FFFE) == 112
-)
+// $F2F8: Health
+
+function lost_all_health() => prior(byte(0xf2f8)) == 0 && byte(0xf2f8) == 0xff
+
+// $F2FA: Max health
+//        0x07 is max
+
+function get_max_health() => prev(byte(0xf2fa)) == 6 && byte(0xf2fa) == 7
+
+// $A002: Mirror upgrade
+//        0x00 -> 0x02
+//        Lost after taking damage (without shield)
+
+function get_magic_mirror() => prev(byte(0xa002)) == 0 && byte(0xa002) == 2
+
+// $A004: Shield - not always clean
+//        0x00 -> 0x03
+//        Ticks down with each hit taken
+
+function get_crystal_ball() => prev(byte(0xa004)) == 0 && byte(0xa004) == 3
+
+// $F388: 02=boss killed
+
+function defeat_boss() => prev(byte(0xf388)) == 1 && byte(0xf388) == 2
+
+// $A010: Time position on stage - don't stop at the boss
+// $F104: 00=game activated
+// $F1B7: 0x00 = In Game (or briefly after reset)
+//        0xff = Stage Select/Cutscenes/Otherwise not in a level.
+// $F2F6: Remained credits
+// $F300: Power gauge
+// $F30E: When in-stage:
+//        0x00 = Forward shot
+//        0x01 = Back shot
+//        
+//        Is 0x01 while on Stage Select However
+// $F314: Command input 10=front 20=change 40=back
+//        Bits0-3=D-Pad
+//        Bit 4 = Forward Attack
+//        Bit 5 = Change
+//        Bit 6 = Back Attack
+
+// ------------
+// Achievements
+// ------------
 
 achievement(
-    title = "Wind", points = 1,
-    description = "Obtain Wind power (Normal or Higher)",
-    id = 25344, badge = "25779", published = "2015-07-16 10:59:03 PM", modified = "2020-11-22 9:12:54 PM",
-    trigger = bit2(0x00F2FE) == 1 && never(byte(0x00F3A2) == 3) && never(byte(0x002F1C) == 0) && byte(0x00FFFE) == 112
-)
-
-achievement(
-    title = "Earth", points = 1,
-    description = "Obtain Earth power (Normal or Higher)",
-    id = 25345, badge = "25780", published = "2015-07-16 10:59:06 PM", modified = "2020-11-22 9:12:56 PM",
-    trigger = bit3(0x00F2FE) == 1 && never(byte(0x00F3A2) == 3) && never(byte(0x002F1C) == 0) && byte(0x00FFFE) == 112
-)
-
-achievement(
-    title = "Water", points = 1,
-    description = "Obtain Water power (Normal or Higher)",
-    id = 25346, badge = "25781", published = "2015-07-16 10:59:10 PM", modified = "2020-11-22 9:12:57 PM",
-    trigger = bit4(0x00F2FE) == 1 && never(byte(0x00F3A2) == 3) && never(byte(0x002F1C) == 0) && byte(0x00FFFE) == 112
-)
-
-achievement(
-    title = "A Fairy Companion", points = 2,
+    id = 25347,
+    title = "A Fairy Companion", 
     description = "Rescue Neena and gain her assistance (Normal or Higher)",
-    id = 25347, badge = "25782", published = "2015-07-16 10:59:13 PM", modified = "2021-02-11 2:07:54 AM",
-    trigger = once(byte(0x00F2E4) > prev(byte(0x00F2E4))) && never(byte(0x00F3A2) == 3) && never(byte(0x002F1C) == 0)
+    points = 1,
+    trigger = !demo() &&
+              difficulty_normal_or_higher() &&
+              clear_first_stage()
 )
 
 achievement(
-    title = "Elemental Master", points = 5,
+    id = 25343,
+    title = "Flame",
+    description = "Obtain Flame power (Normal or Higher)",
+    points = 5,
+    trigger = !demo() &&
+              difficulty_normal_or_higher() &&
+              get_fire()
+)
+
+achievement(
+    id = 25344,
+    title = "Wind",
+    description = "Obtain Wind power (Normal or Higher)",
+    points = 5,
+    trigger = !demo() &&
+              difficulty_normal_or_higher() &&
+              get_wind()
+)
+
+achievement(
+    id = 25345,
+    title = "Earth",
+    description = "Obtain Earth power (Normal or Higher)",
+    points = 5,
+    trigger = !demo() &&
+              difficulty_normal_or_higher() &&
+              get_earth()
+)
+
+achievement(
+    id = 25346,
+    title = "Water",
+    description = "Obtain Water power (Normal or Higher)",
+    points = 5,
+    trigger = !demo() &&
+              difficulty_normal_or_higher() &&
+              get_water()
+)
+
+achievement(
+    id = 25351,
+    title = "Elemental Master",
     description = "Gather all 4 elements and enchance the Light power (Normal or Higher)",
-    id = 25351, badge = "25788", published = "2015-07-16 10:59:46 PM", modified = "2021-02-11 2:07:56 AM",
-    trigger = bit5(0x00F2FE) == 1 && never(byte(0x00F3A2) == 3) && never(byte(0x002F1C) == 0)
+    points = 5,
+    trigger = !demo() &&
+              difficulty_normal_or_higher() &&
+              get_light_power_up()
 )
 
 achievement(
-    title = "Magic Mirror", points = 3,
+    title = "Salome Slain",
+    description = "Defeat Salome in Stage 6 (Normal or Higher)",
+    points = 5,
+    trigger = !demo() &&
+              difficulty_normal_or_higher() &&
+              clear_stage_6()
+)
+
+achievement(
+    title = "Fall of Gyra",
+    description = "Finish the game on Normal level or higher",
+    points = 10,
+    trigger = difficulty_normal_or_higher() &&
+              stage_6_cleared() &&
+              beat_game()
+)
+
+achievement(
+    id = 25357,
+    title = "Liberator of Lorelei",
+    description = "Finish the game on Difficult level",
+    points = 25,
+    trigger = difficult_mode() &&
+              stage_6_cleared() &&
+              beat_game()
+)
+
+achievement(
+    id = 25358,
+    title = "Elemental Genius",
+    description = "Finish the game on Expert level",
+    points = 50,
+    trigger = expert_mode() &&
+              stage_6_cleared() &&
+              beat_game()
+)
+
+achievement(
+    id = 25348,
+    title = "Magic Mirror",
     description = "Obtain Magic Mirror (Normal or Higher)",
-    id = 25348, badge = "25789", published = "2015-07-16 10:59:19 PM", modified = "2021-02-11 2:07:58 AM",
-    trigger = once(byte(0x00A002) == 2) && never(byte(0x00F3A2) == 3) && never(byte(0x002F1C) == 0)
+    points = 3,
+    trigger = !demo() &&
+              difficulty_normal_or_higher() &&
+              get_magic_mirror()
 )
 
 achievement(
-    title = "Crystal Ball", points = 3,
+    id = 25349,
+    title = "Crystal Ball",
     description = "Obtain Crystal Ball (Normal or Higher)",
-    id = 25349, badge = "25790", published = "2015-07-16 10:59:23 PM", modified = "2021-02-11 2:08:00 AM",
-    trigger = byte(0x00A004) == 3 && never(byte(0x00F3A2) == 3) && never(byte(0x002F1C) == 0)
+    points = 3,
+    trigger = !demo() &&
+              difficulty_normal_or_higher() &&
+              get_crystal_ball()
 )
 
 achievement(
-    title = "Seven Chakras", points = 3,
+    id = 25350,
+    title = "Seven Chakras",
     description = "Upgrade your health to the maximum (Normal or Higher)",
-    id = 25350, badge = "25812", published = "2015-07-16 10:59:33 PM", modified = "2021-02-11 2:08:02 AM",
-    trigger = byte(0x00F2FA) == 7 && never(byte(0x00F3A2) == 3) && never(byte(0x002F1C) == 0)
+    points = 3,
+    trigger = !demo() &&
+              difficulty_normal_or_higher() &&
+              get_max_health()
 )
 
 achievement(
@@ -257,20 +419,6 @@ achievement(
     id = 27418, badge = "25786", published = "2015-08-11 4:27:00 PM", modified = "2021-10-07 8:35:26 PM",
     trigger = measured(repeated(250, prev(word(0x00F2E8)) != word(0x00F2E8))) && unless(byte(0x00F2FC) != 4) && 
               never(byte(0x00F3A2) == 3) && never(byte(0x002F1C) == 0)
-)
-
-achievement(
-    title = "Liberator of Lorelei", points = 25,
-    description = "Finish the game on Difficult level",
-    id = 25357, badge = "25791", published = "2015-07-16 11:00:18 PM", modified = "2021-02-11 2:08:21 AM",
-    trigger = never(bit5(0x00F2E4) != 1) && byte(0x00FFFE) == 248 && never(byte(0x00F3A2) != 1)
-)
-
-achievement(
-    title = "Elemental Genius", points = 50,
-    description = "Finish the game on Expert level",
-    id = 25358, badge = "25792", published = "2015-07-16 11:00:22 PM", modified = "2021-02-11 2:08:23 AM",
-    trigger = never(bit5(0x00F2E4) != 1) && once(byte(0x00FFFE) == 248) && never(byte(0x00F3A2) != 2)
 )
 
 achievement(
@@ -423,6 +571,10 @@ achievement(
                == 60 && prev(byte(0x00F388)) == 2 && byte(0x00F388) == 3))
 )
 
+// -------
+// Demoted
+// -------
+
 achievement(
     title = "Divine Herald of Godai", points = 50,
     description = "Finish all stages in ascending order, without being harmed",
@@ -452,6 +604,56 @@ achievement(
                68) && once(byte(0x00F2E4) == 3) && once(byte(0x00F2E4) == 7) && once(byte(0x00F2E4) == 15) && 
               once(byte(0x00F2E4) == 31) && once(byte(0x00F2E4) == 63)
 )
+
+// ------------
+// Leaderboards
+// ------------
+
+function leaderboard_score(difficulty_param) {
+    leaderboard(
+        title = format("High Score: {0}", LevelLookup[difficulty_param]),
+        description = "Submits after dying or after beating the game",
+        start = !demo() &&
+                difficulty() == difficulty_param &&
+                calc_score() > 0 &&
+                ((lost_all_health() && game_over_trans()) ||
+                (stage_6_cleared() && beat_game())),
+        cancel = always_false(),
+        submit = always_true(),
+        value = measured(calc_score()),
+        format = "VALUE"
+    )
+}
+
+leaderboard_score(2)
+leaderboard_score(1)
+leaderboard_score(0)
+
+function leaderboard_practice(stage_param) {
+    leaderboard(
+        title = format("High Score: Practice Stage {0}", stage_param + 1),
+        description = "Submits after dying or after beating the stage",
+        start = !demo() &&
+                practice_mode() &&
+                stage() == stage_param &&
+                calc_score() > 0 &&
+                ((lost_all_health() && game_over_trans()) ||
+                (stage_end() && defeat_boss())),
+        cancel = always_false(),
+        submit = always_true(),
+        value = measured(calc_score()),
+        format = "VALUE"
+    )
+}
+
+leaderboard_practice(0)
+leaderboard_practice(1)
+leaderboard_practice(2)
+leaderboard_practice(3)
+
+// -------------
+// Rich Presence
+// -------------
 
 rich_presence_display("On Stage {0}, using {1} power, with {2} units of energy left, Score: {3} ({4})",
     rich_presence_lookup("Stage", byte(0x00F2E2), StageLookup),
