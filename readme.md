@@ -1,4 +1,2 @@
 # RAScripts
-[RATools](https://github.com/Jamiras/RATools) scripts for [RetroAchievements](https://retroachievements.org/).
-
-Also badges and other images.
+[RATools](https://github.com/Jamiras/RATools) scripts and badges for [RetroAchievements](https://retroachievements.org/).
