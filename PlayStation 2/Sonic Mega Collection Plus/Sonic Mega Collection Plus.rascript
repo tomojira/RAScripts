@@ -260,19 +260,38 @@ character_dict = {
 //          Bonus Stage (Slot Machine) - 0x15
 
 function zone() => byte(0xef364e)
-function zone_and_act() => word(0xef364e)
+function zone_act() => word(0xef364e)
 
 mushroom_hill = 7
 flying_battery = 4
 sandopolis = 8
 lava_reef = 9
-lava_reef_boss = 0x16
+// lava_reef_2_boss = 0x16
 sky_sanctuary = 0xa
 death_egg = 0xb
-death_egg_boss = 0x17
+death_egg_2_boss = 0x17
 doomsday = 0xc
 credits = 0xd
 glowing_spheres_bonus = 0x14
+
+mushroom_hill_1 = 0x0007
+mushroom_hill_2 = 0x0107
+flying_battery_1 = 0x0004
+flying_battery_2 = 0x0104
+sandopolis_1 = 0x0008
+sandopolis_2 = 0x0108
+lava_reef_1 = 0x0009
+lava_reef_2 = 0x0109
+lava_reef_2_boss = 0x0016
+hidden_palace = 0x0116
+sky_sanctuary_sonic = 0x000a
+sky_sanctuary_knuckles = 0x010a
+death_egg_1 = 0x000b
+death_egg_2 = 0x010b
+// death_egg_2_boss = 0x0017
+// doomsday = 0x000c
+// credits = 0x010d
+// glowing_spheres_bonus = 0x0014
 
 zone_dict = {
     0x0007: "Mushroom Hill Zone Act 1",
@@ -451,7 +470,7 @@ function get_life_monitor(param) => prev(byte(param)) == 0x80 && byte(param) == 
 //          Super Chaos Emerald collected - 0x03
 
 function emeralds() => byte(0xef47b0)
-function all_emeralds() => byte(0xef47b1) == 7
+function all_emeralds() => byte(0xef47b0) == 7
 
 green_emerald = 0xef47b2
 orange_emerald = 0xef47b3
@@ -485,6 +504,8 @@ function super() => byte(0xef4619) == 1
  function seconds() => byte(0xef4624)
  function centisecs() => (minutes() * 6000) + (seconds() * 100) + byte(0xef4625)
 
+ function minutes_and_seconds() => word_be(0xef4623)
+
  // $EF4628: [Sonic the Hedgehog (Genesis), 2, 3] [16-bit BE]
 //          Current Score x10
 //          
@@ -508,22 +529,29 @@ function score() => word_be(0xef4628) * 10
 // Achievements
 // ------------
 
-function clear_mh1() => in_game() && zone() == mushroom_hill && act() == 0 && clear_act()
-function clear_mh2() => in_game() && zone() == mushroom_hill && act() == 1 && clear_act()
-function clear_fb1() => in_game() && zone() == flying_battery && act() == 0 && clear_act()
-function clear_fb2() => in_game() && zone() == flying_battery && act() == 1 && clear_act()
-function clear_sp1() => in_game() && zone() == sandopolis && act() == 0 && clear_act()
-function clear_sp2() => in_game() && zone() == sandopolis && act() == 1 && clear_act()
-function clear_lr1() => in_game() && zone() == lava_reef && act() == 0 && clear_act()
-function clear_lr2_sonic() => character_sonic() && in_game() && zone() == lava_reef_boss && act() == 0 && clear_act()
-function clear_lr2_knuckles() => character_knuckles() && screen_transition() && prev(zone()) == lava_reef && zone() == lava_reef_boss
-function clear_hp() => screen_transition() && prev(zone()) == lava_reef_boss && zone() == sky_sanctuary
-function clear_ss_sonic() => character_sonic() && in_game() && zone() == sky_sanctuary && act() == 0 && clear_act()
-function clear_ss_knuckles() => character_knuckles() && in_game() && zone() == sky_sanctuary && act() == 1 && prev_doomsday_music() && prev(act_clear_alt()) == 1 && act_clear_alt() == 0
-function clear_de1() => character_sonic() && in_game() && zone() == death_egg && act() == 0 && clear_act()
-function clear_de2() => character_sonic() && screen_transition() && prev(zone()) == death_egg_boss && __ornext(zone() == doomsday || zone() == credits)
+function clear_mh1() => in_game() && zone_act() == mushroom_hill_1 && clear_act()
+function clear_mh2() => in_game() && zone_act() == mushroom_hill_2 && clear_act()
+function clear_fb1() => in_game() && zone_act() == flying_battery_1 && clear_act()
+function clear_fb2() => in_game() && zone_act() == flying_battery_2 && clear_act()
+function clear_sp1() => in_game() && zone_act() == sandopolis_1 && clear_act()
+function clear_sp2() => in_game() && zone_act() == sandopolis_2 && clear_act()
+function clear_lr1() => in_game() && zone_act() == lava_reef_1 && clear_act()
+function clear_lr2_sonic() => character_sonic() && in_game() && zone_act() == lava_reef_2_boss && clear_act()
+function clear_lr2_knuckles() => character_knuckles() && screen_transition() && prev(zone_act()) == lava_reef_2 && zone_act() == hidden_palace
+function clear_hp() => screen_transition() && prev(zone_act()) == hidden_palace && zone() == sky_sanctuary
+function clear_ss_sonic() => character_sonic() && in_game() && zone_act() == sky_sanctuary_sonic && clear_act()
+function clear_ss_knuckles() => character_knuckles() && in_game() && zone_act() == sky_sanctuary_knuckles && prev_doomsday_music() && prev(act_clear_alt()) == 1 && act_clear_alt() == 0
+function clear_de1() => character_sonic() && in_game() && zone_act() == death_egg_1 && clear_act()
+function clear_de2() => character_sonic() && screen_transition() && prev(zone()) == death_egg_2_boss && __ornext(zone() == doomsday || zone() == credits)
 function clear_doomsday() => character_sonic() && screen_transition() && prev(zone()) == doomsday && zone() == credits
-function clear_game_sonic() => character_sonic() && screen_transition() && __ornext(prev(zone()) == death_egg_boss || prev(zone()) == doomsday) && zone() == credits
+function clear_game_sonic() => character_sonic() && screen_transition() && __ornext(prev(zone()) == death_egg_2_boss || prev(zone()) == doomsday) && zone() == credits
+
+function clear_mh1_trigger() => in_game() && zone_act() == mushroom_hill_1 && trigger_when(clear_act())
+function clear_fb1_trigger() => in_game() && zone_act() == flying_battery_1 && trigger_when(clear_act())
+function clear_sp1_trigger() => in_game() && zone_act() == sandopolis_1 && trigger_when(clear_act())
+function clear_lr1_trigger() => in_game() && zone_act() == lava_reef_1 && trigger_when(clear_act())
+function clear_ss_sonic_trigger() => character_sonic() && in_game() && zone_act() == sky_sanctuary_sonic && trigger_when(clear_act())
+function clear_de1_trigger() => character_sonic() && in_game() && zone_act() == death_egg_1 && trigger_when(clear_act())
 
 zone_clear_logic = {
     "mh": (clear_mh2()),
@@ -536,15 +564,16 @@ zone_clear_logic = {
     "ss_knuckles_all_emeralds": (all_emeralds() && clear_ss_knuckles())
 }
 
-function achievement_progress(title, description, points, zone_param) {
+function achievement_progress(id, title, description, points, zone_param) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
         trigger = once(in_genesis_game() &&
                        in_sk() &&
                        level_select_inactive() &&
-                       zone() == mushroom_hill &&
+                       zone_act() == mushroom_hill_1 &&
                        start_game_from_title()) &&
                   zone_clear_logic[zone_param] &&
                   disable_when(in_genesis_game() && in_sk() && level_select_active()) &&
@@ -555,21 +584,21 @@ function achievement_progress(title, description, points, zone_param) {
     )
 }
 
-achievement_progress("Fungal Fun", "[S&K] Clear Mushroom Hill Zone Act 2. (No Level Select)", 5, "mh")
-achievement_progress("Airship Assault", "[S&K] Clear Flying Battery Zone Act 2. (No Level Select)", 5, "fb")
-achievement_progress("Pyramid Peril", "[S&K] Clear Sandopolis Zone Act 2. (No Level Select)", 5, "sp")
+achievement_progress(370999, "Fungal Fun", "[S&K] Clear Mushroom Hill Zone Act 2. (No Level Select)", 5, "mh")
+achievement_progress(371000, "Airship Assault", "[S&K] Clear Flying Battery Zone Act 2. (No Level Select)", 5, "fb")
+achievement_progress(371001, "Pyramid Peril", "[S&K] Clear Sandopolis Zone Act 2. (No Level Select)", 5, "sp")
 
 // Separated into its own achievement to manage the alt groups
 achievement(
+    id = 371002,
     title = "Volcano Vibes",
     description = "[S&K] Clear Lava Reef Zone Act 2. (No Level Select)",
     points = 5,
     trigger = once(in_genesis_game() &&
                    in_sk() &&
                    level_select_inactive() &&
-                   zone() == mushroom_hill &&
+                   zone_act() == mushroom_hill_1 &&
                    start_game_from_title()) &&
-              zone() == lava_reef_boss &&
               disable_when(in_genesis_game() && in_sk() && level_select_active()) &&
               disable_when(smcp_load_save()) &&
               (always_false() ||
@@ -577,19 +606,20 @@ achievement(
                (clear_lr2_knuckles()))
 )
 
-achievement_progress("Sonic in the Sky", "[S&K] Clear Sky Sanctuary Zone as Sonic. (No Level Select)", 5, "ss_sonic")
-achievement_progress("I Gotta Protect This Place...", "[S&K] Clear Sky Sanctuary Zone as Knuckles. (No Level Select)", 5, "ss_knuckles")
-achievement_progress("Orbital Onslaught", "[S&K] Clear Death Egg Zone Act 2 as Sonic. (No Level Select)", 5, "de")
+achievement_progress(371003, "Sonic in the Sky", "[S&K] Clear Sky Sanctuary Zone as Sonic. (No Level Select)", 5, "ss_sonic")
+achievement_progress(371004, "I Gotta Protect This Place...", "[S&K] Clear Sky Sanctuary Zone as Knuckles. (No Level Select)", 5, "ss_knuckles")
+achievement_progress(371005, "Orbital Onslaught", "[S&K] Clear Death Egg Zone Act 2 as Sonic. (No Level Select)", 5, "de")
 
 // This only exists for the sake of the progression system, since win conditions aren't possible to use in a compilation
 achievement(
+    id = 371006,
     title = "Robot Wreckage",
     description = "[S&K] Beat the game as either character. (No Level Select)",
     points = 10,
     trigger = once(in_genesis_game() &&
                    in_sk() &&
                    level_select_inactive() &&
-                   zone() == mushroom_hill &&
+                   zone_act() == mushroom_hill_1 &&
                    start_game_from_title()) &&
               disable_when(in_genesis_game() && in_sk() && level_select_active()) &&
               disable_when(smcp_load_save()) &&
@@ -598,15 +628,16 @@ achievement(
                (clear_ss_knuckles()))
 )
 
-function achievement_emerald(title, description, points, emerald_param) {
+function achievement_emerald(id, title, description, points, emerald_param) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
         trigger = once(in_genesis_game() &&
                        in_sk() &&
                        level_select_inactive() &&
-                       zone() == mushroom_hill &&
+                       zone_act() == mushroom_hill_1 &&
                        start_game_from_title()) &&
                   special_stage_results() &&
                   get_emerald(emerald_param) &&
@@ -618,16 +649,16 @@ function achievement_emerald(title, description, points, emerald_param) {
     )
 }
 
-achievement_emerald("Green Get!", "[S&K] Get the Green Chaos Emerald. (No Level Select)", 5, green_emerald)
-achievement_emerald("Orange Get!", "[S&K] Get the Orange Chaos Emerald. (No Level Select)", 5, orange_emerald)
-achievement_emerald("Purple Get!", "[S&K] Get the Purple Chaos Emerald. (No Level Select)", 5, purple_emerald)
-achievement_emerald("Blue Get!", "[S&K] Get the Blue Chaos Emerald. (No Level Select)", 5, blue_emerald)
-achievement_emerald("White Get!", "[S&K] Get the White Chaos Emerald. (No Level Select)", 5, white_emerald)
-achievement_emerald("Red Get!", "[S&K] Get the Red Chaos Emerald. (No Level Select)", 5, red_emerald)
-achievement_emerald("Cyan Get!", "[S&K] Get the Cyan Chaos Emerald. (No Level Select)", 5, cyan_emerald)
+achievement_emerald(371007, "Green Get!", "[S&K] Get the Green Chaos Emerald. (No Level Select)", 5, green_emerald)
+achievement_emerald(371008, "Orange Get!", "[S&K] Get the Orange Chaos Emerald. (No Level Select)", 5, orange_emerald)
+achievement_emerald(371009, "Purple Get!", "[S&K] Get the Purple Chaos Emerald. (No Level Select)", 5, purple_emerald)
+achievement_emerald(371010, "Blue Get!", "[S&K] Get the Blue Chaos Emerald. (No Level Select)", 5, blue_emerald)
+achievement_emerald(371011, "White Get!", "[S&K] Get the White Chaos Emerald. (No Level Select)", 5, white_emerald)
+achievement_emerald(371012, "Red Get!", "[S&K] Get the Red Chaos Emerald. (No Level Select)", 5, red_emerald)
+achievement_emerald(371013, "Cyan Get!", "[S&K] Get the Cyan Chaos Emerald. (No Level Select)", 5, cyan_emerald)
 
-achievement_progress("Peace on Angel Island", "Clear the Doomsday Zone as Sonic with all 7 Chaos Emeralds. (No Level Select)", 25, "doomsday")
-achievement_progress("Rivals to Friends", "Clear Sky Sanctuary Zone as Knuckles with all 7 Chaos Emeralds. (No Level Select)", 25, "ss_knuckles_all_emeralds")
+achievement_progress(371014, "Peace on Angel Island", "Clear the Doomsday Zone as Sonic with all 7 Chaos Emeralds. (No Level Select)", 25, "doomsday")
+achievement_progress(371015, "Rivals to Friends", "Clear Sky Sanctuary Zone as Knuckles with all 7 Chaos Emeralds. (No Level Select)", 25, "ss_knuckles_all_emeralds")
 
 function slow_mode_protection_config_1() {
     return __ornext(x_button_input() || circle_button_input()) &&
@@ -660,6 +691,7 @@ function slow_mode_protection() {
 }
 
 achievement(
+    id = 371016,
     title = "Bonus Ascent",
     description = "[S&K] Reach the top of the Glowing Spheres Bonus Stage. (Level Select Allowed, but No Slow Mode/Frame Step)",
     points = 5,
@@ -676,19 +708,20 @@ achievement(
 )
 
 life_monitor_logic = {
-    "mh1": (zone() == mushroom_hill && act() == 0 && tally(2, get_life_monitor(mh1_life_1), get_life_monitor(mh1_life_2)) && never(lose_life())),
-    "mh2": (zone() == mushroom_hill && act() == 1 && get_life_monitor(mh2_life)),
-    "fb1": (zone() == flying_battery && act() == 0 && tally(2, get_life_monitor(fb1_life_1), get_life_monitor(fb1_life_2)) && never(lose_life())),
-    "fb2": (zone() == flying_battery && act() == 1 && get_life_monitor(fb2_life)),
-    "sp1": (zone() == sandopolis && act() == 0 && get_life_monitor(sp1_life_k)),
-    "sp2": (zone() == sandopolis && act() == 1 && get_life_monitor(sp2_life)),
-    "lr1": (zone() == lava_reef && act() == 0 && tally(4, get_life_monitor(lr1_life_1), get_life_monitor(lr1_life_2), get_life_monitor(lr1_life_3), get_life_monitor(lr1_life_4)) && never(lose_life())),
-    "ss_sonic": (character_sonic() && zone() == sky_sanctuary && tally(2, get_life_monitor(ss_life_1), get_life_monitor(ss_life_2)) && never(lose_life())),
-    "de2": (character_sonic() && zone() == death_egg && act() == 1 && tally(2, get_life_monitor(de2_life_1), get_life_monitor(de2_life_2)) && never(lose_life())),
+    "mh1": (measured(tally(2, zone_act() == mushroom_hill_1 && get_life_monitor(mh1_life_1), zone_act() == mushroom_hill_1 && get_life_monitor(mh1_life_2))) && never(lose_life())),
+    "mh2": (zone_act() == mushroom_hill_2 && get_life_monitor(mh2_life)),
+    "fb1": (measured(tally(2, zone_act() == flying_battery_1 && get_life_monitor(fb1_life_1), zone_act() == flying_battery_1 && get_life_monitor(fb1_life_2))) && never(lose_life())),
+    "fb2": (zone_act() == flying_battery_2 && get_life_monitor(fb2_life)),
+    "sp1": (zone_act() == sandopolis_1 && get_life_monitor(sp1_life_k)),
+    "sp2": (zone_act() == sandopolis_2 && get_life_monitor(sp2_life)),
+    "lr1": (character_sonic() && measured(tally(4, zone_act() == lava_reef_1 && get_life_monitor(lr1_life_1), zone_act() == lava_reef_1 && get_life_monitor(lr1_life_2), zone_act() == lava_reef_1 && get_life_monitor(lr1_life_3), zone_act() == lava_reef_1 && get_life_monitor(lr1_life_4))) && never(lose_life())),
+    "ss_sonic": (character_sonic() && measured(tally(2, zone_act() == sky_sanctuary_sonic && get_life_monitor(ss_life_1), zone_act() == sky_sanctuary_sonic && get_life_monitor(ss_life_2))) && never(lose_life())),
+    "de2": (character_sonic() && measured(tally(2, zone_act() == death_egg_2 && get_life_monitor(de2_life_1), zone_act() == death_egg_2 && get_life_monitor(de2_life_2))) && never(lose_life())),
 }
 
-function achievement_life_monitors(title, description, points, zone_param) {
+function achievement_life_monitors(id, title, description, points, zone_param) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
@@ -703,31 +736,38 @@ function achievement_life_monitors(title, description, points, zone_param) {
     )
 }
 
-achievement_life_monitors("Fungal Life I", "[S&K] Get 2 Life Monitors in Mushroom Hill Zone Act 1 without dying. (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "mh1")
-achievement_life_monitors("Fungal Life II", "[S&K] Get 1 Life Monitor in Mushroom Hill Zone Act 2. (Level Select Allowed, but No Slow Mode/Frame Step)", 3, "mh2")
-achievement_life_monitors("Spare Batteries I", "[S&K] Get 2 Life Monitors in Flying Battery Zone Act 1 without dying. (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "fb1")
-achievement_life_monitors("Spare Batteries II", "[S&K] Get 1 Life Monitor in Flying Battery Zone Act 2. (Level Select Allowed, but No Slow Mode/Frame Step)", 3, "fb2")
-achievement_life_monitors("Secrets of the Pyramids Revealed I", "[S&K] Get 1 Life Monitor in Sandopolis Zone Act 1. (Level Select Allowed, but No Slow Mode/Frame Step)", 3, "sp1")
-achievement_life_monitors("Secrets of the Pyramids Revealed II", "[S&K] Get 1 Life Monitor in Sandopolis Zone Act 2. (Level Select Allowed, but No Slow Mode/Frame Step)", 3, "sp2")
-achievement_life_monitors("Life from the Ashes", "[S&K] Get 4 Life Monitors in Lava Reef Zone Act 1 without dying. (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "lr1")
-achievement_life_monitors("Sanctuary of Life", "[S&K] Get 2 Life Monitors in Sky Sanctuary Zone as Sonic without dying. (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "ss_sonic")
-achievement_life_monitors("Life or Death", "[S&K] Get 2 Life Monitors in Death Egg Zone Act 2 as Sonic without dying. (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "de2")
+achievement_life_monitors(371017, "Fungal Life I", "[S&K] Get 2 Life Monitors in Mushroom Hill Zone Act 1 without dying. (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "mh1")
+achievement_life_monitors(371018, "Fungal Life II", "[S&K] Get 1 Life Monitor in Mushroom Hill Zone Act 2. (Level Select Allowed, but No Slow Mode/Frame Step)", 3, "mh2")
+achievement_life_monitors(371019, "Spare Batteries I", "[S&K] Get 2 Life Monitors in Flying Battery Zone Act 1 without dying. (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "fb1")
+achievement_life_monitors(371020, "Spare Batteries II", "[S&K] Get 1 Life Monitor in Flying Battery Zone Act 2. (Level Select Allowed, but No Slow Mode/Frame Step)", 3, "fb2")
+achievement_life_monitors(371021, "Secrets of the Pyramids Revealed I", "[S&K] Get 1 Life Monitor in Sandopolis Zone Act 1. (Level Select Allowed, but No Slow Mode/Frame Step)", 3, "sp1")
+achievement_life_monitors(371022, "Secrets of the Pyramids Revealed II", "[S&K] Get 1 Life Monitor in Sandopolis Zone Act 2. (Level Select Allowed, but No Slow Mode/Frame Step)", 3, "sp2")
+achievement_life_monitors(371023, "Life from the Ashes", "[S&K] Get 4 Life Monitors in Lava Reef Zone Act 1 as Sonic without dying. (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "lr1")
+achievement_life_monitors(371024, "Sanctuary of Life", "[S&K] Get 2 Life Monitors in Sky Sanctuary Zone as Sonic without dying. (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "ss_sonic")
+achievement_life_monitors(371025, "Life or Death", "[S&K] Get 2 Life Monitors in Death Egg Zone Act 2 as Sonic without dying. (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "de2")
 
 speedrun_logic = {
-    "mh1": (clear_mh1() && minutes() <= 1 && seconds() < 20),
-    "fb1": (clear_fb1() && minutes() <= 3 && seconds() < 20),
-    "sp1": (clear_sp1() && minutes() <= 3 && seconds() < 30),
-    "lr1": (clear_lr1() && minutes() <= 3 && seconds() < 40),
-    "ss_sonic": (clear_ss_sonic() && minutes() <= 3 && seconds() < 30),
-    "de1": (clear_de1() && minutes() <= 3 && seconds() < 30)
+    "mh1": (clear_mh1_trigger() && minutes_and_seconds() < 0x0114),
+    "fb1": (clear_fb1_trigger() && minutes_and_seconds() < 0x0314),
+    "sp1": (clear_sp1_trigger() && minutes_and_seconds() < 0x031e),
+    "lr1": (clear_lr1_trigger() && minutes_and_seconds() < 0x0328),
+    "ss_sonic": (clear_ss_sonic_trigger() && minutes_and_seconds() < 0x031e),
+    "de1": (clear_de1_trigger() && minutes_and_seconds() < 0x031e)
 }
 
-function achievement_speedrun(title, description, points, zone_param) {
+// 1min20sec = 0x0114
+// 3min20sec = 0x0314
+// 3min30sec = 0x031e
+// 3min40sec = 0x0328
+
+function achievement_speedrun(id, title, description, points, zone_param) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
         trigger = in_sk() &&
+                  character_sonic() &&
                   speedrun_logic[zone_param] &&
                   disable_when(super()) &&
                   slow_mode_protection() &&
@@ -738,12 +778,12 @@ function achievement_speedrun(title, description, points, zone_param) {
     )
 }
 
-achievement_speedrun("Mushroom Run", "[S&K] Clear Mushroom Hill Zone Act 1 in under 1min20sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "mh1")
-achievement_speedrun("Battery Blitz", "[S&K] Clear Flying Battery Zone Act 1 in under 3min20sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "fb1")
-achievement_speedrun("Dry Run", "[S&K] Clear Sandopolis Zone Act 2 in under 3min30sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "sp1")
-achievement_speedrun("Running on Lava", "[S&K] Clear Lava Reef Zone Act 1 in under 3min40sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "lr1")
-achievement_speedrun("Cloud Runner", "[S&K] Clear Sky Sanctuary Zone as Sonic in under 3min30sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "ss_sonic")
-achievement_speedrun("Death Egg Dash", "[S&K] Clear Death Egg Zone Act 1 as Sonic in under 3min30sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "de1")
+achievement_speedrun(371026, "Mushroom Run", "[S&K] Clear Mushroom Hill Zone Act 1 as Sonic in under 1min20sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "mh1")
+achievement_speedrun(371027, "Battery Blitz", "[S&K] Clear Flying Battery Zone Act 1 as Sonic in under 3min20sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "fb1")
+achievement_speedrun(371028, "Dry Run", "[S&K] Clear Sandopolis Zone Act 1 as Sonic in under 3min30sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "sp1")
+achievement_speedrun(371029, "Running on Lava", "[S&K] Clear Lava Reef Zone Act 1 as Sonic in under 3min40sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "lr1")
+achievement_speedrun(371030, "Cloud Runner", "[S&K] Clear Sky Sanctuary Zone as Sonic in under 3min30sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "ss_sonic")
+achievement_speedrun(371031, "Death Egg Dash", "[S&K] Clear Death Egg Zone Act 1 as Sonic in under 3min30sec. (No Super) (Level Select Allowed, but No Slow Mode/Frame Step)", 5, "de1")
 
 // ------------
 // Leaderboards
@@ -756,6 +796,7 @@ function slow_mode_protection_leaderboard() {
 }
 
 leaderboard(
+    id = 82481,
     title = "[S&K] High Score: Sonic",
     description = "Submits at Game Over or after beating the game. (Level Select Allowed, but No Slow Mode/Frame Step)",
     start = in_genesis_game() &&
@@ -777,6 +818,7 @@ leaderboard(
 )
 
 leaderboard(
+    id = 82482,
     title = "[S&K] High Score: Knuckles",
     description = "Submits at Game Over or after beating the game. (Level Select Allowed, but No Slow Mode/Frame Step)",
     start = in_genesis_game() &&
@@ -798,29 +840,29 @@ leaderboard(
 )
 
 leaderboard_start_logic = {
-    "mh1_sonic": (character_sonic() && zone() == mushroom_hill && act() == 0 && (always_false() || start_game_from_title() || start_game_from_level_select())),
-    "mh1_knuckles": (character_knuckles() && zone() == mushroom_hill && act() == 0 && (always_false() || start_game_from_title() || start_game_from_level_select())),
-    "mh2_sonic": (character_sonic() && zone() == mushroom_hill && act() == 1 && (always_false() || in_game() && prev(act()) == 0 || start_game_from_level_select())),
-    "mh2_knuckles": (character_knuckles() && zone() == mushroom_hill && act() == 1 && (always_false() || in_game() && prev(act()) == 0 || start_game_from_level_select())),
-    "fb1_sonic": (character_sonic() && zone() == flying_battery && act() == 0 && (always_false() || screen_transition() && prev(zone()) == mushroom_hill || start_game_from_level_select())),
-    "fb1_knuckles": (character_knuckles() && zone() == flying_battery && act() == 0 && (always_false() || screen_transition() && prev(zone()) == mushroom_hill || start_game_from_level_select())),
-    "fb2_sonic": (character_sonic() && zone() == flying_battery && act() == 1 && (always_false() || in_game() && prev(act()) == 0 || start_game_from_level_select())),
-    "fb2_knuckles": (character_knuckles() && zone() == flying_battery && act() == 1 && (always_false() || in_game() && prev(act()) == 0 || start_game_from_level_select())),
-    "sp1_sonic": (character_sonic() && zone() == sandopolis && act() == 0 && (always_false() || screen_transition() && prev(zone()) == flying_battery || start_game_from_level_select())),
-    "sp1_knuckles": (character_knuckles() && zone() == sandopolis && act() == 0 && (always_false() || screen_transition() && prev(zone()) == flying_battery || start_game_from_level_select())),
-    "sp2_sonic": (character_sonic() && zone() == sandopolis && act() == 1 && (always_false() || in_game() && prev(act()) == 0 || start_game_from_level_select())),
-    "sp2_knuckles": (character_knuckles() && zone() == sandopolis && act() == 1 && (always_false() || in_game() && prev(act()) == 0 || start_game_from_level_select())),
-    "lr1_sonic": (character_sonic() && zone() == lava_reef && act() == 0 && (always_false() || screen_transition() && prev(zone()) == sandopolis || start_game_from_level_select())),
-    "lr1_knuckles": (character_knuckles() && zone() == lava_reef && act() == 0 && (always_false() || screen_transition() && prev(zone()) == sandopolis || start_game_from_level_select())),
-    "lr2_sonic": (character_sonic() && zone() == lava_reef && act() == 1 && (always_false() || in_game() && prev(act()) == 0 || start_game_from_level_select())),
-    "lr2_knuckles": (character_knuckles() && zone() == lava_reef && act() == 1 && (always_false() || in_game() && prev(act()) == 0 || start_game_from_level_select())),
-    "hp_sonic": (character_sonic() && zone() == lava_reef_boss && act() == 1 && (always_false() || screen_transition() && prev(act()) == 0 || start_game_from_level_select())),
-    "hp_knuckles": (character_knuckles() && zone() == lava_reef_boss && act() == 1 && (always_false() || screen_transition() && prev(zone()) == lava_reef || start_game_from_level_select())),
-    "ss_sonic": (character_sonic() && zone() == sky_sanctuary && (always_false() || screen_transition() && prev(zone()) == lava_reef_boss || start_game_from_level_select())),
-    "ss_knuckles": (character_knuckles() && zone() == sky_sanctuary && (always_false() || screen_transition() && prev(zone()) == lava_reef_boss || start_game_from_level_select())),
-    "de1": (character_sonic() && zone() == death_egg && act() == 0 && (always_false() || screen_transition() && prev(zone()) == sky_sanctuary || start_game_from_level_select())),
-    "de2": (character_sonic() && zone() == death_egg && act() == 1 && (always_false() || in_game() && prev(act()) == 0 || start_game_from_level_select())),
-    "doomsday": (character_sonic() && zone() == doomsday && (always_false() || screen_transition() && prev(zone()) == death_egg_boss || start_game_from_level_select()))
+    "mh1_sonic": (character_sonic() && zone_act() == mushroom_hill_1 && (always_false() || start_game_from_title() || start_game_from_level_select())),
+    "mh1_knuckles": (character_knuckles() && zone_act() == mushroom_hill_1 && (always_false() || start_game_from_title() || start_game_from_level_select())),
+    "mh2_sonic": (character_sonic() && zone_act() == mushroom_hill_2 && (always_false() || in_game() && prev(zone_act()) == mushroom_hill_1 || start_game_from_level_select())),
+    "mh2_knuckles": (character_knuckles() && zone_act() == mushroom_hill_2 && (always_false() || in_game() && prev(zone_act()) == mushroom_hill_1 || start_game_from_level_select())),
+    "fb1_sonic": (character_sonic() && zone_act() == flying_battery_1 && (always_false() || screen_transition() && prev(zone_act()) == mushroom_hill_2 || start_game_from_level_select())),
+    "fb1_knuckles": (character_knuckles() && zone_act() == flying_battery_1 && (always_false() || screen_transition() && prev(zone_act()) == mushroom_hill_2 || start_game_from_level_select())),
+    "fb2_sonic": (character_sonic() && zone_act() == flying_battery_2 && (always_false() || in_game() && prev(zone_act()) == flying_battery_1 || start_game_from_level_select())),
+    "fb2_knuckles": (character_knuckles() && zone_act() == flying_battery_2 && (always_false() || in_game() && prev(zone_act()) == flying_battery_1 || start_game_from_level_select())),
+    "sp1_sonic": (character_sonic() && zone_act() == sandopolis_1 && (always_false() || screen_transition() && prev(zone_act()) == flying_battery_2 || start_game_from_level_select())),
+    "sp1_knuckles": (character_knuckles() && zone_act() == sandopolis_1 && (always_false() || screen_transition() && prev(zone_act()) == flying_battery_2 || start_game_from_level_select())),
+    "sp2_sonic": (character_sonic() && zone_act() == sandopolis_2 && (always_false() || in_game() && prev(zone_act()) == sandopolis_1 || start_game_from_level_select())),
+    "sp2_knuckles": (character_knuckles() && zone_act() == sandopolis_2 && (always_false() || in_game() && prev(zone_act()) == sandopolis_1 || start_game_from_level_select())),
+    "lr1_sonic": (character_sonic() && zone_act() == lava_reef_1 && (always_false() || screen_transition() && prev(zone_act()) == sandopolis_2 || start_game_from_level_select())),
+    "lr1_knuckles": (character_knuckles() && zone_act() == lava_reef_1 && (always_false() || screen_transition() && prev(zone_act()) == sandopolis_2 || start_game_from_level_select())),
+    "lr2_sonic": (character_sonic() && zone_act() == lava_reef_2 && (always_false() || in_game() && prev(zone_act()) == lava_reef_1 || start_game_from_level_select())),
+    "lr2_knuckles": (character_knuckles() && zone_act() == lava_reef_2 && (always_false() || in_game() && prev(zone_act()) == lava_reef_1 || start_game_from_level_select())),
+    "hp_sonic": (character_sonic() && zone_act() == hidden_palace && (always_false() || screen_transition() && prev(zone_act()) == lava_reef_2_boss || start_game_from_level_select())),
+    "hp_knuckles": (character_knuckles() && zone_act() == hidden_palace && (always_false() || screen_transition() && prev(zone_act()) == lava_reef_2 || start_game_from_level_select())),
+    "ss_sonic": (character_sonic() && zone_act() == sky_sanctuary_sonic && (always_false() || screen_transition() && prev(zone_act()) == hidden_palace || start_game_from_level_select())),
+    "ss_knuckles": (character_knuckles() && zone_act() == sky_sanctuary_knuckles && (always_false() || screen_transition() && prev(zone_act()) == hidden_palace || start_game_from_level_select())),
+    "de1": (character_sonic() && zone_act() == death_egg_1 && (always_false() || screen_transition() && prev(zone_act()) == sky_sanctuary_sonic || start_game_from_level_select())),
+    "de2": (character_sonic() && zone_act() == death_egg_2 && (always_false() || in_game() && prev(zone_act()) == death_egg_1 || start_game_from_level_select())),
+    "doomsday": (character_sonic() && zone() == doomsday && (always_false() || screen_transition() && prev(zone()) == death_egg_2_boss || start_game_from_level_select()))
 }
 
 leaderboard_submit_logic = {
@@ -849,8 +891,9 @@ leaderboard_submit_logic = {
     "doomsday": (clear_doomsday())
 }
 
-function leaderboard_speedrun(title, zone_param) {
+function leaderboard_speedrun(id, title, zone_param) {
     leaderboard(
+        id = id,
         title = title,
         description = "No Super. Level Select Allowed, but No Slow Mode/Frame Step",
         start = in_genesis_game() &&
@@ -866,32 +909,33 @@ function leaderboard_speedrun(title, zone_param) {
     )
 }
 
-leaderboard_speedrun("[S&K] Mushroom Hill 1 Speedrun: Sonic", "mh1_sonic")
-leaderboard_speedrun("[S&K] Mushroom Hill 1 Speedrun: Knuckles", "mh1_knuckles")
-leaderboard_speedrun("[S&K] Mushroom Hill 2 Speedrun: Sonic", "mh2_sonic")
-leaderboard_speedrun("[S&K] Mushroom Hill 2 Speedrun: Knuckles", "mh2_knuckles")
-leaderboard_speedrun("[S&K] Flying Battery 1 Speedrun: Sonic", "fb1_sonic")
-leaderboard_speedrun("[S&K] Flying Battery 1 Speedrun: Knuckles", "fb1_knuckles")
-leaderboard_speedrun("[S&K] Flying Battery 2 Speedrun: Sonic", "fb2_sonic")
-leaderboard_speedrun("[S&K] Flying Battery 2 Speedrun: Knuckles", "fb2_knuckles")
-leaderboard_speedrun("[S&K] Sandopolis 1 Speedrun: Sonic", "sp1_sonic")
-leaderboard_speedrun("[S&K] Sandopolis 1 Speedrun: Knuckles", "sp1_knuckles")
-leaderboard_speedrun("[S&K] Sandopolis 2 Speedrun: Sonic", "sp2_sonic")
-leaderboard_speedrun("[S&K] Sandopolis 2 Speedrun: Knuckles", "sp2_knuckles")
-leaderboard_speedrun("[S&K] Lava Reef 1 Speedrun: Sonic", "lr1_sonic")
-leaderboard_speedrun("[S&K] Lava Reef 1 Speedrun: Knuckles", "lr1_knuckles")
-leaderboard_speedrun("[S&K] Lava Reef 2 Speedrun: Sonic", "lr2_sonic")
-leaderboard_speedrun("[S&K] Lava Reef 2 Speedrun: Knuckles", "lr2_knuckles")
-leaderboard_speedrun("[S&K] Hidden Palace Speedrun: Sonic", "hp_sonic")
-leaderboard_speedrun("[S&K] Hidden Palace Speedrun: Knuckles", "hp_knuckles")
-leaderboard_speedrun("[S&K] Sky Sanctuary Speedrun: Sonic", "ss_sonic")
-leaderboard_speedrun("[S&K] Sky Sanctuary Speedrun: Knuckles", "ss_knuckles")
-leaderboard_speedrun("[S&K] Death Egg 1 Speedrun: Sonic", "de1")
-leaderboard_speedrun("[S&K] Death Egg 2 Speedrun: Sonic", "de2")
+leaderboard_speedrun(82483, "[S&K] Mushroom Hill 1 Speedrun: Sonic", "mh1_sonic")
+leaderboard_speedrun(82484, "[S&K] Mushroom Hill 1 Speedrun: Knuckles", "mh1_knuckles")
+leaderboard_speedrun(82485, "[S&K] Mushroom Hill 2 Speedrun: Sonic", "mh2_sonic")
+leaderboard_speedrun(82486, "[S&K] Mushroom Hill 2 Speedrun: Knuckles", "mh2_knuckles")
+leaderboard_speedrun(82487, "[S&K] Flying Battery 1 Speedrun: Sonic", "fb1_sonic")
+leaderboard_speedrun(82488, "[S&K] Flying Battery 1 Speedrun: Knuckles", "fb1_knuckles")
+leaderboard_speedrun(82489, "[S&K] Flying Battery 2 Speedrun: Sonic", "fb2_sonic")
+leaderboard_speedrun(82490, "[S&K] Flying Battery 2 Speedrun: Knuckles", "fb2_knuckles")
+leaderboard_speedrun(82491, "[S&K] Sandopolis 1 Speedrun: Sonic", "sp1_sonic")
+leaderboard_speedrun(82492, "[S&K] Sandopolis 1 Speedrun: Knuckles", "sp1_knuckles")
+leaderboard_speedrun(82493, "[S&K] Sandopolis 2 Speedrun: Sonic", "sp2_sonic")
+leaderboard_speedrun(82494, "[S&K] Sandopolis 2 Speedrun: Knuckles", "sp2_knuckles")
+leaderboard_speedrun(82495, "[S&K] Lava Reef 1 Speedrun: Sonic", "lr1_sonic")
+leaderboard_speedrun(82496, "[S&K] Lava Reef 1 Speedrun: Knuckles", "lr1_knuckles")
+leaderboard_speedrun(82497, "[S&K] Lava Reef 2 Speedrun: Sonic", "lr2_sonic")
+leaderboard_speedrun(82498, "[S&K] Lava Reef 2 Speedrun: Knuckles", "lr2_knuckles")
+leaderboard_speedrun(82499, "[S&K] Hidden Palace Speedrun: Sonic", "hp_sonic")
+leaderboard_speedrun(82500, "[S&K] Hidden Palace Speedrun: Knuckles", "hp_knuckles")
+leaderboard_speedrun(82501, "[S&K] Sky Sanctuary Speedrun: Sonic", "ss_sonic")
+leaderboard_speedrun(82502, "[S&K] Sky Sanctuary Speedrun: Knuckles", "ss_knuckles")
+leaderboard_speedrun(82503, "[S&K] Death Egg 1 Speedrun: Sonic", "de1")
+leaderboard_speedrun(82504, "[S&K] Death Egg 2 Speedrun: Sonic", "de2")
 //leaderboard_speedrun("[S&K] The Doomsday Speedrun", "doomsday")
 
 // Needs separate cancel logic to allow Super
 leaderboard(
+    id = 82505,
     title = "[S&K] The Doomsday Speedrun: Sonic",
     description = "Level Select Allowed, but No Slow Mode/Frame Step",
     start = in_genesis_game() &&
@@ -916,7 +960,7 @@ rich_presence_conditional_display(
 )
 
 rich_presence_conditional_display(
-    in_genesis_game() && in_sk() && in_game() && character_knuckles() && zone() == sky_sanctuary && act() == 1 && credits_music(),
+    in_genesis_game() && in_sk() && in_game() && character_knuckles() && zone_act() == sky_sanctuary_knuckles && credits_music(),
     "[S&K] Knuckles cleared the game! Lives: {0} | Emeralds: {1} | Score: {2}",
     rich_presence_value("Value", lives()),
     rich_presence_value("Value", emeralds()),
@@ -944,7 +988,7 @@ rich_presence_conditional_display(
     in_genesis_game() && in_sk() && (in_game() || screen_transition()),
     "[S&K] {0} is in {1} | Lives: {2} | Emeralds: {3} | Score: {4}",
     rich_presence_lookup("S&KCharacter", character(), character_dict),
-    rich_presence_lookup("S&KZone", zone_and_act(), zone_dict),
+    rich_presence_lookup("S&KZone", zone_act(), zone_dict),
     rich_presence_value("Value", lives()),
     rich_presence_value("Value", emeralds()),
     rich_presence_value("Value", score())
