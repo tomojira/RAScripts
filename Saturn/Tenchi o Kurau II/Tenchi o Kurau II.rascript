@@ -24,6 +24,9 @@
 //          0 = Easy
 //          1 = Normal (Default)
 //          2 = Hard
+// $1E809B: Sou-Sou Choice [8-bit]
+//          0x00 = Kill him
+//          0xff = Let him go
 // $1E80BC: Stage Clear - Boss Bonus [16-bit]
 //          Multiply by 100
 //          Stage 1: Ri-Ten = 12,000
@@ -311,7 +314,6 @@ scene_array = [0, 1, 3, 4, 5, 7, 8, 0x1c, 0x1f, 0x25, 0x0d]
 
 stage_complete = byte(0x1e8f0f) == 0xff
 
-// players_active = 0x1e8f19
 players_active = 0x52d44
 p1_active_only = byte(players_active) == 1
 p2_active_only = byte(players_active) == 2
@@ -322,7 +324,7 @@ p2_active = bit1(players_active) == 1
 
 sou_sou_end = byte(0x1e8f37)
 sou_sou_escape = prev(sou_sou_end) == 0 && sou_sou_end == 1
-let_sou_sou_go = prev(sou_sou_end) == 0 && sou_sou_end == 0xff
+let_sou_sou_go = prev(sou_sou_end) < 0xff && sou_sou_end == 0xff
 
 p1_character = byte(0x1ee20a)
 
@@ -404,8 +406,10 @@ cheat_dict = {
 // Achievements
 // ------------
 
-function achievement_progress(title, description, points, stage_param) {
+function achievement_progress(id, title, description, points, stage_param) {
     achievement(
+        id = id,
+        type = "PROGRESSION",
         title = title,
         description = description,
         points = points,
@@ -419,18 +423,20 @@ function achievement_progress(title, description, points, stage_param) {
     )
 }
 
-achievement_progress("Battle of Bowang, Part 1", "Defeat Ri-Ten in Round 1 on normal or hard (No special moves cheat)", points=5, stage_param=0)
-achievement_progress("Battle of Bowang, Part 2", "Defeat Kakou-Ton in Round 2 on normal or hard (No special moves cheat)", points=5, stage_param=1)
-achievement_progress("Xinye Castle", "Defeat Kyo-Cho in Round 3 on normal or hard (No special moves cheat)", points=5, stage_param=2)
-achievement_progress("Ambush", "Defeat Mei-Mei, Mei-Ya, and Mei-Ling on normal or hard (No special moves cheat)", points=5, stage_param=3)
-achievement_progress("White River", "Defeat Sou-Jin in Round 4 on normal or hard (No special moves cheat)", points=5, stage_param=4)
-achievement_progress("Battle of Changban", "Defeat Jun'U-Dou in Round 5 on normal or hard (No special moves cheat)", points=5, stage_param=5)
-achievement_progress("Changban Bridge", "Defeat Kakou-Ketsu and An-Mei in Round 6 on normal or hard (No special moves cheat)", points=5, stage_param=6)
-achievement_progress("Battle of Red Cliffs, Part 1", "Defeat Chou-Ryou in Round 7 on normal or hard (No special moves cheat)", points=10, stage_param=7)
-achievement_progress("Battle of Red Cliffs, Part 2", "Defeat Jo-Kou in Round 8 on normal or hard (No special moves cheat)", points=10, stage_param=8)
-achievement_progress("Huarong Trail", "Defeat Ryo-Fu in Round 9 on normal or hard (No special moves cheat)", points=25, stage_param=9)
+achievement_progress(391734, "Battle of Bowang, Part 1", "Defeat Ri-Ten in Round 1 on normal or hard (No special moves cheat)", points=5, stage_param=0)
+achievement_progress(391735, "Battle of Bowang, Part 2", "Defeat Kakou-Ton in Round 2 on normal or hard (No special moves cheat)", points=5, stage_param=1)
+achievement_progress(391736, "Xinye Castle", "Defeat Kyo-Cho in Round 3 on normal or hard (No special moves cheat)", points=5, stage_param=2)
+achievement_progress(391737, "Ambush", "Defeat Mei-Mei, Mei-Ya, and Mei-Ling on normal or hard (No special moves cheat)", points=5, stage_param=3)
+achievement_progress(391738, "White River", "Defeat Sou-Jin in Round 4 on normal or hard (No special moves cheat)", points=5, stage_param=4)
+achievement_progress(391739, "Battle of Changban", "Defeat Jun'U-Dou in Round 5 on normal or hard (No special moves cheat)", points=5, stage_param=5)
+achievement_progress(391740, "Changban Bridge", "Defeat Kakou-Ketsu and An-Mei in Round 6 on normal or hard (No special moves cheat)", points=5, stage_param=6)
+achievement_progress(391741, "Battle of Red Cliffs, Part 1", "Defeat Chou-Ryou in Round 7 on normal or hard (No special moves cheat)", points=10, stage_param=7)
+achievement_progress(391742, "Battle of Red Cliffs, Part 2", "Defeat Jo-Kou in Round 8 on normal or hard (No special moves cheat)", points=10, stage_param=8)
+achievement_progress(391743, "Huarong Trail", "Defeat Ryo-Fu in Round 9 on normal or hard (No special moves cheat)", points=25, stage_param=9)
 
 achievement(
+    id = 391744,
+    type = "WIN_CONDITION",
     title = "Changing History",
     description = "Kill Sou-Sou on normal or hard (Special moves cheat allowed)",
     points = 5,
@@ -443,45 +449,51 @@ achievement(
 )
 
 achievement(
+    id = 391745,
+    type = "WIN_CONDITION",
     title = "Age of Tyranny",
     description = "Fail to kill Sou-Sou and watch him escape on normal or hard (Special moves cheat allowed)",
     points = 5,
     trigger = difficulty_normal_or_higher &&
               p1_active_only &&
               stage == stage_array[10] &&
-              stage_complete &&
+              //stage_complete &&
               sou_sou_escape &&
               disable_when(p2_active, until=credits == 10)
 )
 
 achievement(
+    id = 391746,
+    type = "WIN_CONDITION",
     title = "Lurking Threat",
     description = "Choose to let Sou-Sou go on normal or hard (Special moves cheat allowed)",
     points = 5,
     trigger = difficulty_normal_or_higher &&
               p1_active_only &&
               stage == stage_array[10] &&
-              stage_complete &&
+              //stage_complete &&
               let_sou_sou_go &&
               disable_when(p2_active, until=credits == 10)
 )
 
 achievement(
+    id = 391747,
     title = "Hard-Won Victory",
     description = "Complete the game on hard (No special moves cheat)",
     points = 25,
     trigger = difficulty_hard &&
               p1_active_only &&
               stage == stage_array[10] &&
-              stage_complete &&
+              //stage_complete &&
               unless(special_move_cheat_enabled) &&
               disable_when(p2_active, until=credits == 10) &&
-              ((get_boss_bonus) ||
+              ((stage_complete && get_boss_bonus) ||
                (sou_sou_escape) ||
                (let_sou_sou_go))
 )
 
 achievement(
+    id = 391753,
     title = "Three Kingdoms, Three Credits",
     description = "Complete the game using 2 or fewer continues on normal or hard (No special moves cheat)",
     points = 50,
@@ -489,15 +501,16 @@ achievement(
               p1_active_only &&
               credits >= 7 &&
               trigger_when(stage == stage_array[10]) &&
-              trigger_when(stage_complete) &&
+              //trigger_when(stage_complete) &&
               unless(special_move_cheat_enabled) &&
               disable_when(p2_active, until=credits == 10) &&
-              ((trigger_when(get_boss_bonus)) ||
+              ((trigger_when(stage_complete) && trigger_when(get_boss_bonus)) ||
                (trigger_when(sou_sou_escape)) ||
                (trigger_when(let_sou_sou_go)))
 )
 
 achievement(
+    id = 395085,
     title = "Secret Techniques",
     description = "Complete the game with the special moves cheat enabled on normal or hard",
     points = 10,
@@ -505,15 +518,16 @@ achievement(
               p1_active_only &&
               special_move_cheat_enabled &&
               stage == stage_array[10] &&
-              stage_complete &&
+              //stage_complete &&
               disable_when(p2_active, until=credits == 10) &&
-              ((get_boss_bonus) ||
+              ((stage_complete && get_boss_bonus) ||
                (sou_sou_escape) ||
                (let_sou_sou_go))
 )
 
-function achievement_character(title, description, points, character_param) {
+function achievement_character(id, title, description, points, character_param) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
@@ -524,22 +538,23 @@ function achievement_character(title, description, points, character_param) {
                   difficulty_normal_or_higher &&
                   p1_active_only &&
                   trigger_when(stage == stage_array[10]) &&
-                  trigger_when(stage_complete) &&
+                  //trigger_when(stage_complete) &&
                   never(p1_active_only && !stage_complete && p1_character != character_param) &&
                   disable_when(p2_active, until=credits == 10) &&
-                  ((trigger_when(get_boss_bonus)) ||
+                  ((trigger_when(stage_complete) && trigger_when(get_boss_bonus)) ||
                    (trigger_when(sou_sou_escape)) ||
                    (trigger_when(let_sou_sou_go)))
     )
 }
 
-achievement_character("Guan Yu", "Complete the game playing only as Kan-U on normal or hard (Special moves cheat allowed)", 10, kan_u)
-achievement_character("Zhang Fei", "Complete the game playing only as Chou-Hi on normal or hard (Special moves cheat allowed)", 10, chou_hi)
-achievement_character("Zhao Yun", "Complete the game playing only as Chou-Un on normal or hard (Special moves cheat allowed)", 10, chou_un)
-achievement_character("Huang Zhong", "Complete the game playing only as Kou-Chuu on normal or hard (Special moves cheat allowed)", 10, kou_chuu)
-achievement_character("Wei Yan", "Complete the game playing only as Gi-En on normal or hard (Special moves cheat allowed)", 10, gi_en)
+achievement_character(391748, "Guan Yu", "Complete the game playing only as Kan-U on normal or hard (Special moves cheat allowed)", 10, kan_u)
+achievement_character(391749, "Zhang Fei", "Complete the game playing only as Chou-Hi on normal or hard (Special moves cheat allowed)", 10, chou_hi)
+achievement_character(391750, "Zhao Yun", "Complete the game playing only as Chou-Un on normal or hard (Special moves cheat allowed)", 10, chou_un)
+achievement_character(391751, "Huang Zhong", "Complete the game playing only as Kou-Chuu on normal or hard (Special moves cheat allowed)", 10, kou_chuu)
+achievement_character(391752, "Wei Yan", "Complete the game playing only as Gi-En on normal or hard (Special moves cheat allowed)", 10, gi_en)
 
 achievement(
+    id = 391754,
     title = "Well-Fed",
     description = "Eat all your food in the first bonus game on normal or hard (Special moves cheat allowed)",
     points = 5,
@@ -551,6 +566,7 @@ achievement(
 )
 
 achievement(
+    id = 391755,
     title = "Sou-Sou Buster",
     description = "Destroy all statues in the second bonus game on normal or hard (Special moves cheat allowed)",
     points = 5,
@@ -562,6 +578,7 @@ achievement(
 )
 
 achievement(
+    id = 391756,
     title = "Mighty Vitality",
     description = "Get a perfect health bonus of 20,000 on normal or hard (Sou-Sou doesn't count. Special moves cheat allowed)",
     points = 5,
@@ -574,6 +591,7 @@ achievement(
 )
 
 achievement(
+    id = 391757,
     title = "Fatality",
     description = "Get a victory bonus of 5000 by cutting a boss in half on normal or hard (Sou-Sou doesn't count. Special moves cheat allowed)",
     points = 5,
@@ -586,6 +604,7 @@ achievement(
 )
 
 achievement(
+    id = 391758,
     title = "Execution",
     description = "Get a victory bonus of 10,000 by decapitating a boss on normal or hard (Sou-Sou doesn't count. Special moves cheat allowed)",
     points = 5,
@@ -598,6 +617,7 @@ achievement(
 )
 
 achievement(
+    id = 391759,
     title = "Horselord",
     description = "Complete a round while on horseback on normal or hard (Special moves cheat allowed)",
     points = 5,
@@ -609,8 +629,9 @@ achievement(
               disable_when(p2_active, until=credits == 10)
 )
 
-function achievement_weapon(title, description, points, weapon_param) {
+function achievement_weapon(id, title, description, points, weapon_param) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
@@ -622,11 +643,12 @@ function achievement_weapon(title, description, points, weapon_param) {
     )
 }
 
-achievement_weapon("No Escape", "Get the Seikou on normal or hard (Special moves cheat allowed)", 5, seikou)
-achievement_weapon("Rainbow Blade", "Get the Shichisei on normal or hard (Special moves cheat allowed)", 5, shichisei)
-achievement_weapon("Majestic Mace", "Get the Sui on normal or hard (Special moves cheat allowed)", 5, sui)
+achievement_weapon(391760, "No Escape", "Get the Seikou on normal or hard (Special moves cheat allowed)", 5, seikou)
+achievement_weapon(391761, "Rainbow Blade", "Get the Shichisei on normal or hard (Special moves cheat allowed)", 5, shichisei)
+achievement_weapon(391762, "Majestic Mace", "Get the Sui on normal or hard (Special moves cheat allowed)", 5, sui)
 
 achievement(
+    id = 391763,
     title = "Samurai Sword",
     description = "Get a secret sword in Round 8 on normal or hard (Special moves cheat allowed)",
     points = 5,
@@ -639,14 +661,15 @@ achievement(
               disable_when(p2_active, until=credits == 10)
 )
 
-achievement_weapon("Burning Blade", "Get the Kusanagi Sword on normal or hard (Special moves cheat allowed)", 5, kusanagi)
+achievement_weapon(391764, "Burning Blade", "Get the Kusanagi Sword on normal or hard (Special moves cheat allowed)", 5, kusanagi)
 
 // ------------
 // Leaderboards
 // ------------
 
-function leaderboard_score_1cc(difficulty_param) {
+function leaderboard_score_1cc(id, difficulty_param) {
     leaderboard(
+        id = id,
         title = format("High Score: {0} 1CC", difficulty_dict[difficulty_param]),
         description = "Submits after beating the game with 9 credits remaining (No special moves cheat)",
         start = difficulty == difficulty_param &&
@@ -663,7 +686,7 @@ function leaderboard_score_1cc(difficulty_param) {
     )
 }
 
-function leaderboard_score(difficulty_param) {
+function leaderboard_score(id, difficulty_param) {
     leaderboard(
         title = format("High Score: {0}", difficulty_dict[difficulty_param]),
         description = "Submits at continue/game over or after beating the game (No special moves cheat)",
@@ -681,16 +704,17 @@ function leaderboard_score(difficulty_param) {
     )
 }
 
-leaderboard_score_1cc(2)
-leaderboard_score(2)
+leaderboard_score_1cc(87575, 2)
+leaderboard_score(87576, 2)
 
-leaderboard_score_1cc(1)
-leaderboard_score(1)
+leaderboard_score_1cc(87577, 1)
+leaderboard_score(87578, 1)
 
-leaderboard_score_1cc(0)
-leaderboard_score(0)
+leaderboard_score_1cc(87579, 0)
+leaderboard_score(87580, 0)
 
 leaderboard(
+    id = 87581,
     title = "Bonus Game 1 Score",
     description = "Eat your food! (Special moves cheat allowed)",
     start = p1_active_only &&
@@ -705,6 +729,7 @@ leaderboard(
 )
 
 leaderboard(
+    id = 87582,
     title = "Bonus Game 2 Score",
     description = "Destroy the statues! (Special moves cheat allowed)",
     start = p1_active_only &&
