@@ -381,7 +381,6 @@ p2_cpu = bit3(p2_controller) == 1
 p2_player = bit3(p2_controller) == 0 && bit0(p2_controller) == 1
 
 p1_character = byte(0x17a932)
-// p1_character = byte(0x189d40)
 p1_health = byte(0x18a044)
 p1_burning_gauge = byte(0x18a04c)
 p1_move = byte(0x189d42)
@@ -389,7 +388,6 @@ p1_rush = byte(0x189ee2)
 p1_rounds_won = byte(0x18a064)
 
 p2_character = byte(0x17aa82)
-// p2_character = byte(0x18a390)
 p2_health = byte(0x18a694)
 p2_rounds_won = byte(0x18a6b4)
 
@@ -489,13 +487,6 @@ complete_ranking_mode =
     prev(progression) == 0xc &&
     progression == 0xd
 
-// story_mode_start =
-//     game_mode == story_mode &&
-//     progression == 1 &&
-//     p1_rounds_won == 0 &&
-//     p2_rounds_won == 0 &&
-//     timer == 80
-
 story_mode_start =
     game_mode == story_mode &&
     prev(p1_character) == 0 &&
@@ -576,18 +567,18 @@ super_array = [
 ]
 
 rush_array = [
-    35,
-    23,
-    15,
-    29,
+    16,
+    12,
+    11,
     24,
-    25,
-    19,
-    17,
-    18,
-    21,
+    24,
     15,
-    30,
+    11,
+    10,
+    12,
+    19,
+    15,
+    16,
     11
 ]
 
@@ -796,7 +787,7 @@ function achievement_speed() {
             description =
                 format(
                     "Win a round at game speed {0} in Story Mode or Ranking Mode on difficulty 2 or 3 (other settings default)",
-                    i * 3
+                    i * 3 + 1
                 ),
             points = 5,
             trigger =
@@ -867,18 +858,18 @@ rush_title_array = [
 ]
 
 rush_points_array = [
-    10,
-    10,
-    10,
     5,
     5,
-    10,
     5,
-    10,
-    10,
     5,
-    10,
-    10,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
     5
 ]
 
