@@ -1389,15 +1389,15 @@ function achievement_progress(id, title, description, points, type, zone_param) 
     )
 }
 
-achievement_progress(370999, "Fungal Fun", "[S&K] Clear Mushroom Hill Zone Act 2 (No level select and no loading saves)", 5, "PROGRESSION", "mh")
-achievement_progress(371000, "Airship Assault", "[S&K] Clear Flying Battery Zone Act 2 (No level select and no loading saves)", 5, "PROGRESSION", "fb")
-achievement_progress(371001, "Pyramid Peril", "[S&K] Clear Sandopolis Zone Act 2 (No level select and no loading saves)", 5, "PROGRESSION", "sp")
+achievement_progress(370999, "Fungal Fun", "[S&K] Complete Mushroom Hill Zone without using level select or loading a mid-game save", 5, "PROGRESSION", "mh")
+achievement_progress(371000, "Airship Assault", "[S&K] Complete Flying Battery Zone without using level select or loading a mid-game save", 5, "PROGRESSION", "fb")
+achievement_progress(371001, "Pyramid Peril", "[S&K] Complete Sandopolis Zone without using level select or loading a mid-game save", 5, "PROGRESSION", "sp")
 
 // Separated into its own achievement to manage the alt groups
 achievement(
     id = 371002,
     title = "Volcano Vibes",
-    description = "[S&K] Clear Lava Reef Zone Act 2 (No level select and no loading saves)",
+    description = "[S&K] Complete Lava Reef Zone without using level select or loading a mid-game save",
     points = 5,
     type = "PROGRESSION",
     trigger =
@@ -1425,15 +1425,15 @@ achievement(
         )
 )
 
-achievement_progress(371003, "Sonic in the Sky", "[S&K] Clear Sky Sanctuary Zone as Sonic (No level select and no loading saves)", 5, "", "ss_sonic")
-achievement_progress(371004, "I Gotta Protect This Place...", "[S&K] Clear Sky Sanctuary Zone as Knuckles (No level select and no loading saves)", 5, "", "ss_knuckles")
-achievement_progress(371005, "Orbital Onslaught", "[S&K] Clear Death Egg Zone Act 2 as Sonic (No level select and no loading saves)", 5, "", "de")
+achievement_progress(371003, "Sonic in the Sky", "[S&K] Complete Sky Sanctuary Zone as Sonic without using level select or loading a mid-game save", 5, "", "ss_sonic")
+achievement_progress(371004, "I Gotta Protect This Place...", "[S&K] Complete Sky Sanctuary Zone as Knuckles without using level select or loading a mid-game save", 5, "", "ss_knuckles")
+achievement_progress(371005, "Orbital Onslaught", "[S&K] Complete Death Egg Zone without using level select or loading a mid-game save", 5, "", "de")
 
 // This only exists for the sake of the progression system, since win conditions aren't possible to use in a compilation
 achievement(
     id = 371006,
     title = "Robot Wreckage",
-    description = "[S&K] Beat the game as either character (No level select and no loading saves)",
+    description = "[S&K] Beat the game as either character without using level select or loading a mid-game save",
     points = 10,
     type = "PROGRESSION",
     trigger =
@@ -1491,21 +1491,21 @@ function achievement_emerald(id, title, description, points, emerald_param) {
     )
 }
 
-achievement_emerald(371007, "Green Get!", "[S&K] Get the Green Chaos Emerald (No level select and no loading saves)", 5, green_emerald)
-achievement_emerald(371008, "Orange Get!", "[S&K] Get the Orange Chaos Emerald (No level select and no loading saves)", 5, orange_emerald)
-achievement_emerald(371009, "Purple Get!", "[S&K] Get the Purple Chaos Emerald (No level select and no loading saves)", 5, purple_emerald)
-achievement_emerald(371010, "Blue Get!", "[S&K] Get the Blue Chaos Emerald (No level select and no loading saves)", 5, blue_emerald)
-achievement_emerald(371011, "White Get!", "[S&K] Get the White Chaos Emerald (No level select and no loading saves)", 5, white_emerald)
-achievement_emerald(371012, "Red Get!", "[S&K] Get the Red Chaos Emerald (No level select and no loading saves)", 5, red_emerald)
-achievement_emerald(371013, "Cyan Get!", "[S&K] Get the Cyan Chaos Emerald (No level select and no loading saves)", 5, cyan_emerald)
+achievement_emerald(371007, "Green Get!", "[S&K] Obtain the green Chaos Emerald without using level select or loading a mid-game save", 5, green_emerald)
+achievement_emerald(371008, "Orange Get!", "[S&K] Obtain the orange Chaos Emerald without using level select or loading a mid-game save", 5, orange_emerald)
+achievement_emerald(371009, "Purple Get!", "[S&K] Obtain the purple Chaos Emerald without using level select or loading a mid-game save", 5, purple_emerald)
+achievement_emerald(371010, "Blue Get!", "[S&K] Obtain the blue Chaos Emerald without using level select or loading a mid-game save", 5, blue_emerald)
+achievement_emerald(371011, "White Get!", "[S&K] Obtain the white Chaos Emerald without using level select or loading a mid-game save", 5, white_emerald)
+achievement_emerald(371012, "Red Get!", "[S&K] Obtain the red Chaos Emerald without using level select or loading a mid-game save", 5, red_emerald)
+achievement_emerald(371013, "Cyan Get!", "[S&K] Obtain the cyan Chaos Emerald without using level select or loading a mid-game save", 5, cyan_emerald)
 
-achievement_progress(371014, "Peace on Angel Island", "Clear the Doomsday Zone as Sonic with all 7 Chaos Emeralds (No level select and no loading saves)", 25, "", "doomsday")
-achievement_progress(371015, "Rivals to Friends", "Clear Sky Sanctuary Zone as Knuckles with all 7 Chaos Emeralds (No level select and no loading saves)", 25, "", "ss_knuckles_all_emeralds")
+achievement_progress(371014, "Peace on Angel Island", "[S&K] Clear the Doomsday Zone and beat the game as Sonic with all 7 Chaos Emeralds collected and without using level select or loading a mid-game save", 25, "", "doomsday")
+achievement_progress(371015, "Rivals to Friends", "[S&K] Clear Sky Sanctuary Zone and beat the game as Knuckles with all 7 Chaos Emeralds collected and without using level select or loading a mid-game save", 25, "", "ss_knuckles_all_emeralds")
 
 achievement(
     id = 371016,
     title = "Bonus Ascent",
-    description = "[S&K] Reach the top of the Glowing Spheres Bonus Stage (Level select allowed, but no slow mode/frame step and no loading saves)",
+    description = "[S&K] Reach the top of the Glowing Spheres bonus stage without using frame advance or loading a mid-game save",
     points = 5,
     trigger =
         in_sk &&
@@ -1574,15 +1574,15 @@ function achievement_life_monitors(id, title, description, points, zone_param) {
     )
 }
 
-achievement_life_monitors(371017, "Fungal Life I", "[S&K] Get 2 Life Monitors in Mushroom Hill Zone Act 1 without dying (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "mh1")
-achievement_life_monitors(371018, "Fungal Life II", "[S&K] Get 1 Life Monitor in Mushroom Hill Zone Act 2 (Level select allowed, but no slow mode/frame step and no loading saves)", 3, "mh2")
-achievement_life_monitors(371019, "Spare Batteries I", "[S&K] Get 2 Life Monitors in Flying Battery Zone Act 1 without dying (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "fb1")
-achievement_life_monitors(371020, "Spare Batteries II", "[S&K] Get 1 Life Monitor in Flying Battery Zone Act 2 (Level select allowed, but no slow mode/frame step and no loading saves)", 3, "fb2")
-achievement_life_monitors(371021, "Secrets of the Pyramids Revealed I", "[S&K] Get 1 Life Monitor in Sandopolis Zone Act 1 (Level select allowed, but no slow mode/frame step and no loading saves)", 3, "sp1")
-achievement_life_monitors(371022, "Secrets of the Pyramids Revealed II", "[S&K] Get 1 Life Monitor in Sandopolis Zone Act 2 (Level select allowed, but no slow mode/frame step and no loading saves)", 3, "sp2")
-achievement_life_monitors(371023, "Life from the Ashes", "[S&K] Get 4 Life Monitors in Lava Reef Zone Act 1 as Sonic without dying (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "lr1")
-achievement_life_monitors(371024, "Sanctuary of Life", "[S&K] Get 2 Life Monitors in Sky Sanctuary Zone as Sonic without dying (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "ss_sonic")
-achievement_life_monitors(371025, "Life or Death", "[S&K] Get 2 Life Monitors in Death Egg Zone Act 2 as Sonic without dying (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "de2")
+achievement_life_monitors(371017, "Fungal Life I", "[S&K] Collect both 1-Up monitors in Mushroom Hill Zone Act 1 without dying and without using frame advance or loading a mid-game save", 5, "mh1")
+achievement_life_monitors(371018, "Fungal Life II", "[S&K] Collect the 1-Up monitor in Mushroom Hill Zone Act 2 without dying and without using frame advance or loading a mid-game save", 3, "mh2")
+achievement_life_monitors(371019, "Spare Batteries I", "[S&K] Collect both 1-Up monitors in Flying Battery Zone Act 1 without dying and without using frame advance or loading a mid-game save", 5, "fb1")
+achievement_life_monitors(371020, "Spare Batteries II", "[S&K] Collect the 1-Up monitor in Flying Battery Zone Act 2 without dying and without using frame advance or loading a mid-game save", 3, "fb2")
+achievement_life_monitors(371021, "Secrets of the Pyramids Revealed I", "[S&K] Collect the 1-Up monitor in Sandopolis Zone Act 1 without dying and without using frame advance or loading a mid-game save", 3, "sp1")
+achievement_life_monitors(371022, "Secrets of the Pyramids Revealed II", "[S&K] Collect the 1-Up monitor in Sandopolis Zone Act 2 without dying and without using frame advance or loading a mid-game save", 3, "sp2")
+achievement_life_monitors(371023, "Life from the Ashes", "[S&K] Collect 4 1-Up monitors in Lava Reef Zone Act 1 as Sonic without dying and without using frame advance or loading a mid-game save", 5, "lr1")
+achievement_life_monitors(371024, "Sanctuary of Life", "[S&K] Collect 2 1-Up monitors in Sky Sanctuary Zone as Sonic without dying and without using frame advance or loading a mid-game save", 5, "ss_sonic")
+achievement_life_monitors(371025, "Life or Death", "[S&K] Collect 2 1-Up monitors in Death Egg Zone Act 2 as Sonic without dying and without using frame advance or loading a mid-game save", 5, "de2")
 
 speedrun_logic = {
     "mh1": (clear_mh1_trigger && minutes_and_seconds < 0x0114),
@@ -1623,12 +1623,56 @@ function achievement_speedrun(id, title, description, points, zone_param) {
     )
 }
 
-achievement_speedrun(371026, "Mushroom Run", "[S&K] Clear Mushroom Hill Zone Act 1 as Sonic in under 1min20sec without going Super (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "mh1")
-achievement_speedrun(371027, "Battery Blitz", "[S&K] Clear Flying Battery Zone Act 1 as Sonic in under 3min20sec without going Super (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "fb1")
-achievement_speedrun(371028, "Dry Run", "[S&K] Clear Sandopolis Zone Act 1 as Sonic in under 3min30sec without going Super (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "sp1")
-achievement_speedrun(371029, "Running on Lava", "[S&K] Clear Lava Reef Zone Act 1 as Sonic in under 3min40sec without going Super (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "lr1")
-achievement_speedrun(371030, "Cloud Runner", "[S&K] Clear Sky Sanctuary Zone as Sonic in under 3min30sec without going Super (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "ss_sonic")
-achievement_speedrun(371031, "Death Egg Dash", "[S&K] Clear Death Egg Zone Act 1 as Sonic in under 3min30sec without going Super (Level select allowed, but no slow mode/frame step and no loading saves)", 5, "de1")
+achievement_speedrun(371026, "Mushroom Run", "[S&K] Clear Mushroom Hill Zone Act 1 as Sonic in under 1:20 without transforming into Super Sonic and without using frame advance or loading a mid-game save", 5, "mh1")
+achievement_speedrun(371027, "Battery Blitz", "[S&K] Clear Flying Battery Zone Act 1 as Sonic in under 3:20 without transforming into Super Sonic and without using frame advance or loading a mid-game save", 5, "fb1")
+achievement_speedrun(371028, "Dry Run", "[S&K] Clear Sandopolis Zone Act 1 as Sonic in under 3:30 without transforming into Super Sonic and without using frame advance or loading a mid-game save", 5, "sp1")
+achievement_speedrun(371029, "Running on Lava", "[S&K] Clear Lava Reef Zone Act 1 as Sonic in under 3:40 without transforming into Super Sonic and without using frame advance or loading a mid-game save", 5, "lr1")
+achievement_speedrun(371030, "Cloud Runner", "[S&K] Clear Sky Sanctuary Zone as Sonic in under 3:30 without transforming into Super Sonic and without using frame advance or loading a mid-game save", 5, "ss_sonic")
+achievement_speedrun(371031, "Death Egg Dash", "[S&K] Clear Death Egg Zone Act 1 as Sonic in under 3:30 without transforming into Super Sonic and without using frame advance or loading a mid-game save", 5, "de1")
+
+// --------------
+// Sonic 3D Blast
+// --------------
+
+s3db_screen = word_be(0xee4bfe)
+s3db_no_demo = byte(0xee4c11) == 0
+s3db_zone = byte(0xee4e79)
+s3db_lives = byte(0xee4e81)
+s3db_emeralds = byte(0xee4ea3)
+s3db_score = word_be(0xee4ea6) * 100
+s3db_time = word_be(0xee525c)
+in_s3db = byte(0x1fda628) == 7
+s3db_main_menu = s3db_screen == 0x0456
+s3db_act_clear = s3db_screen == 0x0642
+s3db_game_over = s3db_screen == 0x091e
+s3db_no_level_select = byte(0xee4c0d) == 0
+s3db_good_end = s3db_screen == 0x0684
+s3db_bad_end = s3db_screen == 0x0708
+
+s3db_zone_dict = {
+    1: "Green Grove Zone Act 1",
+    2: "Green Grove Zone Act 2",
+    3: "Green Grove Zone Act 3",
+    4: "Gene Gadget Zone Act 1",
+    5: "Gene Gadget Zone Act 2",
+    6: "Rusty Ruin Zone Act 2",
+    7: "Rusty Ruin Zone Act 1",
+    8: "Rusty Ruin Zone Act 3",
+    9: "Diamond Dust Zone Act 1",
+    0xa: "Diamond Dust Zone Act 2",
+    0xb: "Diamond Dust Zone Act 3",
+    0xc: "Volcano Valley Zone Act 2",
+    0xd: "Volcano Valley Zone Act 1",
+    0xe: "Volcano Valley Zone Act 3",
+    0xf: "Spring Stadium Zone Act 1",
+    0x10: "Spring Stadium Zone Act 2",
+    0x11: "Spring Stadium Zone Act 3",
+    0x12: "Gene Gadget Zone Act 3",
+    0x13: "Panic Puppet Zone Act 2",
+    0x14: "Panic Puppet Zone Act 1",
+    0x15: "Panic Puppet Zone Act 3",
+    0x16: "The Final Fight"
+}
 
 // ------------
 // Leaderboards
@@ -1636,8 +1680,8 @@ achievement_speedrun(371031, "Death Egg Dash", "[S&K] Clear Death Egg Zone Act 1
 
 leaderboard(
     id = 82481,
-    title = "[S&K] High Score: Sonic",
-    description = "Submits at game over or after beating the game. No slow mode/frame step and no loading saves",
+    title = "[S&K] High Score - Sonic",
+    description = "Beat the game or get a Game Over with the highest possible score as Sonic without using frame advance or loading a mid-game save",
     start =
         in_sk &&
         character_sonic &&
@@ -1667,8 +1711,8 @@ leaderboard(
 
 leaderboard(
     id = 82482,
-    title = "[S&K] High Score: Knuckles",
-    description = "Submits at game over or after beating the game. No slow mode/frame step and no loading saves",
+    title = "[S&K] High Score - Knuckles",
+    description = "Beat the game or get a Game Over with the highest possible score as Knuckles without using frame advance or loading a mid-game save",
     start =
         in_sk &&
         character_knuckles &&
@@ -1753,7 +1797,7 @@ function leaderboard_speedrun_game(id, title_param, description_param, start_par
         id = id,
         title =
             format(
-                "[S&K] Full Game Speedrun: {0}",
+                "[S&K] Full Game Speedrun - {0}",
                 title_param
             ),
         description = description_param,
@@ -1780,7 +1824,7 @@ function leaderboard_speedrun_game(id, title_param, description_param, start_par
 leaderboard_speedrun_game(
     94359,
     "Sonic",
-    "Submits after beating the game with fewer than 7 Chaos Emeralds. No slow mode/frame step and no loading saves",
+    "Beat the game as Sonic as quickly as possible without all 7 Chaos Emeralds obtained and without using frame advance or loading a mid-game save",
     "mh1_sonic",
     all_emeralds && clear_doomsday,
     emeralds < 7 && character_sonic && screen_transition && prev(zone) == death_egg_2_boss && zone == credits
@@ -1789,7 +1833,7 @@ leaderboard_speedrun_game(
 leaderboard_speedrun_game(
     94360,
     "Sonic, All Emeralds",
-    "Submits after beating the game with all 7 Chaos Emeralds. No slow mode/frame step and no loading saves",
+    "Beat the game as Sonic as quickly as possible with all 7 Chaos Emeralds obtained and without using frame advance or loading a mid-game save",
     "mh1_sonic",
     emeralds < 7 && character_sonic && screen_transition && prev(zone) == death_egg_2_boss && zone == credits,
     all_emeralds && clear_doomsday
@@ -1798,7 +1842,7 @@ leaderboard_speedrun_game(
 leaderboard_speedrun_game(
     94361,
     "Knuckles",
-    "Submits after beating the game with fewer than 7 Chaos Emeralds. No slow mode/frame step and no loading saves",
+    "Beat the game as Knuckles as quickly as possible without all 7 Chaos Emeralds obtained and without using frame advance or loading a mid-game save",
     "mh1_knuckles",
     all_emeralds && clear_ss_knuckles,
     emeralds < 7 && clear_ss_knuckles
@@ -1807,17 +1851,27 @@ leaderboard_speedrun_game(
 leaderboard_speedrun_game(
     94362,
     "Knuckles, All Emeralds",
-    "Submits after beating the game with all 7 Chaos Emeralds. No slow mode/frame step and no loading saves",
+    "Beat the game as Knuckles as quickly as possible with all 7 Chaos Emeralds obtained and without using frame advance or loading a mid-game save",
     "mh1_knuckles",
     emeralds < 7 && clear_ss_knuckles,
     all_emeralds && clear_ss_knuckles
 )
 
-function leaderboard_speedrun(id, title, zone_param) {
+function leaderboard_speedrun(id, title_param, char_param, zone_param) {
     leaderboard(
         id = id,
-        title = title,
-        description = "No Super transformation, no slow mode/frame step, and no loading saves",
+        title =
+            format(
+                "[S&K] {0} Speedrun - {1}",
+                title_param,
+                char_param
+            ),
+        description =
+            format(
+                "Clear {0} as {1} as quickly as possible without using a Super transformation, frame advance, or loading a mid-game save",
+                title_param,
+                char_param
+            ),
         start =
             in_sk &&
             smcp_load_save_protection &&
@@ -1841,35 +1895,35 @@ function leaderboard_speedrun(id, title, zone_param) {
     )
 }
 
-leaderboard_speedrun(82483, "[S&K] Mushroom Hill 1 Speedrun: Sonic", "mh1_sonic")
-leaderboard_speedrun(82484, "[S&K] Mushroom Hill 1 Speedrun: Knuckles", "mh1_knuckles")
-leaderboard_speedrun(82485, "[S&K] Mushroom Hill 2 Speedrun: Sonic", "mh2_sonic")
-leaderboard_speedrun(82486, "[S&K] Mushroom Hill 2 Speedrun: Knuckles", "mh2_knuckles")
-leaderboard_speedrun(82487, "[S&K] Flying Battery 1 Speedrun: Sonic", "fb1_sonic")
-leaderboard_speedrun(82488, "[S&K] Flying Battery 1 Speedrun: Knuckles", "fb1_knuckles")
-leaderboard_speedrun(82489, "[S&K] Flying Battery 2 Speedrun: Sonic", "fb2_sonic")
-leaderboard_speedrun(82490, "[S&K] Flying Battery 2 Speedrun: Knuckles", "fb2_knuckles")
-leaderboard_speedrun(82491, "[S&K] Sandopolis 1 Speedrun: Sonic", "sp1_sonic")
-leaderboard_speedrun(82492, "[S&K] Sandopolis 1 Speedrun: Knuckles", "sp1_knuckles")
-leaderboard_speedrun(82493, "[S&K] Sandopolis 2 Speedrun: Sonic", "sp2_sonic")
-leaderboard_speedrun(82494, "[S&K] Sandopolis 2 Speedrun: Knuckles", "sp2_knuckles")
-leaderboard_speedrun(82495, "[S&K] Lava Reef 1 Speedrun: Sonic", "lr1_sonic")
-leaderboard_speedrun(82496, "[S&K] Lava Reef 1 Speedrun: Knuckles", "lr1_knuckles")
-leaderboard_speedrun(82497, "[S&K] Lava Reef 2 Speedrun: Sonic", "lr2_sonic")
-leaderboard_speedrun(82498, "[S&K] Lava Reef 2 Speedrun: Knuckles", "lr2_knuckles")
-leaderboard_speedrun(82499, "[S&K] Hidden Palace Speedrun: Sonic", "hp_sonic")
-leaderboard_speedrun(82500, "[S&K] Hidden Palace Speedrun: Knuckles", "hp_knuckles")
-leaderboard_speedrun(82501, "[S&K] Sky Sanctuary Speedrun: Sonic", "ss_sonic")
-leaderboard_speedrun(82502, "[S&K] Sky Sanctuary Speedrun: Knuckles", "ss_knuckles")
-leaderboard_speedrun(82503, "[S&K] Death Egg 1 Speedrun: Sonic", "de1")
-leaderboard_speedrun(82504, "[S&K] Death Egg 2 Speedrun: Sonic", "de2")
+leaderboard_speedrun(82483, "Mushroom Hill Zone Act 1", "Sonic", "mh1_sonic")
+leaderboard_speedrun(82484, "Mushroom Hill Zone Act 1", "Knuckles", "mh1_knuckles")
+leaderboard_speedrun(82485, "Mushroom Hill Zone Act 2", "Sonic", "mh2_sonic")
+leaderboard_speedrun(82486, "Mushroom Hill Zone Act 2", "Knuckles", "mh2_knuckles")
+leaderboard_speedrun(82487, "Flying Battery Zone Act 1", "Sonic", "fb1_sonic")
+leaderboard_speedrun(82488, "Flying Battery Zone Act 1", "Knuckles", "fb1_knuckles")
+leaderboard_speedrun(82489, "Flying Battery Zone Act 2", "Sonic", "fb2_sonic")
+leaderboard_speedrun(82490, "Flying Battery Zone Act 2", "Knuckles", "fb2_knuckles")
+leaderboard_speedrun(82491, "Sandopolis Zone Act 1", "Sonic", "sp1_sonic")
+leaderboard_speedrun(82492, "Sandopolis Zone Act 1", "Knuckles", "sp1_knuckles")
+leaderboard_speedrun(82493, "Sandopolis Zone Act 2", "Sonic", "sp2_sonic")
+leaderboard_speedrun(82494, "Sandopolis Zone Act 2", "Knuckles", "sp2_knuckles")
+leaderboard_speedrun(82495, "Lava Reef Zone Act 1", "Sonic", "lr1_sonic")
+leaderboard_speedrun(82496, "Lava Reef Zone Act 1", "Knuckles", "lr1_knuckles")
+leaderboard_speedrun(82497, "Lava Reef Zone Act 2", "Sonic", "lr2_sonic")
+leaderboard_speedrun(82498, "Lava Reef Zone Act 2", "Knuckles", "lr2_knuckles")
+leaderboard_speedrun(82499, "Hidden Palace Zone", "Sonic", "hp_sonic")
+leaderboard_speedrun(82500, "Hidden Palace Zone", "Knuckles", "hp_knuckles")
+leaderboard_speedrun(82501, "Sky Sanctuary Zone", "Sonic", "ss_sonic")
+leaderboard_speedrun(82502, "Sky Sanctuary Zone", "Knuckles", "ss_knuckles")
+leaderboard_speedrun(82503, "Death Egg Zone Act 1", "Sonic", "de1")
+leaderboard_speedrun(82504, "Death Egg Zone Act 2", "Sonic", "de2")
 //leaderboard_speedrun("[S&K] The Doomsday Speedrun", "doomsday")
 
 // Needs separate cancel logic to allow Super
 leaderboard(
     id = 82505,
-    title = "[S&K] The Doomsday Speedrun: Sonic",
-    description = "No slow mode/frame step and no loading saves",
+    title = "[S&K] The Doomsday Zone - Sonic",
+    description = "Clear The Doomsday Zone as Sonic as quickly as possible without using frame advance or loading a mid-game save",
     start =
         in_sk &&
         smcp_load_save_protection &&
@@ -1891,6 +1945,180 @@ leaderboard(
     lower_is_better = true
 )
 
+leaderboard(
+    id = 126477,
+    title = "[S3DB] High Score",
+    description = "Beat the game or get a Game Over with the highest possible score without loading a mid-game save",
+    start =
+        in_s3db &&
+        prev(s3db_score) != 0 &&
+        smcp_load_save_protection &&
+        (
+            (
+                s3db_zone == 0x15 &&
+                s3db_emeralds < 7 &&
+                prev(s3db_screen) != 0x0708 &&
+                s3db_bad_end
+            ) ||
+            (
+                s3db_zone == 0x16 &&
+                prev(s3db_screen) != 0x0684 &&
+                s3db_good_end
+            ) ||
+            (
+                prev(s3db_screen) != 0x091e &&
+                s3db_game_over
+            ) ||
+            (
+                always_false() &&
+                never(s3db_main_menu) &&
+                never(!in_genesis_game)
+            )
+        ),
+    cancel = always_false(),
+    submit = always_true(),
+    value = measured(prev(s3db_score)),
+    format = "VALUE"
+)
+
+leaderboard(
+    id = 126478,
+    title = "[S3DB] Full Game Speedrun",
+    description = "Beat the game as quickly as possible without all 7 Chaos Emeralds obtained and without loading a mid-game save",
+    start =
+        in_genesis_game &&
+        in_s3db &&
+        s3db_no_level_select &&
+        prev(s3db_zone) == 0 &&
+        s3db_zone == 1,
+    cancel =
+        (s3db_zone == 0x16 && s3db_act_clear) ||
+        s3db_game_over ||
+        smcp_load_save ||
+        s3db_main_menu ||
+        !in_genesis_game,
+    submit = 
+        in_genesis_game &&
+        in_s3db &&
+        s3db_zone == 0x15 &&
+        s3db_emeralds < 7 &&
+        prev(s3db_screen) != 0x0642 &&
+        s3db_act_clear,
+    value = measured(always_true()),
+    format = "FRAMES",
+    lower_is_better = true
+)
+
+leaderboard(
+    id = 126479,
+    title = "[S3DB] Full Game Speedrun, All Emeralds",
+    description = "Beat the game as quickly as possible with all 7 Chaos Emeralds obtained and without loading a mid-game save",
+    start =
+        in_genesis_game &&
+        in_s3db &&
+        s3db_no_level_select &&
+        prev(s3db_zone) == 0 &&
+        s3db_zone == 1,
+    cancel =
+        (s3db_zone == 0x15 && s3db_emeralds < 7 && s3db_act_clear) ||
+        s3db_game_over ||
+        smcp_load_save ||
+        s3db_main_menu ||
+        !in_genesis_game,
+    submit = 
+        in_genesis_game &&
+        in_s3db &&
+        s3db_zone == 0x16 &&
+        prev(s3db_screen) != 0x0642 &&
+        s3db_act_clear,
+    value = measured(always_true()),
+    format = "FRAMES",
+    lower_is_better = true
+)
+
+function leaderboard_speedrun_s3db(id, title_param, zone_param) {
+    leaderboard(
+        id = id,
+        title =
+            format(
+                "[S3DB] {0} Speedrun",
+                title_param
+            ),
+        description = 
+            format(
+                "Clear {0} as quickly as possible without loading a mid-game save",
+                title_param
+            ),
+        start =
+            in_s3db &&
+            s3db_zone == zone_param &&
+            prev(s3db_time) <= 0x8c63 &&
+            prev(s3db_screen) != 0x0642 &&
+            s3db_act_clear &&
+            smcp_load_save_protection &&
+            (
+                (
+                    always_false()
+                ) ||
+                (
+                    never(s3db_main_menu) &&
+                    never(!in_genesis_game)
+                )
+            ),
+        cancel = always_false(),
+        submit = always_true(),
+        value = measured(prev(s3db_time)),
+        format = "FRAMES",
+        lower_is_better = true
+    )
+}
+
+leaderboard_speedrun_s3db(126480, "Green Grove Zone Act 1", 1)
+leaderboard_speedrun_s3db(126481, "Green Grove Zone Act 2", 2)
+leaderboard_speedrun_s3db(126482, "Green Grove Zone Act 3", 3)
+leaderboard_speedrun_s3db(126483, "Rusty Ruin Zone Act 1", 7)
+leaderboard_speedrun_s3db(126484, "Rusty Ruin Zone Act 2", 6)
+leaderboard_speedrun_s3db(126485, "Rusty Ruin Zone Act 3", 8)
+leaderboard_speedrun_s3db(126486, "Spring Stadium Zone Act 1", 0xf)
+leaderboard_speedrun_s3db(126487, "Spring Stadium Zone Act 2", 0x10)
+leaderboard_speedrun_s3db(126488, "Spring Stadium Zone Act 3", 0x11)
+leaderboard_speedrun_s3db(126489, "Diamond Dust Zone Act 1", 9)
+leaderboard_speedrun_s3db(126490, "Diamond Dust Zone Act 2", 0xa)
+leaderboard_speedrun_s3db(126491, "Diamond Dust Zone Act 3", 0xb)
+leaderboard_speedrun_s3db(126492, "Volcano Valley Zone Act 1", 0xd)
+leaderboard_speedrun_s3db(126493, "Volcano Valley Zone Act 2", 0xc)
+leaderboard_speedrun_s3db(126494, "Volcano Valley Zone Act 3", 0xe)
+leaderboard_speedrun_s3db(126495, "Gene Gadget Zone Act 1", 4)
+leaderboard_speedrun_s3db(126496, "Gene Gadget Zone Act 2", 5)
+leaderboard_speedrun_s3db(126497, "Gene Gadget Zone Act 3", 0x12)
+leaderboard_speedrun_s3db(126498, "Panic Puppet Zone Act 1", 0x14)
+leaderboard_speedrun_s3db(126499, "Panic Puppet Zone Act 2", 0x13)
+leaderboard_speedrun_s3db(126500, "Panic Puppet Zone Act 3", 0x15)
+leaderboard_speedrun_s3db(126501, "The Final Fight", 0x16)
+
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Green Grove 1 Speedrun", 1)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Green Grove 2 Speedrun", 2)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Green Grove 3 Speedrun", 3)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Rusty Ruin 1 Speedrun", 7)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Rusty Ruin 2 Speedrun", 6)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Rusty Ruin 3 Speedrun", 8)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Spring Stadium 1 Speedrun", 0xf)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Spring Stadium 2 Speedrun", 0x10)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Spring Stadium 3 Speedrun", 0x11)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Diamond Dust 1 Speedrun", 9)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Diamond Dust 2 Speedrun", 0xa)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Diamond Dust 3 Speedrun", 0xb)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Volcano Valley 1 Speedrun", 0xd)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Volcano Valley 2 Speedrun", 0xc)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Volcano Valley 3 Speedrun", 0xe)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Gene Gadget 1 Speedrun", 4)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Gene Gadget 2 Speedrun", 5)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Gene Gadget 3 Speedrun", 0x12)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Panic Puppet 1 Speedrun", 0x14)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Panic Puppet 2 Speedrun", 0x13)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] Panic Puppet 3 Speedrun", 0x15)
+// leaderboard_speedrun_s3db("[Sonic 3D Blast] The Final Fight Speedrun", 0x16)
+
 // -------------
 // Rich Presence
 // -------------
@@ -1902,7 +2130,7 @@ rich_presence_conditional_display(
 
 rich_presence_conditional_display(
     in_genesis_game && in_sk && in_game && character_knuckles && zone_act == sky_sanctuary_knuckles && credits_music,
-    "[S&K] Knuckles cleared the game! Lives: {0} | Emeralds: {1} | Score: {2}",
+    "[S&K] Knuckles cleared the game! Lives: {0} • Emeralds: {1} • Score: {2}",
     rich_presence_value("Value", lives),
     rich_presence_value("Value", emeralds),
     rich_presence_value("Value", score)
@@ -1910,7 +2138,7 @@ rich_presence_conditional_display(
 
 rich_presence_conditional_display(
     in_genesis_game && in_sk && character_sonic && zone == credits,
-    "[S&K] Sonic cleared the game! Lives: {0} | Emeralds: {1} | Score: {2}",
+    "[S&K] Sonic cleared the game! Lives: {0} • Emeralds: {1} • Score: {2}",
     rich_presence_value("Value", lives),
     rich_presence_value("Value", emeralds),
     rich_presence_value("Value", score)
@@ -1918,7 +2146,7 @@ rich_presence_conditional_display(
 
 rich_presence_conditional_display(
     in_genesis_game && in_sk && (in_special_stage || special_stage_results),
-    "[S&K] {0} is in a Special Stage | Lives: {1} | Emeralds: {2} | Score: {3}",
+    "[S&K] {0} is in a Special Stage • Lives: {1} • Emeralds: {2} • Score: {3}",
     rich_presence_lookup("S&KCharacter", character, character_dict),
     rich_presence_value("Value", lives),
     rich_presence_value("Value", emeralds),
@@ -1927,7 +2155,7 @@ rich_presence_conditional_display(
 
 rich_presence_conditional_display(
     in_genesis_game && in_sk && (in_game || screen_transition),
-    "[S&K] {0} is in {1} | Lives: {2} | Emeralds: {3} | Score: {4}",
+    "[S&K] {0} is in {1} • Lives: {2} • Emeralds: {3} • Score: {4}",
     rich_presence_lookup("S&KCharacter", character, character_dict),
     rich_presence_lookup("S&KZone", zone_act, zone_dict),
     rich_presence_value("Value", lives),
@@ -1938,6 +2166,29 @@ rich_presence_conditional_display(
 rich_presence_conditional_display(
     in_genesis_game && in_sk,
     "Playing Sonic & Knuckles"
+)
+
+rich_presence_conditional_display(
+    in_genesis_game && in_s3db && s3db_no_demo && s3db_screen >= 0x0684 && s3db_screen <= 0x0730,
+    "[Sonic 3D Blast] Completed the game! Lives: {1} • Emeralds: {2} • Score: {3}",
+    rich_presence_lookup("S3DBZone", s3db_zone, s3db_zone_dict),
+    rich_presence_value("Value", s3db_lives),
+    rich_presence_value("Value", s3db_emeralds),
+    rich_presence_value("Value", s3db_score)
+)
+
+rich_presence_conditional_display(
+    in_genesis_game && in_s3db && s3db_no_demo && s3db_zone != 0,
+    "[Sonic 3D Blast] {0} • Lives: {1} • Emeralds: {2} • Score: {3}",
+    rich_presence_lookup("S3DBZone", s3db_zone, s3db_zone_dict),
+    rich_presence_value("Value", s3db_lives),
+    rich_presence_value("Value", s3db_emeralds),
+    rich_presence_value("Value", s3db_score)
+)
+
+rich_presence_conditional_display(
+    in_genesis_game && in_s3db,
+    "Playing Sonic 3D Blast"
 )
 
 rich_presence_display(
