@@ -304,6 +304,7 @@ p1_health = byte(0x1b4674)
 p1_lives = byte(0x1b4676)
 p1_magic = byte(0x1b4678)
 p1_score = (word(0x1b4684) * 0x10000) + word(0x1b4686)
+p1_minor_damage = byte(0x1b46e4)
 
 p2_character = byte(0x1b46ec)
 p2_zac = p2_character == 0
@@ -314,6 +315,7 @@ p2_health = byte(0x1b46f0)
 p2_lives = byte(0x1b46f2)
 p2_magic = byte(0x1b46f4)
 p2_score = (word(0x1b4700) * 0x10000) + word(0x1b4702)
+p2_minor_damage = byte(0x1b4760)
 
 both_players_active = p1_active && p2_active
 
@@ -358,8 +360,9 @@ ura_dict = {
 // Achievements
 // ------------
 
-function achievement_stage_damageless(title, description, points, stage_param) {
+function achievement_stage_damageless(id, title, description, points, stage_param) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
@@ -371,20 +374,22 @@ function achievement_stage_damageless(title, description, points, stage_param) {
                   stage_array[stage_param] &&
                   trigger_when(defeat_boss_array[stage_param]) &&
                   disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=stage < stage_start_array[stage_param] || stage > stage_end_array[stage_param]) &&
+                  disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=stage < stage_start_array[stage_param] || stage > stage_end_array[stage_param]) &&
                   disable_when(use_magic, until=stage < stage_start_array[stage_param] || stage > stage_end_array[stage_param]) &&
                   disable_when(p2_active, until=game_start || game_over)
     )
 }
 
-achievement_stage_damageless("Not on Their Turf Either", "Complete Round 2 without being harmed and without using magic on hard (Ura mode off)", 5, 1)
-achievement_stage_damageless("True Leg Legend", "Complete Round 3 without being harmed and without using magic on hard (Ura mode off)", 10, 2)
-achievement_stage_damageless("Super Snail Smasher", "Complete Round 4 without being harmed and without using magic on hard (Ura mode off)", 25, 3)
-achievement_stage_damageless("Eternal Life After Death", "Complete Round 5 without being harmed and without using magic on hard (Ura mode off)", 25, 4)
-achievement_stage_damageless("True Puppetmaster", "Complete Round 6 without being harmed and without using magic on hard (Ura mode off)", 50, 5)
-achievement_stage_damageless("Jack Attack", "Defeat the final boss without being harmed and without using magic on hard (Ura mode off)", 50, 6)
+achievement_stage_damageless(396310, "Not on Their Turf Either", "Complete Round 2 without being harmed and without using magic on hard (Ura mode off)", 5, 1)
+achievement_stage_damageless(396311, "True Leg Legend", "Complete Round 3 without being harmed and without using magic on hard (Ura mode off)", 10, 2)
+achievement_stage_damageless(396312, "Super Snail Smasher", "Complete Round 4 without being harmed and without using magic on hard (Ura mode off)", 25, 3)
+achievement_stage_damageless(396313, "Eternal Life After Death", "Complete Round 5 without being harmed and without using magic on hard (Ura mode off)", 25, 4)
+achievement_stage_damageless(396314, "True Puppetmaster", "Complete Round 6 without being harmed and without using magic on hard (Ura mode off)", 50, 5)
+achievement_stage_damageless(396315, "Jack Attack", "Defeat the final boss without being harmed and without using magic on hard (Ura mode off)", 50, 6)
 
-function achievement_stage_damageless_ura(title, description, points, character_param, stage_param) {
+function achievement_stage_damageless_ura(id, title, description, points, character_param, stage_param) {
     achievement(
+        id = id,
         title = title,
         description = description,
         points = points,
@@ -397,26 +402,28 @@ function achievement_stage_damageless_ura(title, description, points, character_
                   stage_array[stage_param] &&
                   trigger_when(defeat_boss_array[stage_param]) &&
                   disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=stage < stage_start_array[stage_param] || stage > stage_end_array[stage_param]) &&
+                  disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=stage < stage_start_array[stage_param] || stage > stage_end_array[stage_param]) &&
                   disable_when(use_magic, until=stage < stage_start_array[stage_param] || stage > stage_end_array[stage_param]) &&
                   disable_when(p2_active, until=game_start || game_over)
     )
 }
 
-achievement_stage_damageless_ura("Mel of the Mountains", "Complete Round 2 without being harmed and without using magic as Mel with ura mode on hard", 5, 1, 1)
-achievement_stage_damageless_ura("Mel's Bizarre Adventure", "Complete Round 3 without being harmed and without using magic as Mel with ura mode on hard", 10, 1, 2)
-achievement_stage_damageless_ura("Queen of the Desert", "Complete Round 4 without being harmed and without using magic as Mel with ura mode on hard", 10, 1, 3)
-achievement_stage_damageless_ura("Mellow Mel", "Complete Round 5 without being harmed and without using magic as Mel with ura mode on hard", 10, 1, 4)
-achievement_stage_damageless_ura("Mel's Nightmare", "Complete Round 6 without being harmed and without using magic as Mel with ura mode on hard", 25, 1, 5)
-achievement_stage_damageless_ura("Mel Smacks Jack", "Defeat the final boss without being harmed and without using magic as Mel with ura mode on hard", 25, 1, 6)
+achievement_stage_damageless_ura(396316, "Mel of the Mountains", "Complete Round 2 without being harmed and without using magic as Mel with ura mode on hard", 5, 1, 1)
+achievement_stage_damageless_ura(396317, "Mel's Bizarre Adventure", "Complete Round 3 without being harmed and without using magic as Mel with ura mode on hard", 10, 1, 2)
+achievement_stage_damageless_ura(396318, "Queen of the Desert", "Complete Round 4 without being harmed and without using magic as Mel with ura mode on hard", 10, 1, 3)
+achievement_stage_damageless_ura(396319, "Mellow Mel", "Complete Round 5 without being harmed and without using magic as Mel with ura mode on hard", 10, 1, 4)
+achievement_stage_damageless_ura(396320, "Mel's Nightmare", "Complete Round 6 without being harmed and without using magic as Mel with ura mode on hard", 25, 1, 5)
+achievement_stage_damageless_ura(396321, "Mel Smacks Jack", "Defeat the final boss without being harmed and without using magic as Mel with ura mode on hard", 25, 1, 6)
 
-achievement_stage_damageless_ura("Zac the Mountain Climber", "Complete Round 2 without being harmed and without using magic as Zac with ura mode on hard", 5, 0, 1)
-achievement_stage_damageless_ura("Zac's Bizarre Adventure", "Complete Round 3 without being harmed and without using magic as Zac with ura mode on hard", 10, 0, 2)
-achievement_stage_damageless_ura("King of the Desert", "Complete Round 4 without being harmed and without using magic as Zac with ura mode on hard", 10, 0, 3)
-achievement_stage_damageless_ura("Zac Reborn", "Complete Round 5 without being harmed and without using magic as Zac with ura mode on hard", 10, 0, 4)
-achievement_stage_damageless_ura("Zac's Nightmare", "Complete Round 6 without being harmed and without using magic as Zac with ura mode on hard", 25, 0, 5)
-achievement_stage_damageless_ura("Zac & Jack", "Defeat the final boss without being harmed and without using magic as Zac with ura mode on hard", 10, 0, 6)
+achievement_stage_damageless_ura(396322, "Zac the Mountain Climber", "Complete Round 2 without being harmed and without using magic as Zac with ura mode on hard", 5, 0, 1)
+achievement_stage_damageless_ura(396323, "Zac's Bizarre Adventure", "Complete Round 3 without being harmed and without using magic as Zac with ura mode on hard", 10, 0, 2)
+achievement_stage_damageless_ura(396324, "King of the Desert", "Complete Round 4 without being harmed and without using magic as Zac with ura mode on hard", 10, 0, 3)
+achievement_stage_damageless_ura(396325, "Zac Reborn", "Complete Round 5 without being harmed and without using magic as Zac with ura mode on hard", 10, 0, 4)
+achievement_stage_damageless_ura(396326, "Zac's Nightmare", "Complete Round 6 without being harmed and without using magic as Zac with ura mode on hard", 25, 0, 5)
+achievement_stage_damageless_ura(396327, "Zac & Jack", "Defeat the final boss without being harmed and without using magic as Zac with ura mode on hard", 10, 0, 6)
 
 achievement(
+    id = 396328,
     title = "Dauntless Hero",
     description = "Starting from Round 1, complete the game without being harmed on hard (Magic setting default, ura mode off)",
     points = 100,
@@ -430,11 +437,13 @@ achievement(
               trigger_when(stage == 0x14) &&
               trigger_when(defeat_final_boss_2) &&
               disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+              disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
               disable_when(p2_active, until=game_start || game_over) &&
               disable_when(shock_pa, until=game_start || game_over)
 )
 
 achievement(
+    id = 396329,
     title = "Dauntless Mel",
     description = "Starting from Round 1, complete the game without being harmed as Mel with ura mode on hard (Magic setting default)",
     points = 100,
@@ -449,11 +458,13 @@ achievement(
               trigger_when(stage == 0x14) &&
               trigger_when(defeat_final_boss_2) &&
               disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+              disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
               disable_when(p2_active, until=game_start || game_over) &&
               disable_when(shock_pa, until=game_start || game_over)
 )
 
 achievement(
+    id = 396330,
     title = "Dauntless Zac",
     description = "Starting from Round 1, complete the game without being harmed as Zac with ura mode on hard (Magic setting default)",
     points = 50,
@@ -468,11 +479,13 @@ achievement(
               trigger_when(stage == 0x14) &&
               trigger_when(defeat_final_boss_2) &&
               disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+              disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
               disable_when(p2_active, until=game_start || game_over) &&
               disable_when(shock_pa, until=game_start || game_over)
 )
 
 achievement(
+    id = 396331,
     title = "True Dauntless Hero",
     description = "Starting from Round 1, complete the game without being harmed and without restocking magic on hard (Magic setting default, ura mode off)",
     points = 100,
@@ -486,12 +499,14 @@ achievement(
               trigger_when(stage == 0x14) &&
               trigger_when(defeat_final_boss_2) &&
               disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+              disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
               disable_when(p1_magic > prev(p1_magic), until=game_start || game_over) &&
               disable_when(p2_active, until=game_start || game_over) &&
               disable_when(shock_pa, until=game_start || game_over)
 )
 
 achievement(
+    id = 396332,
     title = "True Dauntless Mel",
     description = "Starting from Round 1, complete the game without being harmed and without restocking magic as Mel with ura mode on hard (Magic setting default)",
     points = 100,
@@ -506,12 +521,14 @@ achievement(
               trigger_when(stage == 0x14) &&
               trigger_when(defeat_final_boss_2) &&
               disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+              disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
               disable_when(p1_magic > prev(p1_magic), until=game_start || game_over) &&
               disable_when(p2_active, until=game_start || game_over) &&
               disable_when(shock_pa, until=game_start || game_over)
 )
 
 achievement(
+    id = 396333,
     title = "True Dauntless Zac",
     description = "Starting from Round 1, complete the game without being harmed and without using magic as Zac with ura mode on hard",
     points = 100,
@@ -525,11 +542,13 @@ achievement(
               trigger_when(stage == 0x14) &&
               trigger_when(defeat_final_boss_2) &&
               disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+              disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
               disable_when(use_magic, until=game_start || game_over) &&
               disable_when(p2_active, until=game_start || game_over)
 )
 
 achievement(
+    id = 396334,
     title = "Radical Radish Redeemer",
     description = "Starting from Round 1, complete the game without using a continue, without healing, and without using magic on hard (Lives setting default or lower, ura mode off)",
     points = 50,
@@ -552,6 +571,7 @@ achievement(
 )
 
 achievement(
+    id = 396335,
     title = "Revolutionary Radish Redeemer",
     description = "Starting from Round 1, complete the game without dying, without healing, and without using magic on hard (Ura mode off)",
     points = 100,
@@ -574,6 +594,7 @@ achievement(
 // ------------
 
 leaderboard(
+    id = 88645,
     title = "High Score: Damageless",
     description = "Starting from Round 1. Submits after beating the game on hard (Magic setting default, ura mode off)",
     start = !demo_active &&
@@ -586,6 +607,7 @@ leaderboard(
             stage == 0x14 &&
             defeat_final_boss_2 &&
             disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+            disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
             disable_when(p2_active, until=game_start || game_over) &&
             disable_when(shock_pa, until=game_start || game_over),
     cancel = always_false(),
@@ -595,6 +617,7 @@ leaderboard(
 )
 
 leaderboard(
+    id = 88646,
     title = "High Score: Ura Mode, Mel, Damageless",
     description = "Starting from Round 1. Submits after beating the game on hard (Magic setting default)",
     start = !demo_active &&
@@ -608,6 +631,7 @@ leaderboard(
             stage == 0x14 &&
             defeat_final_boss_2 &&
             disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+            disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
             disable_when(p2_active, until=game_start || game_over) &&
             disable_when(shock_pa, until=game_start || game_over),
     cancel = always_false(),
@@ -617,6 +641,7 @@ leaderboard(
 )
 
 leaderboard(
+    id = 88647,
     title = "High Score: Ura Mode, Zac, Damageless",
     description = "Starting from Round 1. Submits after beating the game on hard (Magic setting default)",
     start = !demo_active &&
@@ -630,6 +655,7 @@ leaderboard(
             stage == 0x14 &&
             defeat_final_boss_2 &&
             disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+            disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
             disable_when(p2_active, until=game_start || game_over) &&
             disable_when(shock_pa, until=game_start || game_over),
     cancel = always_false(),
@@ -639,6 +665,7 @@ leaderboard(
 )
 
 leaderboard(
+    id = 88648,
     title = "High Score: Damageless, No Magic Restock",
     description = "Starting from Round 1. Submits after beating the game on hard (Magic setting default, ura mode off)",
     start = !demo_active &&
@@ -651,6 +678,7 @@ leaderboard(
             stage == 0x14 &&
             defeat_final_boss_2 &&
             disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+            disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
             disable_when(p1_magic > prev(p1_magic), until=game_start || game_over) &&
             disable_when(p2_active, until=game_start || game_over) &&
             disable_when(shock_pa, until=game_start || game_over),
@@ -661,6 +689,7 @@ leaderboard(
 )
 
 leaderboard(
+    id = 88649,
     title = "High Score: Ura Mode, Mel, Damageless, No Magic Restock",
     description = "Starting from Round 1. Submits after beating the game on hard (Magic setting default)",
     start = !demo_active &&
@@ -674,6 +703,7 @@ leaderboard(
             stage == 0x14 &&
             defeat_final_boss_2 &&
             disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+            disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
             disable_when(p1_magic > prev(p1_magic), until=game_start || game_over) &&
             disable_when(p2_active, until=game_start || game_over) &&
             disable_when(shock_pa, until=game_start || game_over),
@@ -684,6 +714,7 @@ leaderboard(
 )
 
 leaderboard(
+    id = 88650,
     title = "High Score: Ura Mode, Zac, Damageless, No Magic",
     description = "Starting from Round 1. Submits after beating the game on hard",
     start = !demo_active &&
@@ -696,6 +727,7 @@ leaderboard(
             stage == 0x14 &&
             defeat_final_boss_2 &&
             disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_health < prev(p1_health), until=game_start || game_over) &&
+            disable_when(prev(stage) != 0 && prev(stage) != 0x20 && p1_minor_damage > prev(p1_minor_damage), until=game_start || game_over) &&
             disable_when(use_magic, until=game_start || game_over) &&
             disable_when(p2_active, until=game_start || game_over),
     cancel = always_false(),
@@ -705,6 +737,7 @@ leaderboard(
 )
 
 leaderboard(
+    id = 88651,
     title = "High Score: 1CC, No Healing, No Magic",
     description = "Starting from Round 1. Submits after beating the game on hard (Lives setting default or lower, ura mode off)",
     start = !demo_active &&
@@ -730,6 +763,7 @@ leaderboard(
 )
 
 leaderboard(
+    id = 88652,
     title = "High Score: Deathless, No Healing, No Magic",
     description = "Starting from Round 1. Submits after beating the game on hard (Ura mode off)",
     start = !demo_active &&
