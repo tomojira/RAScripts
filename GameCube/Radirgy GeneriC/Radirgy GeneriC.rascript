@@ -385,6 +385,8 @@ score_jp = dword_be(0x2fed88) * 10
 score_multiplier_gauge_us = word_be(0x202642)
 score_multiplier_gauge_jp = word_be(0x30082a)
 
+score_multiplier_gauge_freeze_jp = byte(0x30082f)
+
 score_multiplier_us = byte(0x200bb3)
 score_multiplier_jp = byte(0x2fed9b)
 
@@ -674,7 +676,7 @@ for i in range(0, 3) {
         title = title_param,
         description =
             format(
-                "Complete Stage {0} in Arcade Mode or Manpuku Mode on any difficulty with other settings on default",
+                "Complete Stage {0} in Arcade Mode or Manpuku Mode (any difficulty with other settings on default)",
                 i + 1
             ),
         points = points_param,
@@ -690,7 +692,7 @@ achievement(
     id = 407067,
     type = "WIN_CONDITION",
     title = "Confronting Ruki",
-    description = "Complete Stage 5 in Arcade Mode or Manpuku Mode on any difficulty with other settings on default",
+    description = "Complete Stage 5 in Arcade Mode or Manpuku Mode (any difficulty with other settings on default)",
     points = 25,
     trigger =
         default_options_jp &&
@@ -717,7 +719,7 @@ for i in range(0, 6) {
     }
     else if (i == 2) {
         title_param = "Malding"
-        description_param = "miniboss"
+        description_param = "mid-boss"
         points_param = 5
         stage_param = 4
         progress_param_jp = stage_3_miniboss_jp
@@ -731,7 +733,7 @@ for i in range(0, 6) {
     }
     else if (i == 4) {
         title_param = "Terrorist Thwarted"
-        description_param = "miniboss"
+        description_param = "mid-boss"
         points_param = 5
         stage_param = 5
         progress_param_jp = stage_4_miniboss_jp
@@ -745,7 +747,7 @@ for i in range(0, 6) {
     }
     else {
         title_param = "Crazy Clash"
-        description_param = "miniboss"
+        description_param = "mid-boss"
         points_param = 10
         stage_param = 6
         progress_param_jp = stage_5_miniboss_jp
@@ -755,7 +757,7 @@ for i in range(0, 6) {
         title = title_param,
         description =
             format(
-                "Defeat the {0} of Stage {1} in Arcade Mode or Manpuku Mode on Normal or Hard difficulty with other settings on default",
+                "Defeat the {0} of Stage {1} in Arcade Mode or Manpuku Mode (Normal or Hard difficulty with other settings on default)",
                 description_param,
                 stage_param - 1
             ),
@@ -790,7 +792,7 @@ for i in range(0, 1) {
         title = title_param,
         description =
             format(
-                "Defeat the true last boss in Arcade Mode or Manpuku Mode on {0} difficulty with other settings on default",
+                "Defeat the true last boss in Arcade Mode or Manpuku Mode ({0} difficulty with other settings on default)",
                 description_param
             ),
         points = points_param,
@@ -850,7 +852,7 @@ for i in range(0, 5) {
         title = title_param,
         description =
             format(
-                "Complete Arcade Mode or Manpuku Mode using {0} on Normal or Hard difficulty with other settings on default",
+                "Complete Arcade Mode or Manpuku Mode using {0} (Normal or Hard difficulty with other settings on default)",
                 description_param
             ),
         points = 10,
@@ -865,8 +867,8 @@ for i in range(0, 5) {
 achievement(
     id = 407083,
     title = "Breathe Easy",
-    description = "Complete Arcade Mode or Manpuku Mode without using a continue on Normal or Hard difficulty with other settings on default",
-    points = 100,
+    description = "Complete Arcade Mode or Manpuku Mode without using a continue (Normal or Hard difficulty with other settings on default)",
+    points = 50,
     trigger =
         once(
             normal_options_jp &&
@@ -913,7 +915,7 @@ for i in range(0, 3) {
         title = title_param,
         description =
             format(
-                "Complete Stage {0} without losing a battery on Normal or Hard difficulty with other settings on default",
+                "Complete Stage {0} without losing a battery (Normal or Hard difficulty with other settings on default)",
                 i + 1
             ),
         points = points_param,
@@ -943,7 +945,7 @@ for i in range(0, 3) {
 achievement(
     id = 407088,
     title = "Immune System V",
-    description = "Complete Stage 5 without losing a battery on Normal or Hard difficulty with other settings on default",
+    description = "Complete Stage 5 without losing a battery (Normal or Hard difficulty with other settings on default)",
     points = 25,
     trigger =
         once(
@@ -970,7 +972,7 @@ achievement(
 achievement(
     id = 407089,
     title = "Killer Kojiro",
-    description = "Fully power up your weapon in Arcade Mode or Manpuku Mode on Normal or Hard difficulty with other settings on default",
+    description = "Fully power up your weapon in Arcade Mode or Manpuku Mode (Normal or Hard difficulty with other settings on default)",
     points = 5,
     trigger =
         normal_options_jp &&
@@ -982,7 +984,7 @@ achievement(
 achievement(
     id = 407090,
     title = "Greenpilled",
-    description = "Max out your score multiplier gauge in Arcade Mode or Score Attack Mode on Normal or Hard difficulty with other settings on default",
+    description = "Max out your score multiplier gauge in Arcade Mode or Score Attack Mode (Normal or Hard difficulty with other settings on default)",
     points = 5,
     trigger =
         normal_options_jp &&
@@ -1011,7 +1013,7 @@ for i in range(0, 1) {
         title = title_param,
         description =
             format(
-                "Score {0} points and extend your battery gauge to {1} in Arcade Mode on Normal or Hard difficulty with other settings on default",
+                "Score {0} points and extend your battery gauge to {1} in Arcade Mode (Normal or Hard difficulty with other settings on default)",
                 description_param,
                 i + 4
             ),
@@ -1054,7 +1056,7 @@ for i in range(0, 4) {
         title = title_param,
         description =
             format(
-                "Collect {0} items in Stage {1} on Normal or Hard difficulty with other settings on default",
+                "Collect {0} items in Stage {1} (Normal or Hard difficulty with other settings on default)",
                 items_param,
                 i + 1
             ),
@@ -1082,7 +1084,7 @@ for i in range(0, 4) {
 achievement(
     id = 407098,
     title = "Collection Complete",
-    description = "Collect the Milestone logo and complete Arcade Mode or Manpuku Mode with 100% items on Normal or Hard difficulty with other settings on default",
+    description = "Collect the Milestone logo and complete Arcade Mode or Manpuku Mode with 100% items (Normal or Hard difficulty with other settings on default)",
     points = 10,
     trigger =
         normal_options_jp &&
@@ -1129,7 +1131,7 @@ for i in range(0, 4) {
         title = title_param,
         description =
             format(
-                "Score {0} points in Stage {1} in Score Attack Mode on Normal or Hard difficulty with other settings on default",
+                "Score {0} points in Stage {1} in Score Attack Mode (Normal or Hard difficulty with other settings on default)",
                 description_param,
                 i + 1
             ),
@@ -1168,7 +1170,7 @@ for i in range(0, 3) {
         title = title_param,
         description =
             format(
-                "Complete Stage {0} in Arcade Mode or Score Attack Mode with your score multiplier at x16 on Normal or Hard difficulty with other settings on default",
+                "Complete Stage {0} in Arcade Mode or Score Attack Mode with your score multiplier at x16 (Normal or Hard difficulty with other settings on default)",
                 i + 1
             ),
         points = points_param,
@@ -1184,7 +1186,7 @@ for i in range(0, 3) {
 achievement(
     id = 407108,
     title = "Pill Pusher V",
-    description = "Complete Stage 5 in Arcade Mode or Score Attack Mode with your score multiplier at x16 on Normal or Hard difficulty with other settings on default",
+    description = "Complete Stage 5 in Arcade Mode or Score Attack Mode with your score multiplier at x16 (Normal or Hard difficulty with other settings on default)",
     points = 25,
     trigger =
         normal_options_jp &&
@@ -1196,7 +1198,7 @@ achievement(
 achievement(
     id = 407109,
     title = "Drug Addict",
-    description = "Max out your score multiplier gauge in Manpuku Mode on Normal or Hard difficulty with other settings on default",
+    description = "Max out your score multiplier gauge in Manpuku Mode (Normal or Hard difficulty with other settings on default)",
     points = 5,
     trigger =
         normal_options_jp &&
@@ -1208,7 +1210,7 @@ achievement(
 achievement(
     id = 407110,
     title = "Allergy Avenger",
-    description = "Score 500,000,000 points in Manpuku Mode on Normal or Hard difficulty with other settings on default",
+    description = "Score 500,000,000 points in Manpuku Mode (Normal or Hard difficulty with other settings on default)",
     points = 25,
     trigger =
         manpuku_options_jp &&
@@ -1217,52 +1219,50 @@ achievement(
         score_jp >= 500000000
 )
 
-manpuku_multiplier_id_array = range(407111, 407114)
+manpuku_multiplier_id_array = range(407111, 407115)
 
-for i in range(0, 3) {
+for i in range(0, 4) {
     if (i == 0) {
         title_param = "Full Belly Jacket I"
-        points_param = 10
+        points_param = 5
     }
     else if (i == 1) {
         title_param = "Full Belly Jacket II"
-        points_param = 10
+        points_param = 5
     }
     else if (i == 2) {
         title_param = "Full Belly Jacket III"
-        points_param = 25
+        points_param = 5
+    }
+    else if (i == 3) {
+        title_param = "Full Belly Jacket IV"
+        points_param = 5
     }
     else {
-        title_param = "Full Belly Jacket IV"
-        points_param = 50
+        title_param = "Full Belly Jacket V"
+        points_param = 5
     }
     achievement(
         id = manpuku_multiplier_id_array[i],
         title = title_param,
         description =
             format(
-                "Complete Stage {0} in Manpuku Mode with your score multiplier at x256 on Normal or Hard difficulty with other settings on default",
+                "Maintain a x256 score multiplier for 20 seconds in Stage {0} in Manpuku Mode (Normal or Hard difficulty with other settings on default). Doesn't count time before and after bosses when the gauge doesn't drain",
                 i + 1
             ),
         points = points_param,
         trigger =
             manpuku_options_jp &&
-            prev(stage_jp) == i + 2 &&
-            max_score_multiplier_manpuku_jp &&
-            complete_stage_jp
+            trigger_when(
+                repeated(1200,
+                    score_multiplier_gauge_freeze_jp == 0 &&
+                    max_score_multiplier_manpuku_jp
+                )
+            ) &&
+            never(score_multiplier_jp < 8) &&
+            never(stage_jp != i + 2)
     )
 }
-
-achievement(
-    id = 407115,
-    title = "Full Belly Jacket V",
-    description = "Complete Stage 5 in Manpuku Mode with your score multiplier at x256 on Normal or Hard difficulty with other settings on default",
-    points = 100,
-    trigger =
-        manpuku_options_jp &&
-        max_score_multiplier_manpuku_jp &&
-        complete_stage_5_jp
-)
 
 // ------------
 // Leaderboards
@@ -1399,6 +1399,55 @@ rich_presence_conditional_display(
 rich_presence_display(
     "Preparing to fight UMBRA!"
 )
+
+// -------------
+// Formerly Used
+// -------------
+
+// for i in range(0, 3) {
+//     if (i == 0) {
+//         title_param = "Full Belly Jacket I"
+//         points_param = 10
+//     }
+//     else if (i == 1) {
+//         title_param = "Full Belly Jacket II"
+//         points_param = 10
+//     }
+//     else if (i == 2) {
+//         title_param = "Full Belly Jacket III"
+//         points_param = 25
+//     }
+//     else {
+//         title_param = "Full Belly Jacket IV"
+//         points_param = 50
+//     }
+//     achievement(
+//         id = manpuku_multiplier_id_array[i],
+//         title = title_param,
+//         description =
+//             format(
+//                 "Complete Stage {0} in Manpuku Mode with your score multiplier at x256 on Normal or Hard difficulty with other settings on default",
+//                 i + 1
+//             ),
+//         points = points_param,
+//         trigger =
+//             manpuku_options_jp &&
+//             prev(stage_jp) == i + 2 &&
+//             max_score_multiplier_manpuku_jp &&
+//             complete_stage_jp
+//     )
+// }
+
+// achievement(
+//     id = 407115,
+//     title = "Full Belly Jacket V",
+//     description = "Complete Stage 5 in Manpuku Mode with your score multiplier at x256 on Normal or Hard difficulty with other settings on default",
+//     points = 100,
+//     trigger =
+//         manpuku_options_jp &&
+//         max_score_multiplier_manpuku_jp &&
+//         complete_stage_5_jp
+// )
 
 // -----------------
 // Prototype Support
