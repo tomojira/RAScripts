@@ -544,16 +544,29 @@ p1_score =
     word(p1_pointer + 0x1e0e2a) +
     p1_continues_used
 
-p2_pointer = word(0x1dc662)
-p2_element = byte(p2_pointer + 0x1e0f62)
-p2_health = byte(p2_pointer + 0x1e0f7c)
+// Unreliable
+// p2_pointer = word(0x1dc662)
+// p2_element = byte(p2_pointer + 0x1e0f62)
+// p2_health = byte(p2_pointer + 0x1e0f7c)
 
-p2_level = byte(p2_pointer + 0x1e1c3a)
-p2_continues_used = byte(p2_pointer + 0x1e1c64)
+// p2_level = byte(p2_pointer + 0x1e1c3a)
+// p2_continues_used = byte(p2_pointer + 0x1e1c64)
+
+// p2_score =
+//     word(p2_pointer + 0x1e1c34) * 0x10000 +
+//     word(p2_pointer + 0x1e1c36) +
+//     p2_continues_used
+
+p2_pointer = word(0x1dee7a)
+p2_element = byte(p2_pointer + 0x1e0da2)
+p2_health = byte(p2_pointer + 0x1e0dbc)
+
+p2_level = byte(p2_pointer + 0x1e1a7a)
+p2_continues_used = byte(p2_pointer + 0x1e1aa4)
 
 p2_score =
-    word(p2_pointer + 0x1e1c34) * 0x10000 +
-    word(p2_pointer + 0x1e1c36) +
+    word(p2_pointer + 0x1e1a74) * 0x10000 +
+    word(p2_pointer + 0x1e1a76) +
     p2_continues_used
 
 p1_pointer_alt = word(0x1dee3e)
@@ -909,15 +922,21 @@ achievement(
         normal_options_2p &&
         disable_when(
             stage_progress > 0 &&
-            p1_health < prev(p1_health),
-            until = screen != 5
+            p1_health < prev(p1_health)
         ) &&
         disable_when(
             stage_progress > 0 &&
-            p2_health < prev(p2_health),
-            until = screen != 5
+            p2_health < prev(p2_health)
         ) &&
-        trigger_when(complete_stage)
+        trigger_when(complete_stage) &&
+        (
+            (
+                never(screen != 5)
+            ) ||
+            (
+                always_false()
+            )
+        )
 )
 
 damageless_array = [
@@ -944,15 +963,21 @@ for i in range(0, 4) {
             normal_options_2p &&
             disable_when(
                 stage_progress > 0 &&
-                p1_death,
-                until = screen != i + 6
+                p1_death
             ) &&
             disable_when(
                 stage_progress > 0 &&
-                p2_death,
-                until = screen != i + 6
+                p2_death
             ) &&
-            trigger_when(complete_stage)
+            trigger_when(complete_stage) &&
+            (
+                (
+                    never(screen != i + 6)
+                ) ||
+                (
+                    always_false()
+                )
+            )
     )
 }
 
@@ -965,20 +990,25 @@ achievement(
         normal_options_2p &&
         disable_when(
             stage_progress > 0 &&
-            p1_death,
-            until =
-                screen != 0xb &&
-                screen != 0x13
+            p1_death
         ) &&
         disable_when(
             stage_progress > 0 &&
-            p2_death,
-            until =
-                screen != 0xb &&
-                screen != 0x13
+            p2_death
         ) &&
         prev(screen) == 0xb &&
-        trigger_when(screen == 0x13)
+        trigger_when(screen == 0x13) &&
+        (
+            (
+                never(
+                    screen != 0xb &&
+                    screen != 0x13
+                )
+            ) ||
+            (
+                always_false()
+            )
+        )
 )
 
 achievement(
@@ -1120,12 +1150,10 @@ for c in range(0, 1) {
                     logic_param_xyz &&
                     game_mode == m &&
                     logic_param_difficulty &&
-                    screen == 0xb &&
-                    prev(stage) == 6 &&
-                    stage == 7,
+                    complete_game,
                 cancel = always_false(),
                 submit = always_true(),
-                value = measured(p1_score + p2_score),
+                value = measured(p1_score_alt + p2_score),
                 format = "VALUE"
             )
             leaderboard_id_index = leaderboard_id_index + 1
@@ -1153,9 +1181,7 @@ for m in range(0, 1) {
             }
             else {
                 logic_param_stage =
-                    screen == 0xb &&
-                    prev(stage) == 6 &&
-                    stage == 7
+                    complete_game
             }
             leaderboard(
                 id = leaderboard_id_array[leaderboard_id_index],
