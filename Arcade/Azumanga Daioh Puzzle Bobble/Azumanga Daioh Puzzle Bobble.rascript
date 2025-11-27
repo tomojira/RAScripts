@@ -337,9 +337,9 @@ for c in range(0, 5) {
 }
 
 achievement(
-    title = "School Complete",
+    title = "Rule the School",
     description = "Complete the School Course in 1P Puzzle Mode (Normal or higher difficulty)",
-    points = 10,
+    points = 5,
     type = "PROGRESSION",
     trigger =
         default_settings &&
@@ -349,12 +349,12 @@ achievement(
 )
 
 school_array = [
-    "Osaka School",
-    "Chiyo School",
-    "Tomo School",
-    "Yomi School",
-    "Kagura School",
-    "Sakaki School"
+    "Oh My Gah!",
+    "Penguin Power",
+    "Why the Heck?",
+    "While You Were Playing, I Studied the Bobble",
+    "Knucklehead No More",
+    "Too Cool for School"
 ]
 
 for c in range(0, 5) {
@@ -365,7 +365,7 @@ for c in range(0, 5) {
                 "Complete the School Course as {0} in 1P Puzzle Mode (Normal or higher difficulty)",
                 character_dict[c]
             ),
-        points = 10,
+        points = 5,
         trigger =
             default_settings &&
             puzzle_mode &&
@@ -376,8 +376,8 @@ for c in range(0, 5) {
 }
 
 school_3cc_array = [
-    "Osaka, Tomo, Kagura School 3CC",
-    "Chiyo, Yomi, Sakaki School 3CC"
+    "Boke Gang",
+    "Tsukkomi Gang"
 ]
 
 for c in range(0, 1) {
@@ -396,7 +396,7 @@ for c in range(0, 1) {
                 character_dict[c + 2],
                 character_dict[c + 4]
             ),
-        points = 25,
+        points = 10,
         trigger =
             unless(
                 repeated(3,
@@ -477,9 +477,9 @@ for c in range(0, 5) {
 }
 
 achievement(
-    title = "After School Complete",
+    title = "I Wish I Were a Bird",
     description = "Complete the After School Course in 1P Puzzle Mode (Normal or higher difficulty)",
-    points = 10,
+    points = 5,
     type = "PROGRESSION",
     trigger =
         default_settings &&
@@ -489,12 +489,12 @@ achievement(
 )
 
 after_school_array = [
-    "Osaka After School",
-    "Chiyo After School",
-    "Tomo After School",
-    "Yomi After School",
-    "Kagura After School",
-    "Sakaki After School"
+    "Sata Andagi",
+    "Let's Cook Together!",
+    "Hide Your Keys",
+    "Double Chop!",
+    "Yay!",
+    "The Bite Back"
 ]
 
 for c in range(0, 5) {
@@ -505,7 +505,7 @@ for c in range(0, 5) {
                 "Complete the After School Course as {0} in 1P Puzzle Mode (Normal or higher difficulty)",
                 character_dict[c]
             ),
-        points = 10,
+        points = 5,
         trigger =
             default_settings &&
             puzzle_mode &&
@@ -516,8 +516,8 @@ for c in range(0, 5) {
 }
 
 after_school_3cc_array = [
-    "Osaka, Tomo, Kagura After School 3CC",
-    "Chiyo, Yomi, Sakaki After School 3CC"
+    "Return of Boke Gang",
+    "Return of Tsukkomi Gang"
 ]
 
 for c in range(0, 1) {
@@ -536,7 +536,7 @@ for c in range(0, 1) {
                 character_dict[c + 2],
                 character_dict[c + 4]
             ),
-        points = 25,
+        points = 10,
         trigger =
             unless(
                 repeated(3,
@@ -569,9 +569,9 @@ for c in range(0, 1) {
 }
 
 achievement(
-    title = "CPU Battle Complete",
+    title = "Oh, Good! Fine! Fantastic!",
     description = "Complete CPU Battle Mode (Normal or higher difficulty)",
-    points = 10,
+    points = 5,
     type = "PROGRESSION",
     trigger =
         default_settings &&
@@ -580,12 +580,12 @@ achievement(
 )
 
 cpu_battle_array = [
-    "Osaka CPU Battle",
-    "Chiyo CPU Battle",
-    "Tomo CPU Battle",
-    "Yomi CPU Battle",
-    "Kagura CPU Battle",
-    "Sakaki CPU Battle"
+    "It's No Longer a Prawnblem",
+    "If I Pull Those Off, Will You Die?",
+    "Interpol's Finest",
+    "The Heavyweight Champion",
+    "At the Top of Her Game",
+    "Silent and Deadly"
 ]
 
 for c in range(0, 5) {
@@ -596,7 +596,7 @@ for c in range(0, 5) {
                 "Complete CPU Battle Mode playing only as {0} (Normal or higher difficulty)",
                 character_dict[c]
             ),
-        points = 10,
+        points = 5,
         trigger =
             disable_when(
                 attract_mode == 0 &&
@@ -625,9 +625,9 @@ for c in range(0, 5) {
 }
 
 achievement(
-    title = "CPU Battle 3CC",
+    title = "Raspberry Heaven",
     description = "Complete CPU Battle Mode using 2 or fewer continues (Normal or higher difficulty)",
-    points = 25,
+    points = 10,
     trigger =
         disable_when(
             repeated(3,
@@ -722,33 +722,27 @@ leaderboard(
     format = "VALUE"
 )
 
-for c in range(0, 5) {
-    leaderboard(
-        title =
-            format(
-                "CPU Battle High Score: {0}",
-                character_dict[c]
-            ),
-        description = "Submits at continue/game over or after completing the game (Normal or higher difficulty)",
-        start =
-            default_settings &&
-            cpu_battle_mode &&
-            p1_character == c &&
-            p1_score > 0 &&
+leaderboard(
+    id = 103636,
+    title = "CPU Battle High Score",
+    description = "Submits at continue/game over or after completing the game (Normal or higher difficulty)",
+    start =
+        default_settings &&
+        cpu_battle_mode &&
+        p1_score > 0 &&
+        (
             (
-                (
-                    complete_cpu_battle_mode
-                ) ||
-                (
-                    continue_screen_trans
-                )
-            ),
-        cancel = always_false(),
-        submit = always_true(),
-        value = measured(p1_score),
-        format = "VALUE"
-    )
-}
+                complete_cpu_battle_mode
+            ) ||
+            (
+                continue_screen_trans
+            )
+        ),
+    cancel = always_false(),
+    submit = always_true(),
+    value = measured(p1_score),
+    format = "VALUE"
+)
 
 // -------------
 // Rich Presence
@@ -865,3 +859,64 @@ rich_presence_conditional_display(
 rich_presence_display(
     "Hello, everynyan! How are you? Fine, thank you."
 )
+
+// -------------
+// Formerly Used
+// -------------
+
+// achievement(
+//     title = "After School 3CC",
+//     description = "Complete the After School Course in 1P Puzzle Mode using 2 or fewer continues (Normal or higher difficulty)",
+//     points = 25,
+//     trigger =
+//         unless(
+//             repeated(3,
+//                 attract_mode == 0 &&
+//                 puzzle_mode &&
+//                 after_school_course &&
+//                 continue_screen_trans
+//             )
+//         ) &&
+//         once(start_school_course) &&
+//         default_settings &&
+//         puzzle_mode &&
+//         after_school_course &&
+//         trigger_when(complete_school_course) &&
+//         (
+//             (
+//                 never(title_screen) &&
+//                 never(game_over)
+//             ) ||
+//             (
+//                 always_false()
+//             )
+//         )
+// )
+
+// for c in range(0, 5) {
+//     leaderboard(
+//         title =
+//             format(
+//                 "CPU Battle High Score: {0}",
+//                 character_dict[c]
+//             ),
+//         description = "Submits at continue/game over or after completing the game (Normal or higher difficulty)",
+//         start =
+//             default_settings &&
+//             cpu_battle_mode &&
+//             p1_character == c &&
+//             p1_score > 0 &&
+//             (
+//                 (
+//                     complete_cpu_battle_mode
+//                 ) ||
+//                 (
+//                     continue_screen_trans
+//                 )
+//             ),
+//         cancel = always_false(),
+//         submit = always_true(),
+//         value = measured(p1_score),
+//         format = "VALUE"
+//     )
+// }
